@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>荆超的小站</title><link>/</link><description></description><atom:link href="/feeds/jing-chao.rss.xml" rel="self"></atom:link><lastBuildDate>Mon, 25 Aug 2014 17:50:00 +0800</lastBuildDate><item><title>百度LBS开放平台坐标转换及逆地理编码服务</title><link>/bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html</link><description>&lt;h3&gt;坐标转换&lt;/h3&gt;
+&lt;p&gt;我获得iphone的定位结果后，在百度地图上进行标注，发现位置有上百米的偏差。是因为百度地图SDK和手机GPS定位使用了不同的坐标系统。&lt;/p&gt;
+&lt;p&gt;目前常用的坐标系统有三种：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;GCJ-02，国测局经纬度坐标。由中国国家测绘局制订的地理信息系统的坐标系统。引入随机的偏差，对经纬度数据进行加密。google地图、soso地图都使用这种标准。&lt;/li&gt;
+&lt;li&gt;WGS84，为GPS全球定位系统使用而建立的坐标系统。在iOS中，使用CLLocationManager接口定位出来的坐标属于该标准。&lt;/li&gt;
+&lt;li&gt;bd09ll，百度经纬度坐标。百度地图SDK采用的是百度自有的地理坐标系&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;百度LBS开放平台官方文档给出了&lt;a href="http://developer.baidu.com/map/wiki/index.php?title=iossdk/guide/tool#.E5.9D.90.E6.A0.87.E8.BD.AC.E6.8D.A2"&gt;其它两种系统转换为百度坐标的方法&lt;/a&gt; 。我的Object-C示例代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+#import "BMapKit.h"
+- (void)locationManager:(CLLocationManager *)manager
+     didUpdateLocations:(NSArray *)locations
+{
+
+    CLLocation *location = [locations lastObject];
+
+    //GPS坐标换为百度坐标（bd09ll）
+    NSDictionary* baiduDic = BMKConvertBaiduCoorFrom(location.coordinate,BMK_COORDTYPE_GPS);
+
+    //坐标是乱码
+    NSLog(@"x=%@,y=%@",[baiduDic objectForKey:@"x"],[baiduDic objectForKey:@"y"]);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;转换为百度坐标后，工作并没有结束，因为BMKConvertBaiduCoorFrom方法对输出进行了Base64编码。可以使用&lt;a href="https://code.google.com/p/google-toolbox-for-mac/source/browse/trunk/Foundation/?r=87"&gt;google-toolbox-for-mac&lt;/a&gt;提供的工具进行解码。&lt;/p&gt;
+&lt;p&gt;从工程中下载这三个文件，并把它们拖入到xcode工程:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;GTMDefines.h&lt;/li&gt;
+&lt;li&gt;GTMBase64.h&lt;/li&gt;
+&lt;li&gt;GTMBase64.m&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用时需要import GTMBase64.h:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+#import "BMapKit.h"
+#import "GTMBase64.h"
+- (void)locationManager:(CLLocationManager *)manager
+     didUpdateLocations:(NSArray *)locations
+{
+
+    CLLocation *location = [locations lastObject];
+
+    //GPS坐标换为百度坐标（bd09ll）
+    NSDictionary* baiduDic = BMKConvertBaiduCoorFrom(location.coordinate,BMK_COORDTYPE_GPS);
+    NSString *baiduLat = [[NSString alloc] initWithData:[GTMBase64 decodeString:[baiduDic objectForKey:@"y"]]
+                                               encoding:NSUTF8StringEncoding];
+    NSString *baiduLng = [[NSString alloc] initWithData:[GTMBase64 decodeString:[baiduDic objectForKey:@"x"]]
+                                               encoding:NSUTF8StringEncoding];
+    //Base64解码之后
+    NSLog(@"x=%@,y=%@",baiduLat,baiduLng);
+
+    CLLocationCoordinate2D baiduCoors = CLLocationCoordinate2DMake([baiduLat doubleValue], [baiduLng doubleValue]);
+    //初始化百度地图
+    BMKMapView *mapView = [[BMKMapView alloc]initWithFrame:CGRectMake(0, 0, DEVICE_WIDTH, DEVICE_HEIGHT)];
+    [mapView setZoomLevel:14.0f];
+    //地图中心设置为用户所在位置
+    [mapView setCenterCoordinate:baiduCoors];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;百度SDK没有提供百度坐标转换为其它坐标的方法，网上收到一篇文章近似地&lt;a href="http://hunray.iteye.com/blog/1404129"&gt;将百度坐标转换为GPS坐标&lt;/a&gt;，没有试验。&lt;/p&gt;
+&lt;p&gt;由于坐标转换太麻烦，我最后索性使用&lt;a href="http://developer.baidu.com/map/wiki/index.php?title=iossdk/guide/location"&gt;百度SDK的定位API&lt;/a&gt;，直接返回百度坐标。&lt;/p&gt;
+&lt;h3&gt;逆地理编码服务&lt;/h3&gt;
+&lt;p&gt;将经纬度转换为地址时，也面临着坐标系统的问题。iOS提供了逆地理编码服务接口CLGeocoder，在百度坐标面前就没用了。&lt;/p&gt;
+&lt;p&gt;百度LBS开放平台的逆地理编码服务只有&lt;a href="http://developer.baidu.com/map/webservice-geocoding.htm#.E8.BF.94.E5.9B.9E.E6.95.B0.E6.8D.AE.E8.AF.B4.E6.98.8E"&gt;web接口&lt;/a&gt;。mobile类型的开发密钥不能使用该接口，服务会被拒绝(status=101)。要申请一个server类型的密钥:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="/images/申请server密钥.png" /&gt;&lt;/p&gt;
+&lt;p&gt;还要注意的是，设定返回结果为JSON格式时，该web接口返回的字符串头尾还包括了接口名称，需要去掉这些内容才能按照JSON格式正确解析。比如GEOENCODING接口返回的内容格式为:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+renderReverse&amp;&amp;renderReverse(JSON字符串)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;详情请见官方文档给出的JSON示例。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">荆超</dc:creator><pubDate>Mon, 25 Aug 2014 17:50:00 +0800</pubDate><guid>tag:,2014-08-25:bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html</guid><category>iOS</category><category>LBS</category></item></channel></rss>
