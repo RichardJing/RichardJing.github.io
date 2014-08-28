@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>荆超的小站</title><link>/</link><description></description><atom:link href="/feeds/jing-chao.rss.xml" rel="self"></atom:link><lastBuildDate>Tue, 26 Aug 2014 09:50:00 +0800</lastBuildDate><item><title>在Godaddy上给github pages配置自定义域名</title><link>/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html</link><description>&lt;p&gt;Github pages默认的域名是username.github.io，十分丑陋。&lt;/p&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>荆超的小站</title><link>/</link><description></description><atom:link href="/feeds/jing-chao.rss.xml" rel="self"></atom:link><lastBuildDate>Thu, 28 Aug 2014 00:00:00 +0800</lastBuildDate><item><title>验证车牌号是否合法</title><link>/yan-zheng-che-pai-hao-shi-fou-he-fa.html</link><description>&lt;p&gt;中文可以使用下面的正则表达式:
+&lt;pre&gt;&lt;code&gt;
+    [\u4e00-\u9fa5]
+&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;
+&lt;p&gt;Object-C示例代码:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;BOOL&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="nf"&gt;validateCarNo:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;carNo&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kt"&gt;BOOL&lt;/span&gt; &lt;span class="n"&gt;isValid&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;NO&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;carNo&lt;/span&gt; &lt;span class="n"&gt;length&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="mi"&gt;7&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;车牌必须是7位&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;carRegex&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;@&amp;quot;^[&lt;/span&gt;&lt;span class="se"&gt;\u4e00&lt;/span&gt;&lt;span class="s"&gt;-&lt;/span&gt;&lt;span class="se"&gt;\u9fa5&lt;/span&gt;&lt;span class="s"&gt;]{1}[A-Za-z]{1}[A-Za-z_0-9]{5}$&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="n"&gt;NSRange&lt;/span&gt; &lt;span class="n"&gt;range&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;carNo&lt;/span&gt; &lt;span class="n"&gt;rangeOfString&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;carRegex&lt;/span&gt; &lt;span class="n"&gt;options&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;NSRegularExpressionSearch&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;range&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;location&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="n"&gt;NSNotFound&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;isValid&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;YES&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;isValid&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">荆超</dc:creator><pubDate>Thu, 28 Aug 2014 00:00:00 +0800</pubDate><guid>tag:,2014-08-28:yan-zheng-che-pai-hao-shi-fou-he-fa.html</guid><category>iOS</category></item><item><title>将本地文件添加到github中</title><link>/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html</link><description>&lt;p&gt;已经在github页面中新建repository: yourproject&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="o"&gt;~/&lt;/span&gt;&lt;span class="n"&gt;localproject&lt;/span&gt;
+&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;init&lt;/span&gt;
+&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;commit&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;本地文件添加到github中&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;remote&lt;/span&gt; &lt;span class="n"&gt;yourproject&lt;/span&gt; &lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;//github.com/username/yourproject.git&lt;/span&gt;
+&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;push&lt;/span&gt; &lt;span class="n"&gt;yourproject&lt;/span&gt; &lt;span class="n"&gt;master&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">荆超</dc:creator><pubDate>Tue, 26 Aug 2014 00:00:00 +0800</pubDate><guid>tag:,2014-08-26:jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html</guid><category>git</category><category>github</category></item><item><title>在Godaddy上给github pages配置自定义域名</title><link>/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html</link><description>&lt;p&gt;Github pages默认的域名是username.github.io，十分丑陋。&lt;/p&gt;
 &lt;p&gt;在repository根目录中添加CNAME文件，并添加你的域名。CNAME文件只能有一行:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;jingchao&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;me&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
@@ -19,14 +45,7 @@
 &lt;li&gt;在“CName (Alias)”区块下， 将www指向: username.github.io&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;&lt;img alt="Alt Text" src="/images/修改DNSZoneFile.png" /&gt;&lt;/p&gt;
-&lt;p&gt;保存，等待你的DNS配置更新成功。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">荆超</dc:creator><pubDate>Tue, 26 Aug 2014 09:50:00 +0800</pubDate><guid>tag:,2014-08-26:zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html</guid><category>github</category></item><item><title>将本地文件添加到github中</title><link>/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html</link><description>&lt;p&gt;已经在github页面中新建repository: yourproject&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="o"&gt;~/&lt;/span&gt;&lt;span class="n"&gt;localproject&lt;/span&gt;
-&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;init&lt;/span&gt;
-&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;
-&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;commit&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;本地文件添加到github中&amp;quot;&lt;/span&gt;
-&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;remote&lt;/span&gt; &lt;span class="n"&gt;yourproject&lt;/span&gt; &lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;//github.com/username/yourproject.git&lt;/span&gt;
-&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;push&lt;/span&gt; &lt;span class="n"&gt;yourproject&lt;/span&gt; &lt;span class="n"&gt;master&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">荆超</dc:creator><pubDate>Tue, 26 Aug 2014 08:50:00 +0800</pubDate><guid>tag:,2014-08-26:jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html</guid><category>github</category></item><item><title>百度LBS开放平台坐标转换及逆地理编码服务</title><link>/bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html</link><description>&lt;h3&gt;坐标转换&lt;/h3&gt;
+&lt;p&gt;保存，等待你的DNS配置更新成功。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">荆超</dc:creator><pubDate>Tue, 26 Aug 2014 00:00:00 +0800</pubDate><guid>tag:,2014-08-26:zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html</guid><category>github</category></item><item><title>百度LBS开放平台坐标转换及逆地理编码服务</title><link>/bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html</link><description>&lt;h3&gt;坐标转换&lt;/h3&gt;
 &lt;p&gt;我获得iphone的定位结果后，在百度地图上进行标注，发现位置有上百米的偏差。是因为百度地图SDK和手机GPS定位使用了不同的坐标系统。&lt;/p&gt;
 &lt;p&gt;目前常用的坐标系统有三种：&lt;/p&gt;
 &lt;ol&gt;
@@ -93,8 +112,8 @@
 &lt;p&gt;百度LBS开放平台的逆地理编码服务只有&lt;a href="http://developer.baidu.com/map/webservice-geocoding.htm#.E8.BF.94.E5.9B.9E.E6.95.B0.E6.8D.AE.E8.AF.B4.E6.98.8E"&gt;web接口&lt;/a&gt;。mobile类型的开发密钥不能使用该接口，服务会被拒绝(status=101)。要申请一个server类型的密钥:&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Alt Text" src="/images/申请server密钥.png" /&gt;&lt;/p&gt;
 &lt;p&gt;还要注意的是，设定返回结果为JSON格式时，该web接口返回的字符串头尾还包括了接口名称，需要去掉这些内容才能按照JSON格式正确解析。比如GEOENCODING接口返回的内容格式为:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;renderReverse&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;renderReverse&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;JSON&lt;/span&gt;&lt;span class="err"&gt;字符串&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
+&lt;pre&gt;&lt;code&gt;
+    renderReverse&amp;&amp;renderReverse(JSON字符串)
+&lt;/code&gt;&lt;/pre&gt;
 
-
-&lt;p&gt;详情请见官方文档给出的JSON示例。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">荆超</dc:creator><pubDate>Mon, 25 Aug 2014 17:50:00 +0800</pubDate><guid>tag:,2014-08-25:bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html</guid><category>iOS</category><category>LBS</category></item></channel></rss>
+&lt;p&gt;详情请见官方文档给出的JSON示例。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">荆超</dc:creator><pubDate>Mon, 25 Aug 2014 00:00:00 +0800</pubDate><guid>tag:,2014-08-25:bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html</guid><category>iOS</category><category>LBS</category></item></channel></rss>
