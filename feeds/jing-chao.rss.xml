@@ -19,7 +19,7 @@
 &lt;li&gt;在“CName (Alias)”区块下， 将www指向: username.github.io&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;&lt;img alt="Alt Text" src="/images/修改DNSZoneFile.png" /&gt;&lt;/p&gt;
-&lt;p&gt;保存，等待你的DNS配置更新成功。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">荆超</dc:creator><pubDate>Tue, 26 Aug 2014 09:50:00 +0800</pubDate><guid>tag:,2014-08-26:zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html</guid></item><item><title>将本地文件添加到github中</title><link>/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html</link><description>&lt;p&gt;已经在github页面中新建repository: yourproject&lt;/p&gt;
+&lt;p&gt;保存，等待你的DNS配置更新成功。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">荆超</dc:creator><pubDate>Tue, 26 Aug 2014 09:50:00 +0800</pubDate><guid>tag:,2014-08-26:zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html</guid><category>github</category></item><item><title>将本地文件添加到github中</title><link>/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html</link><description>&lt;p&gt;已经在github页面中新建repository: yourproject&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="o"&gt;~/&lt;/span&gt;&lt;span class="n"&gt;localproject&lt;/span&gt;
 &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;init&lt;/span&gt;
 &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;
