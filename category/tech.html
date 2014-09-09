@@ -61,6 +61,25 @@
         <div class="col-sm-9">
 
             <article>
+                <h2><a href="/bai-du-di-tu-ios-sdkding-wei-fan-hui-00zuo-biao.html">百度地图iOS SDK定位返回{0,0}坐标</a></h2>
+                <div class="summary"><p>我只需要在app打开时给用户定位，不需要一直追踪用户位置的变化。所以在定位成功后，我会立即关闭定位服务。发现返回坐标的经纬度都是零，mapView显示一片空白:</p>
+<div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">didUpdateUserLocation:</span><span class="p">(</span><span class="n">BMKUserLocation</span> <span class="o">*</span><span class="p">)</span><span class="nv">userLocation</span>
+<span class="p">{</span>
+    <span class="p">[</span><span class="n">_mapView</span> <span class="n">setCenterCoordinate</span><span class="o">:</span><span class="n">userLocation</span><span class="p">.</span><span class="n">location</span><span class="p">.</span><span class="n">coordinate</span><span class="p">];</span> <span class="c1">//_mapView是BMKMapView示例</span>
+    <span class="p">[</span><span class="n">_locService</span> <span class="n">stopUserLocationService</span><span class="p">];</span> <span class="c1">//定位成功后就关闭</span>
+
+    <span class="c1">//打印出来发现都是零:</span>
+    <span class="n">NSString</span> <span class="o">*</span><span class="n">mLat</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="n">stringWithFormat</span><span class="o">:</span><span class="s">@&quot;%0.6f&quot;</span><span class="p">,</span><span class="n">userLocation</span><span class="p">.</span><span class="n">location</span><span class="p">.</span><span class="n">coordinate</span><span class="p">.</span><span class="n">latitude</span><span class="p">];</span>
+    <span class="n">NSString</span> <span class="o">*</span><span class="n">mLng</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="n">stringWithFormat</span><span class="o">:</span><span class="s">@&quot;%0.6f&quot;</span><span class="p">,</span><span class="n">userLocation</span><span class="p">.</span><span class="n">location</span><span class="p">.</span><span class="n">coordinate</span><span class="p">.</span><span class="n">longitude</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;latitude %@,longitude:%@&quot;</span><span class="p">,</span><span class="n">mLat</span><span class="p">,</span><span class="n">mLng</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewWillAppear:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">animated</span><span class="p">{</span>
+    <span class="p">[</span><span class="n">_mapView ...</span></pre></div>
+                    <a class="btn btn-default btn-xs" href="/bai-du-di-tu-ios-sdkding-wei-fan-hui-00zuo-biao.html">more ...</a>
+                </div>
+            </article>
+            <hr/>
+            <article>
                 <h2><a href="/yan-zheng-che-pai-hao-shi-fou-he-fa.html">验证车牌号是否合法</a></h2>
                 <div class="summary"><p>中文可以使用下面的正则表达式:
 <pre><code>
@@ -171,6 +190,11 @@
                 <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
                     <ul class="list-group" id="recentposts">
                         <li class="list-group-item">
+                            <a href="/bai-du-di-tu-ios-sdkding-wei-fan-hui-00zuo-biao.html">
+                                百度地图iOS SDK定位返回{0,0}坐标
+                            </a>
+                        </li>
+                        <li class="list-group-item">
                             <a href="/yan-zheng-che-pai-hao-shi-fou-he-fa.html">
                                 验证车牌号是否合法
                             </a>
@@ -206,23 +230,23 @@
                 <li class="list-group-item"><a href="/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
                     <ul class="list-group " id="tags">
                         <li class="list-group-item tag-1">
+                            <a href="/tag/ios.html">
+                                iOS
+                            </a>
+                        </li>
+                        <li class="list-group-item tag-2">
                             <a href="/tag/github.html">
                                 github
                             </a>
                         </li>
-                        <li class="list-group-item tag-1">
-                            <a href="/tag/ios.html">
-                                iOS
+                        <li class="list-group-item tag-2">
+                            <a href="/tag/lbs.html">
+                                LBS
                             </a>
                         </li>
                         <li class="list-group-item tag-4">
                             <a href="/tag/git.html">
                                 git
-                            </a>
-                        </li>
-                        <li class="list-group-item tag-4">
-                            <a href="/tag/lbs.html">
-                                LBS
                             </a>
                         </li>
                     </ul>
@@ -232,6 +256,11 @@
         <li class="list-group-item">
             <a href="http://hutaow.com/" target="_blank">
                 胡桃夹子
+            </a>
+        </li>
+        <li class="list-group-item">
+            <a href="http://fwz.github.io/" target="_blank">
+                Wenzhong's Blog
             </a>
         </li>
       </ul>
@@ -263,22 +292,16 @@
 <!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
 <script src="/theme/js/respond.min.js"></script>
 
-    <!-- Google Analytics -->
+    <!-- Google Analytics Universal -->
     <script type="text/javascript">
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-54277813-1']);
-        _gaq.push(['_trackPageview']);
-
-        (function () {
-            var ga = document.createElement('script');
-            ga.type = 'text/javascript';
-            ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(ga, s);
-        })();
+        ga('create', 'UA-54277813-1', '');
+        ga('send', 'pageview');
     </script>
-    <!-- End Google Analytics Code -->
+    <!-- End Google Analytics Universal Code -->
 </body>
 </html>

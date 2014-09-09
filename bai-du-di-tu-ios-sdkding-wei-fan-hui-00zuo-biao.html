@@ -2,7 +2,7 @@
 <html lang="en"
 >
 <head>
-    <title>LBS - 荆超的小站</title>
+    <title>百度地图iOS SDK定位返回{0,0}坐标 - 荆超的小站</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -10,16 +10,12 @@
 
 
 
+<link rel="canonical" href="/bai-du-di-tu-ios-sdkding-wei-fan-hui-00zuo-biao.html">
 
-    <meta name="author" content="荆超" />
-    <meta name="keywords" content="LBS" />
+        <meta name="author" content="荆超" />
+        <meta name="keywords" content="iOS,LBS" />
+        <meta name="description" content="我只需要在app打开时给用户定位，不需要一直追踪用户位置的变化。所以在定位成功后，我会立即关闭定位服务。发现返回坐标的经纬度都是零，mapView显示一片空白: - (void)didUpdateUserLocation:(BMKUserLocation *)userLocation { [_mapView setCenterCoordinate:userLocation.location.coordinate]; //_mapView是BMKMapView示例 [_locService stopUserLocationService]; //定位成功后就关闭 //打印出来发现都是零: NSString *mLat = [NSString stringWithFormat:@&#34;%0.6f&#34;,userLocation.location.coordinate.latitude]; NSString *mLng = [NSString stringWithFormat:@&#34;%0.6f&#34;,userLocation.location.coordinate.longitude]; NSLog(@&#34;latitude %@,longitude:%@&#34;,mLat,mLng); } -(void)viewWillAppear:(BOOL)animated{ [_mapView ..." />
 
-    <!-- Open Graph tags -->
-        <meta property="og:site_name" content="荆超的小站" />
-        <meta property="og:type" content="website"/>
-        <meta property="og:title" content="荆超的小站"/>
-        <meta property="og:url" content=""/>
-        <meta property="og:description" content="荆超的小站"/>
 
 
     <!-- Bootstrap -->
@@ -60,9 +56,36 @@
     <div class="row">
         <div class="col-sm-9">
 
-            <article>
-                <h2><a href="/bai-du-di-tu-ios-sdkding-wei-fan-hui-00zuo-biao.html">百度地图iOS SDK定位返回{0,0}坐标</a></h2>
-                <div class="summary"><p>我只需要在app打开时给用户定位，不需要一直追踪用户位置的变化。所以在定位成功后，我会立即关闭定位服务。发现返回坐标的经纬度都是零，mapView显示一片空白:</p>
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="/bai-du-di-tu-ios-sdkding-wei-fan-hui-00zuo-biao.html"
+                       rel="bookmark"
+                       title="Permalink to 百度地图iOS SDK定位返回{0,0}坐标">
+                        百度地图iOS SDK定位返回{0,0}坐标
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2014-09-08T00:00:00+08:00"> 一 08 九月 2014</time>
+    </span>
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="/tag/ios.html">iOS</a>
+        /
+	<a href="/tag/lbs.html">LBS</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <p>我只需要在app打开时给用户定位，不需要一直追踪用户位置的变化。所以在定位成功后，我会立即关闭定位服务。发现返回坐标的经纬度都是零，mapView显示一片空白:</p>
 <div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">didUpdateUserLocation:</span><span class="p">(</span><span class="n">BMKUserLocation</span> <span class="o">*</span><span class="p">)</span><span class="nv">userLocation</span>
 <span class="p">{</span>
     <span class="p">[</span><span class="n">_mapView</span> <span class="n">setCenterCoordinate</span><span class="o">:</span><span class="n">userLocation</span><span class="p">.</span><span class="n">location</span><span class="p">.</span><span class="n">coordinate</span><span class="p">];</span> <span class="c1">//_mapView是BMKMapView示例</span>
@@ -74,38 +97,35 @@
     <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;latitude %@,longitude:%@&quot;</span><span class="p">,</span><span class="n">mLat</span><span class="p">,</span><span class="n">mLng</span><span class="p">);</span>
 <span class="p">}</span>
 <span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewWillAppear:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">animated</span><span class="p">{</span>
-    <span class="p">[</span><span class="n">_mapView ...</span></pre></div>
-                    <a class="btn btn-default btn-xs" href="/bai-du-di-tu-ios-sdkding-wei-fan-hui-00zuo-biao.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html">百度LBS开放平台坐标转换及逆地理编码服务</a></h2>
-                <div class="summary"><h3>坐标转换</h3>
-<p>我获得iphone的定位结果后，在百度地图上进行标注，发现位置有上百米的偏差。是因为百度地图SDK和手机GPS定位使用了不同的坐标系统。</p>
-<p>目前常用的坐标系统有三种：</p>
-<ol>
-<li>GCJ-02，国测局经纬度坐标。由中国国家测绘局制订的地理信息系统的坐标系统。引入随机的偏差，对经纬度数据进行加密。google地图、soso地图都使用这种标准。</li>
-<li>WGS84，为GPS全球定位系统使用而建立的坐标系统。在iOS中，使用CLLocationManager接口定位出来的坐标属于该标准。</li>
-<li>bd09ll，百度经纬度坐标。百度地图SDK采用的是百度自有的地理坐标系</li>
-</ol>
-<p>百度LBS开放平台官方文档给出了<a href="http://developer.baidu.com/map/wiki/index.php?title=iossdk/guide/tool#.E5.9D.90.E6.A0.87.E8.BD.AC.E6.8D.A2">其它两种系统转换为百度坐标的方法</a> 。我的Object-C示例代码：</p>
-<div class="highlight"><pre><span class="cp">#import &quot;BMapKit.h&quot;</span>
-<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">locationManager:</span><span class="p">(</span><span class="n">CLLocationManager</span> <span class="o">*</span><span class="p">)</span><span class="nv">manager</span>
-     <span class="nl">didUpdateLocations:</span><span class="p">(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">locations</span>
+    <span class="p">[</span><span class="n">_mapView</span> <span class="n">viewWillAppear</span><span class="p">];</span>
+    <span class="n">_mapView</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span> <span class="c1">// 此处记得不用的时候需要置nil，否则影响内存的释放</span>
+    <span class="n">_locService</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewWillDisappear:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">animated</span><span class="p">{</span>
+    <span class="p">[</span><span class="n">_mapView</span> <span class="n">viewWillDisappear</span><span class="p">];</span>
+    <span class="n">_mapView</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span> <span class="c1">// 不用时，置nil</span>
+    <span class="n">_locService</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>查阅了官方文档和Demo，没有发现我的API使用方法有什么问题。最后发现是因为百度定位会有一定概率失败，我需要在失败时继续定位，直到定位成功再关闭服务:</p>
+<div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">didUpdateUserLocation:</span><span class="p">(</span><span class="n">BMKUserLocation</span> <span class="o">*</span><span class="p">)</span><span class="nv">userLocation</span>
 <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">userLocation</span><span class="p">.</span><span class="n">location</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">[</span><span class="n">_mapView</span> <span class="n">setCenterCoordinate</span><span class="o">:</span><span class="n">userLocation</span><span class="p">.</span><span class="n">location</span><span class="p">.</span><span class="n">coordinate</span><span class="p">];</span> <span class="c1">//_mapView是BMKMapView示例</span>
+        <span class="p">[</span><span class="n">_locService</span> <span class="n">stopUserLocationService</span><span class="p">];</span> <span class="c1">//定位成功后就关闭</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
 
-    <span class="n">CLLocation</span> <span class="o">*</span><span class="n">location</span> <span class="o">=</span> <span class="p">[</span><span class="n">locations</span> <span class="n">lastObject</span><span class="p">];</span>
 
-    <span class="c1">//GPS坐标换为百度坐标（bd09ll）</span>
-    <span class="n">NSDictionary</span><span class="o">*</span> <span class="n">baiduDic</span> <span class="o">=</span> <span class="n">BMKConvertBaiduCoorFrom</span><span class="p">(</span><span class="n">location</span><span class="p">.</span><span class="n">coordinate</span><span class="p">,</span><span class="n">BMK_COORDTYPE_GPS</span><span class="p">);</span>
-
-    <span class="c1">//坐标是乱码</span>
-    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;x=%@,y=%@&quot;</span><span class="p">,[</span><span class="n">baiduDic ...</span></pre></div>
-                    <a class="btn btn-default btn-xs" href="/bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
+<p>在Object-C中给一个nil对象发消息，如果方法返回类型是数字型(int,float等)，则nil返回一个零；如果返回类型是结构体，则nil返回一个未知内容的结构体。在本例中大家可以看到，如果访问一个nil对象的结构体成员变量，即userLocation.location（CLLocationCoordinate2D），会出现什么情况：不会报错，且结构体的内容都是0。</p>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
 
         </div>
         <div class="col-sm-3 well well-sm" id="sidebar">
@@ -125,6 +145,21 @@
                         <li class="list-group-item">
                             <a href="/bai-du-di-tu-ios-sdkding-wei-fan-hui-00zuo-biao.html">
                                 百度地图iOS SDK定位返回{0,0}坐标
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="/yan-zheng-che-pai-hao-shi-fou-he-fa.html">
+                                验证车牌号是否合法
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html">
+                                将本地文件添加到github中
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html">
+                                在Godaddy上给github pages配置自定义域名
                             </a>
                         </li>
                         <li class="list-group-item">
