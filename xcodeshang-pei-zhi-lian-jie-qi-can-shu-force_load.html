@@ -92,9 +92,8 @@ Undefined symbols for architecture armv7:
         objc-class-ref in XxxXxx.o
     "_OBJC_CLASS_$_BMKGeoCodeSearch", referenced from:
         objc-class-ref in XxxXxx.o
-</pre>
+</code></pre>
 
-<p></code></p>
 <p>正式由于我没有配置链接器选项而造成symbol找不到。关于-all_load和-force_load选项，<a href="http://small.qiang.blog.163.com/blog/static/978493072013112571950/">这篇文章</a>已经说得很清楚。</p>
 <p>我至今还是不理解为什么BMKReverseGeoCodeOption和BMKGeoCodeSearch这两个symbol找到不到。根据上面的文章，由于Object-C只为类创建symbol，所以在使用category时就会出现链接不到的情况，而我并没有找到百度SDK这两个类有相应的category。</p>
 <p>如果多个静态库中有相同的symbol，则使用-all_load参数会出现duplicate symbol错误。我就遇到了这种情况，所以决定使用-force_load。</p>
@@ -102,9 +101,8 @@ Undefined symbols for architecture armv7:
 <p>-force_load选项后面需要跟着静态库地址，可以使用相对地址，相对地址以xcodeproj文件所在目录为根目录:</p>
 <pre><code>
     -force_load lib/libbaidumapapi.a
-</pre>
+</code></pre>
 
-<p></code></p>
 <p>点击TARGETS -&gt; Buliding Settings -&gt; Linking -&gt; Other Linker Flags，添加上面的选项。入下图:</p>
 <p><img alt="Alt Text" src="/images/添加OtherLinkerFlags选项.png" /></p>
 <p>如果选项中含有空格，则Xcode会自动分成多行，入下图：</p>
@@ -212,13 +210,13 @@ Undefined symbols for architecture armv7:
                             </a>
                         </li>
                         <li class="list-group-item tag-2">
-                            <a href="/tag/lbs.html">
-                                LBS
+                            <a href="/tag/github.html">
+                                github
                             </a>
                         </li>
                         <li class="list-group-item tag-2">
-                            <a href="/tag/github.html">
-                                github
+                            <a href="/tag/lbs.html">
+                                LBS
                             </a>
                         </li>
                         <li class="list-group-item tag-4">

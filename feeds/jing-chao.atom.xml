@@ -8,9 +8,8 @@ Undefined symbols for architecture armv7:
         objc-class-ref in XxxXxx.o
     "_OBJC_CLASS_$_BMKGeoCodeSearch", referenced from:
         objc-class-ref in XxxXxx.o
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;正式由于我没有配置链接器选项而造成symbol找不到。关于-all_load和-force_load选项，&lt;a href="http://small.qiang.blog.163.com/blog/static/978493072013112571950/"&gt;这篇文章&lt;/a&gt;已经说得很清楚。&lt;/p&gt;
 &lt;p&gt;我至今还是不理解为什么BMKReverseGeoCodeOption和BMKGeoCodeSearch这两个symbol找到不到。根据上面的文章，由于Object-C只为类创建symbol，所以在使用category时就会出现链接不到的情况，而我并没有找到百度SDK这两个类有相应的category。&lt;/p&gt;
 &lt;p&gt;如果多个静态库中有相同的symbol，则使用-all_load参数会出现duplicate symbol错误。我就遇到了这种情况，所以决定使用-force_load。&lt;/p&gt;
@@ -18,9 +17,8 @@ Undefined symbols for architecture armv7:
 &lt;p&gt;-force_load选项后面需要跟着静态库地址，可以使用相对地址，相对地址以xcodeproj文件所在目录为根目录:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;
     -force_load lib/libbaidumapapi.a
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;点击TARGETS -&amp;gt; Buliding Settings -&amp;gt; Linking -&amp;gt; Other Linker Flags，添加上面的选项。入下图:&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Alt Text" src="/images/添加OtherLinkerFlags选项.png" /&gt;&lt;/p&gt;
 &lt;p&gt;如果选项中含有空格，则Xcode会自动分成多行，入下图：&lt;/p&gt;
