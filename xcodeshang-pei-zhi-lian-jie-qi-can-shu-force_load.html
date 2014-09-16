@@ -2,7 +2,7 @@
 <html lang="en"
 >
 <head>
-    <title>在Godaddy上给github pages配置自定义域名 - 荆超的小站</title>
+    <title>Xcode上配置链接器参数-force_load - 荆超的小站</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -10,11 +10,11 @@
 
 
 
-<link rel="canonical" href="/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html">
+<link rel="canonical" href="/xcodeshang-pei-zhi-lian-jie-qi-can-shu-force_load.html">
 
         <meta name="author" content="荆超" />
-        <meta name="keywords" content="github" />
-        <meta name="description" content="Github pages默认的域名是username.github.io，十分丑陋。 在repository根目录中添加CNAME文件，并添加你的域名。CNAME文件只能有一行: jingchao.me 打开Godaddy网站，进入“Manage My Domains”: 在Godaddy中配置DNS ZoneFile必须保证Nameserver是Godaddy自己的。在要修改的域名旁边点击向下的三角，然后点击“Set Nameservers”: 保证Nameserver是Standard，即GoDaddy自己的Nameserver: 进入“Manage DNS”: 修改DNS Zone File: 在“A(Host)”区块下，将IP指向: 192.30.252.153 在“CName (Alias)”区块下， 将www指向: username.github.io 保存，等待你的DNS配置更新成功。" />
+        <meta name="keywords" content="iOS" />
+        <meta name="description" content="先说一下我为什么用到了-force_load参数 百度地图iOS SDK的注意事项中已经说明，必须在Xcode的Other Linker Flags中添加-all_load选项。在没有添加这个选项的情况下，我能够正常使用普通地图和定位服务。 我还需要使用百度LBS开放平台的逆地理编码服务。在官方网站中只介绍了web API，后来发现demo代码提供了iOS API的示例。在使用GEO API时(BMKGeoCodeSearch)，报出了找不到symbol的错误： Undefined symbols for architecture armv7: &#34;_OBJC_CLASS_$_BMKReverseGeoCodeOption&#34;, referenced from: objc-class-ref in XxxXxx.o &#34;_OBJC_CLASS_$_BMKGeoCodeSearch&#34;, referenced from: objc-class-ref in XxxXxx.o 正式由于我没有配置链接器选项而造成symbol找不到。关于-all_load和-force_load选项，这篇文章已经说得很清楚。 我至今还是不理解为什么BMKReverseGeoCodeOption和BMKGeoCodeSearch这两个symbol找到不到。根据上面的文章，由于Object-C只为类创建symbol，所以在使用category时就会出现链接不到的情况 ..." />
 
 
 
@@ -60,10 +60,10 @@
         <article>
             <header class="page-header">
                 <h1>
-                    <a href="/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html"
+                    <a href="/xcodeshang-pei-zhi-lian-jie-qi-can-shu-force_load.html"
                        rel="bookmark"
-                       title="Permalink to 在Godaddy上给github pages配置自定义域名">
-                        在Godaddy上给github pages配置自定义域名
+                       title="Permalink to Xcode上配置链接器参数-force_load">
+                        Xcode上配置链接器参数-force_load
                     </a>
                 </h1>
             </header>
@@ -73,37 +73,49 @@
 <footer class="post-info">
     <span class="label label-default">Date</span>
     <span class="published">
-        <i class="fa fa-calendar"></i><time datetime="2014-08-26T00:00:00+08:00"> 二 26 八月 2014</time>
+        <i class="fa fa-calendar"></i><time datetime="2014-09-16T00:00:00+08:00"> 二 16 九月 2014</time>
     </span>
 
 
 
 <span class="label label-default">Tags</span>
-	<a href="/tag/github.html">github</a>
+	<a href="/tag/ios.html">iOS</a>
     
 </footer><!-- /.post-info -->                    </div>
                 </div>
-                <p>Github pages默认的域名是username.github.io，十分丑陋。</p>
-<p>在repository根目录中添加CNAME文件，并添加你的域名。CNAME文件只能有一行:</p>
-<div class="highlight"><pre><span class="n">jingchao</span><span class="p">.</span><span class="n">me</span>
-</pre></div>
+                <h3>先说一下我为什么用到了-force_load参数</h3>
+<p>百度地图iOS SDK的<a href="http://developer.baidu.com/map/index.php?title=iossdk/guide/attention">注意事项</a>中已经说明，必须在Xcode的Other Linker Flags中添加-all_load选项。在没有添加这个选项的情况下，我能够正常使用普通地图和定位服务。</p>
+<p>我还需要使用百度LBS开放平台的<a href="http://developer.baidu.com/map/index.php?title=webapi/guide/webservice-geocoding">逆地理编码</a>服务。在官方网站中只介绍了web API，后来发现demo代码提供了iOS API的示例。在使用GEO API时(BMKGeoCodeSearch)，报出了找不到symbol的错误：</p>
+<pre><code>
+Undefined symbols for architecture armv7:
+    "_OBJC_CLASS_$_BMKReverseGeoCodeOption", referenced from:
+        objc-class-ref in XxxXxx.o
+    "_OBJC_CLASS_$_BMKGeoCodeSearch", referenced from:
+        objc-class-ref in XxxXxx.o
+</pre>
 
+<p></code></p>
+<p>正式由于我没有配置链接器选项而造成symbol找不到。关于-all_load和-force_load选项，<a href="http://small.qiang.blog.163.com/blog/static/978493072013112571950/">这篇文章</a>已经说得很清楚。</p>
+<p>我至今还是不理解为什么BMKReverseGeoCodeOption和BMKGeoCodeSearch这两个symbol找到不到。根据上面的文章，由于Object-C只为类创建symbol，所以在使用category时就会出现链接不到的情况，而我并没有找到百度SDK这两个类有相应的category。</p>
+<p>如果多个静态库中有相同的symbol，则使用-all_load参数会出现duplicate symbol错误。我就遇到了这种情况，所以决定使用-force_load。</p>
+<h3>在Xcode上配置链接器参数-force_load</h3>
+<p>-force_load选项后面需要跟着静态库地址，可以使用相对地址，相对地址以xcodeproj文件所在目录为根目录:</p>
+<pre><code>
+    -force_load lib/libbaidumapapi.a
+</pre>
 
-<p>打开Godaddy网站，进入“Manage My Domains”:</p>
-<p><img alt="Alt Text" src="/images/ManageMyDomains.png" /></p>
-<p>在Godaddy中配置DNS ZoneFile必须保证Nameserver是Godaddy自己的。在要修改的域名旁边点击向下的三角，然后点击“Set Nameservers”:</p>
-<p><img alt="Alt Text" src="/images/SetNameservers.png" /></p>
-<p>保证Nameserver是Standard，即GoDaddy自己的Nameserver:</p>
-<p><img alt="Alt Text" src="/images/StandardNameserver.png" /></p>
-<p>进入“Manage DNS”:</p>
-<p><img alt="Alt Text" src="/images/ManageDNS.png" /></p>
-<p>修改DNS Zone File:</p>
-<ol>
-<li>在“A(Host)”区块下，将IP指向: 192.30.252.153</li>
-<li>在“CName (Alias)”区块下， 将www指向: username.github.io</li>
-</ol>
-<p><img alt="Alt Text" src="/images/修改DNSZoneFile.png" /></p>
-<p>保存，等待你的DNS配置更新成功。</p>
+<p></code></p>
+<p>点击TARGETS -&gt; Buliding Settings -&gt; Linking -&gt; Other Linker Flags，添加上面的选项。入下图:</p>
+<p><img alt="Alt Text" src="/images/添加OtherLinkerFlags选项.png" /></p>
+<p>如果选项中含有空格，则Xcode会自动分成多行，入下图：</p>
+<p><img alt="Alt Text" src="/images/选项分成多行.png" /></p>
+<p>保持这样就好。我在空格前面加反斜杠之后，可以使自动分行失效，但build时会报错。</p>
+<p>除此之外，还要做两件事：</p>
+<p>1   将libbaidumapapi.a从Link Binary With Libaries中删掉
+1   将libbaidumapapi.a从Search Paths中删除</p>
+<p>为了实现2，我还为libbaidumapapi.a单独创建了一个文件夹。</p>
+<p>Search Paths在Linking下方不远。Link Binary With Libaries在Build Phase中，入下图:</p>
+<p><img alt="Alt Text" src="/images/LinkBinaryWithLibaries位置.png" /></p>
             </div>
             <!-- /.entry-content -->
     <hr/>
@@ -115,8 +127,8 @@
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
 
-                    var disqus_identifier = 'zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming';
-                var disqus_url = '/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html';
+                    var disqus_identifier = 'xcodeshang-pei-zhi-lian-jie-qi-can-shu-force_load';
+                var disqus_url = '/xcodeshang-pei-zhi-lian-jie-qi-can-shu-force_load.html';
 
             var disqus_config = function () {
                 this.language = "en";

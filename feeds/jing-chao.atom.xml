@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>荆超的小站</title><link href="/" rel="alternate"></link><link href="/feeds/jing-chao.atom.xml" rel="self"></link><id>/</id><updated>2014-09-09T00:00:00+08:00</updated><entry><title>UITableViewCell文本高度自适应</title><link href="/uitableviewcellwen-ben-gao-du-zi-gua-ying.html" rel="alternate"></link><updated>2014-09-09T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-09:uitableviewcellwen-ben-gao-du-zi-gua-ying.html</id><summary type="html">&lt;p&gt;在UITableViewCell中使用UILabel存储文本，每个cell的高度需要根据其文本内容的长度自适应。&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>荆超的小站</title><link href="/" rel="alternate"></link><link href="/feeds/jing-chao.atom.xml" rel="self"></link><id>/</id><updated>2014-09-16T00:00:00+08:00</updated><entry><title>Xcode上配置链接器参数-force_load</title><link href="/xcodeshang-pei-zhi-lian-jie-qi-can-shu-force_load.html" rel="alternate"></link><updated>2014-09-16T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-16:xcodeshang-pei-zhi-lian-jie-qi-can-shu-force_load.html</id><summary type="html">&lt;h3&gt;先说一下我为什么用到了-force_load参数&lt;/h3&gt;
+&lt;p&gt;百度地图iOS SDK的&lt;a href="http://developer.baidu.com/map/index.php?title=iossdk/guide/attention"&gt;注意事项&lt;/a&gt;中已经说明，必须在Xcode的Other Linker Flags中添加-all_load选项。在没有添加这个选项的情况下，我能够正常使用普通地图和定位服务。&lt;/p&gt;
+&lt;p&gt;我还需要使用百度LBS开放平台的&lt;a href="http://developer.baidu.com/map/index.php?title=webapi/guide/webservice-geocoding"&gt;逆地理编码&lt;/a&gt;服务。在官方网站中只介绍了web API，后来发现demo代码提供了iOS API的示例。在使用GEO API时(BMKGeoCodeSearch)，报出了找不到symbol的错误：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+Undefined symbols for architecture armv7:
+    "_OBJC_CLASS_$_BMKReverseGeoCodeOption", referenced from:
+        objc-class-ref in XxxXxx.o
+    "_OBJC_CLASS_$_BMKGeoCodeSearch", referenced from:
+        objc-class-ref in XxxXxx.o
+&lt;/pre&gt;
+
+&lt;p&gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;正式由于我没有配置链接器选项而造成symbol找不到。关于-all_load和-force_load选项，&lt;a href="http://small.qiang.blog.163.com/blog/static/978493072013112571950/"&gt;这篇文章&lt;/a&gt;已经说得很清楚。&lt;/p&gt;
+&lt;p&gt;我至今还是不理解为什么BMKReverseGeoCodeOption和BMKGeoCodeSearch这两个symbol找到不到。根据上面的文章，由于Object-C只为类创建symbol，所以在使用category时就会出现链接不到的情况，而我并没有找到百度SDK这两个类有相应的category。&lt;/p&gt;
+&lt;p&gt;如果多个静态库中有相同的symbol，则使用-all_load参数会出现duplicate symbol错误。我就遇到了这种情况，所以决定使用-force_load。&lt;/p&gt;
+&lt;h3&gt;在Xcode上配置链接器参数-force_load&lt;/h3&gt;
+&lt;p&gt;-force_load选项后面需要跟着静态库地址，可以使用相对地址，相对地址以xcodeproj文件所在目录为根目录:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+    -force_load lib/libbaidumapapi.a
+&lt;/pre&gt;
+
+&lt;p&gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;点击TARGETS -&amp;gt; Buliding Settings -&amp;gt; Linking -&amp;gt; Other Linker Flags，添加上面的选项。入下图:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="/images/添加OtherLinkerFlags选项.png" /&gt;&lt;/p&gt;
+&lt;p&gt;如果选项中含有空格，则Xcode会自动分成多行，入下图：&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="/images/选项分成多行.png" /&gt;&lt;/p&gt;
+&lt;p&gt;保持这样就好。我在空格前面加反斜杠之后，可以使自动分行失效，但build时会报错。&lt;/p&gt;
+&lt;p&gt;除此之外，还要做两件事：&lt;/p&gt;
+&lt;p&gt;1   将libbaidumapapi.a从Link Binary With Libaries中删掉
+1   将libbaidumapapi.a从Search Paths中删除&lt;/p&gt;
+&lt;p&gt;为了实现2，我还为libbaidumapapi.a单独创建了一个文件夹。&lt;/p&gt;
+&lt;p&gt;Search Paths在Linking下方不远。Link Binary With Libaries在Build Phase中，入下图:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="/images/LinkBinaryWithLibaries位置.png" /&gt;&lt;/p&gt;</summary><category term="iOS"></category></entry><entry><title>UITableViewCell文本高度自适应</title><link href="/uitableviewcellwen-ben-gao-du-zi-gua-ying.html" rel="alternate"></link><updated>2014-09-09T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-09:uitableviewcellwen-ben-gao-du-zi-gua-ying.html</id><summary type="html">&lt;p&gt;在UITableViewCell中使用UILabel存储文本，每个cell的高度需要根据其文本内容的长度自适应。&lt;/p&gt;
 &lt;h4&gt;Cell的实现&lt;/h4&gt;
 &lt;p&gt;头文件:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;//&lt;/span&gt;
@@ -192,8 +224,8 @@
 &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;init&lt;/span&gt;
 &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;
 &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;commit&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;本地文件添加到github中&amp;quot;&lt;/span&gt;
-&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;remote&lt;/span&gt; &lt;span class="n"&gt;yourproject&lt;/span&gt; &lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;//github.com/username/yourproject.git&lt;/span&gt;
-&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;push&lt;/span&gt; &lt;span class="n"&gt;yourproject&lt;/span&gt; &lt;span class="n"&gt;master&lt;/span&gt;
+&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;remote&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;alias&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;//github.com/username/yourproject.git&lt;/span&gt;
+&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;push&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;alias&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;master&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;</summary><category term="git"></category><category term="github"></category></entry><entry><title>在Godaddy上给github pages配置自定义域名</title><link href="/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html" rel="alternate"></link><updated>2014-08-26T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-08-26:zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html</id><summary type="html">&lt;p&gt;Github pages默认的域名是username.github.io，十分丑陋。&lt;/p&gt;
 &lt;p&gt;在repository根目录中添加CNAME文件，并添加你的域名。CNAME文件只能有一行:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;jingchao&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;me&lt;/span&gt;
@@ -285,4 +317,6 @@
     renderReverse&amp;&amp;renderReverse(JSON字符串)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;详情请见官方文档给出的JSON示例。&lt;/p&gt;</summary><category term="iOS"></category><category term="LBS"></category></entry></feed>
+&lt;p&gt;详情请见官方文档给出的JSON示例。&lt;/p&gt;
+&lt;h4&gt;补充&lt;/h4&gt;
+&lt;p&gt;后来在SDK demo中发现了逆地理编码的iOS API，使用过程中遇到了&lt;a href="/xcodeshang-pei-zhi-lian-jie-qi-can-shu-force_load.html"&gt;链接器参数&lt;/a&gt;问题。&lt;/p&gt;</summary><category term="iOS"></category><category term="LBS"></category></entry></feed>
