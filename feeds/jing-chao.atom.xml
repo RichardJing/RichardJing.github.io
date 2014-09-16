@@ -217,14 +217,29 @@ Undefined symbols for architecture armv7:
     &lt;span class="p"&gt;}&lt;/span&gt;
     &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;isValid&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;</summary><category term="iOS"></category></entry><entry><title>将本地文件添加到github中</title><link href="/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html" rel="alternate"></link><updated>2014-08-26T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-08-26:jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html</id><summary type="html">&lt;p&gt;已经在github页面中新建repository: yourproject&lt;/p&gt;
+&lt;/pre&gt;&lt;/div&gt;</summary><category term="iOS"></category></entry><entry><title>将本地文件添加到github中</title><link href="/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html" rel="alternate"></link><updated>2014-08-26T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-08-26:jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html</id><summary type="html">&lt;h4&gt;第1步: 创建SSH Key&lt;/h4&gt;
+&lt;p&gt;你和Github之间的通信是通过SSH加密的，所以要把公钥告诉Github。
+看看家目录有没有.ssh文件夹，该文件夹下有没有id_rsa和id_rsa.pub两个文件。如果有这两个文件，就可以跳到下一步了。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;ssh&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;keygen&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="n"&gt;rsa&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;C&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;youremail@example.com&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;id_rsa是私钥，id_rsa.pub是公钥。&lt;/p&gt;
+&lt;h4&gt;第2步: 上传公钥&lt;/h4&gt;
+&lt;p&gt;登录Github -&amp;gt; Settings -&amp;gt; SSH Keys -&amp;gt; Add SSH Key，输入Title及rsa文件内容，点击Add key，如下图:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="/images/AddSSHKey.png" /&gt;&lt;/p&gt;
+&lt;h4&gt;第3步: 命令行提交&lt;/h4&gt;
+&lt;p&gt;在github页面中新建repository: yourproject&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="o"&gt;~/&lt;/span&gt;&lt;span class="n"&gt;localproject&lt;/span&gt;
 &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;init&lt;/span&gt;
 &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;
 &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;commit&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;本地文件添加到github中&amp;quot;&lt;/span&gt;
 &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;remote&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;alias&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;//github.com/username/yourproject.git&lt;/span&gt;
 &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;push&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;alias&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;master&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;</summary><category term="git"></category><category term="github"></category></entry><entry><title>在Godaddy上给github pages配置自定义域名</title><link href="/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html" rel="alternate"></link><updated>2014-08-26T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-08-26:zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html</id><summary type="html">&lt;p&gt;Github pages默认的域名是username.github.io，十分丑陋。&lt;/p&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;alias-name是你为远程库起的一个别名，各git教程中都用的“origin”&lt;/p&gt;</summary><category term="git"></category><category term="github"></category></entry><entry><title>在Godaddy上给github pages配置自定义域名</title><link href="/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html" rel="alternate"></link><updated>2014-08-26T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-08-26:zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html</id><summary type="html">&lt;p&gt;Github pages默认的域名是username.github.io，十分丑陋。&lt;/p&gt;
 &lt;p&gt;在repository根目录中添加CNAME文件，并添加你的域名。CNAME文件只能有一行:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;jingchao&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;me&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
