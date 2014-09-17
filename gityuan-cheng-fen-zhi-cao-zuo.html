@@ -2,7 +2,7 @@
 <html lang="en"
 >
 <head>
-    <title>将本地文件添加到github中 - 荆超的小站</title>
+    <title>git远程分支操作 - 荆超的小站</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -10,11 +10,11 @@
 
 
 
-<link rel="canonical" href="/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html">
+<link rel="canonical" href="/gityuan-cheng-fen-zhi-cao-zuo.html">
 
         <meta name="author" content="荆超" />
-        <meta name="keywords" content="git,github" />
-        <meta name="description" content="第1步: 创建SSH Key 你和Github之间的通信是通过SSH加密的，所以要把公钥告诉Github。 看看家目录有没有.ssh文件夹，该文件夹下有没有id_rsa和id_rsa.pub两个文件。如果有这两个文件，就可以跳到下一步了。 ssh-keygen -t rsa -C &#34;youremail@example.com&#34; id_rsa是私钥，id_rsa.pub是公钥。 第2步: 上传公钥 登录Github -&gt; Settings -&gt; SSH Keys -&gt; Add SSH Key，输入Title及rsa文件内容，点击Add key，如下图: 第3步: 第一次push文件 在github页面中新建repository: yourproject cd ~/localproject git init git add . git commit -m &#34;本地文件添加到github中&#34; git ..." />
+        <meta name="keywords" content="git" />
+        <meta name="description" content="如果你将一个远程库clone到本地，那么远程库默认会使用origin作为别名。可以使用git remote -v命令查看远程库的别名和信息。 远程分支merge到本地分支，以及本地分支push到远程分支的命令如下: git pull origin master git push origin master 如果设置本地分支追踪(track)了某个远程分支，那么就不用每次都输入&#34;origin master&#34;了。git clone命令本质上就是创建了本地的master分支，并追踪远程master分支。使用git remote show origin命令可以看到远程分支的追踪情况，如下: $ git clone https://github.com/RichardJing/test.git $ cd test $ git remote show origin ~/tmp/test (1) * remote origin Fetch ..." />
 
 
 
@@ -60,10 +60,10 @@
         <article>
             <header class="page-header">
                 <h1>
-                    <a href="/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html"
+                    <a href="/gityuan-cheng-fen-zhi-cao-zuo.html"
                        rel="bookmark"
-                       title="Permalink to 将本地文件添加到github中">
-                        将本地文件添加到github中
+                       title="Permalink to git远程分支操作">
+                        git远程分支操作
                     </a>
                 </h1>
             </header>
@@ -73,47 +73,17 @@
 <footer class="post-info">
     <span class="label label-default">Date</span>
     <span class="published">
-        <i class="fa fa-calendar"></i><time datetime="2014-08-26T00:00:00+08:00"> 二 26 八月 2014</time>
+        <i class="fa fa-calendar"></i><time datetime="2014-09-17T00:00:00+08:00"> 三 17 九月 2014</time>
     </span>
 
 
 
 <span class="label label-default">Tags</span>
 	<a href="/tag/git.html">git</a>
-        /
-	<a href="/tag/github.html">github</a>
     
 </footer><!-- /.post-info -->                    </div>
                 </div>
-                <h4>第1步: 创建SSH Key</h4>
-<p>你和Github之间的通信是通过SSH加密的，所以要把公钥告诉Github。
-看看家目录有没有.ssh文件夹，该文件夹下有没有id_rsa和id_rsa.pub两个文件。如果有这两个文件，就可以跳到下一步了。</p>
-<div class="highlight"><pre><span class="n">ssh</span><span class="o">-</span><span class="n">keygen</span> <span class="o">-</span><span class="n">t</span> <span class="n">rsa</span> <span class="o">-</span><span class="n">C</span> <span class="s">&quot;youremail@example.com&quot;</span>
-</pre></div>
-
-
-<p>id_rsa是私钥，id_rsa.pub是公钥。</p>
-<h4>第2步: 上传公钥</h4>
-<p>登录Github -&gt; Settings -&gt; SSH Keys -&gt; Add SSH Key，输入Title及rsa文件内容，点击Add key，如下图:</p>
-<p><img alt="Alt Text" src="/images/AddSSHKey.png" /></p>
-<h4>第3步: 第一次push文件</h4>
-<p>在github页面中新建repository: yourproject</p>
-<div class="highlight"><pre><span class="n">cd</span> <span class="o">~/</span><span class="n">localproject</span>
-<span class="n">git</span> <span class="n">init</span>
-<span class="n">git</span> <span class="n">add</span> <span class="p">.</span>
-<span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s">&quot;本地文件添加到github中&quot;</span>
-<span class="n">git</span> <span class="n">remote</span> <span class="n">add</span> <span class="o">&lt;</span><span class="n">alias</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span> <span class="n">https</span><span class="o">:</span><span class="c1">//github.com/username/yourproject.git</span>
-<span class="n">git</span> <span class="n">push</span> <span class="o">-</span><span class="n">u</span> <span class="o">&lt;</span><span class="n">alias</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span> <span class="n">master</span>
-</pre></div>
-
-
-<p>在第一次push之前，远程库还是空的。加上-u参数不但可以把本地master分支的内容同步到远程master分支，还可以把本地master分支和远程master分支关联起来，方便以后push。之后的push就可以用下面的命令:</p>
-<div class="highlight"><pre><span class="n">git</span> <span class="n">push</span> <span class="o">&lt;</span><span class="n">alias</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span> <span class="n">master</span>
-</pre></div>
-
-
-<p>alias-name是你为远程库起的一个别名，git默认是“origin”。如果你将一个远程库clone到本地，那么远程库默认会使用origin作为别名。这篇文章从这里开始，都用"origin"作为远程库的别名。</p>
-<h3>补充: 更新文件到远程分支</h3>
+                <p>如果你将一个远程库clone到本地，那么远程库默认会使用origin作为别名。可以使用git remote -v命令查看远程库的别名和信息。</p>
 <p>远程分支merge到本地分支，以及本地分支push到远程分支的命令如下:</p>
 <div class="highlight"><pre><span class="n">git</span> <span class="n">pull</span> <span class="n">origin</span> <span class="n">master</span>
 <span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">master</span>
@@ -256,8 +226,8 @@
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
 
-                    var disqus_identifier = 'jiang-ben-di-wen-jian-tian-jia-dao-githubzhong';
-                var disqus_url = '/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html';
+                    var disqus_identifier = 'gityuan-cheng-fen-zhi-cao-zuo';
+                var disqus_url = '/gityuan-cheng-fen-zhi-cao-zuo.html';
 
             var disqus_config = function () {
                 this.language = "en";
