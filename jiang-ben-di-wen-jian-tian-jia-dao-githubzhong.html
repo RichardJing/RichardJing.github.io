@@ -112,139 +112,7 @@
 </pre></div>
 
 
-<p>alias-name是你为远程库起的一个别名，git默认是“origin”。如果你将一个远程库clone到本地，那么远程库默认会使用origin作为别名。这篇文章从这里开始，都用"origin"作为远程库的别名。</p>
-<h3>补充: 更新文件到远程分支</h3>
-<p>远程分支merge到本地分支，以及本地分支push到远程分支的命令如下:</p>
-<div class="highlight"><pre><span class="n">git</span> <span class="n">pull</span> <span class="n">origin</span> <span class="n">master</span>
-<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">master</span>
-</pre></div>
-
-
-<p>如果设置本地分支追踪(track)了某个远程分支，那么就不用每次都输入"origin master"了。git clone命令本质上就是创建了本地的master分支，并追踪远程master分支。使用git remote show origin命令可以看到远程分支的追踪情况，如下:</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="o">:</span><span class="c1">//github.com/RichardJing/test.git</span>
-<span class="err">$</span> <span class="n">cd</span> <span class="n">test</span>
-<span class="err">$</span> <span class="n">git</span> <span class="n">remote</span> <span class="n">show</span> <span class="n">origin</span>                                   <span class="o">~/</span><span class="n">tmp</span><span class="o">/</span><span class="n">test</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="o">*</span> <span class="n">remote</span> <span class="n">origin</span>
-  <span class="n">Fetch</span> <span class="n">URL</span><span class="o">:</span> <span class="n">https</span><span class="o">:</span><span class="c1">//github.com/RichardJing/test.git</span>
-  <span class="n">Push</span>  <span class="n">URL</span><span class="o">:</span> <span class="n">https</span><span class="o">:</span><span class="c1">//github.com/RichardJing/test.git</span>
-  <span class="n">HEAD</span> <span class="n">branch</span><span class="o">:</span> <span class="n">master</span>
-  <span class="n">Remote</span> <span class="n">branch</span><span class="o">:</span>
-    <span class="n">master</span> <span class="n">tracked</span>
-  <span class="n">Local</span> <span class="n">branch</span> <span class="n">configured</span> <span class="k">for</span> <span class="err">&#39;</span><span class="n">git</span> <span class="n">pull</span><span class="err">&#39;</span><span class="o">:</span>
-    <span class="n">master</span> <span class="n">merges</span> <span class="n">with</span> <span class="n">remote</span> <span class="n">master</span>
-  <span class="n">Local</span> <span class="n">ref</span> <span class="n">configured</span> <span class="k">for</span> <span class="err">&#39;</span><span class="n">git</span> <span class="n">push</span><span class="err">&#39;</span><span class="o">:</span>
-    <span class="n">master</span> <span class="n">pushes</span> <span class="n">to</span> <span class="n">master</span> <span class="p">(</span><span class="n">up</span> <span class="n">to</span> <span class="n">date</span><span class="p">)</span>
-</pre></div>
-
-
-<p>从返回信息可以看到，远程master分支被追踪。如果使用git pull命令，就会将远程master分支merge到本地分支。使用git push命令就会将本地master分支push到远程分支。</p>
-<p>创建远程分支origin/dev:</p>
-<div class="highlight"><pre><span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">dev</span> <span class="err">#创建并切换到本地分支</span><span class="n">dev</span>
-<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">dev</span> <span class="err">#创建远程分支</span><span class="n">origin</span><span class="o">/</span><span class="n">dev</span>
-</pre></div>
-
-
-<p>可以用下面的命令查看远程分支，如果你的git开启了颜色，那么所有的远程分支都是红色的:</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">git</span> <span class="n">branch</span> <span class="o">-</span><span class="n">a</span>
-<span class="o">*</span> <span class="n">dev</span>
-  <span class="n">master</span>
-  <span class="n">remotes</span><span class="o">/</span><span class="n">origin</span><span class="o">/</span><span class="n">HEAD</span> <span class="o">-&gt;</span> <span class="n">origin</span><span class="o">/</span><span class="n">master</span>
-  <span class="n">remotes</span><span class="o">/</span><span class="n">origin</span><span class="o">/</span><span class="n">dev</span>
-  <span class="n">remotes</span><span class="o">/</span><span class="n">origin</span><span class="o">/</span><span class="n">master</span>
-</pre></div>
-
-
-<p>再查看一下追踪信息：</p>
-<div class="highlight"><pre><span class="n">git</span> <span class="n">remote</span> <span class="n">show</span> <span class="n">origin</span>                                       <span class="o">~/</span><span class="n">tmp</span><span class="o">/</span><span class="n">test</span>
-<span class="o">*</span> <span class="n">remote</span> <span class="n">origin</span>
-  <span class="n">Fetch</span> <span class="n">URL</span><span class="o">:</span> <span class="n">https</span><span class="o">:</span><span class="c1">//github.com/RichardJing/test.git</span>
-  <span class="n">Push</span>  <span class="n">URL</span><span class="o">:</span> <span class="n">https</span><span class="o">:</span><span class="c1">//github.com/RichardJing/test.git</span>
-  <span class="n">HEAD</span> <span class="n">branch</span><span class="o">:</span> <span class="n">master</span>
-  <span class="n">Remote</span> <span class="n">branches</span><span class="o">:</span>
-    <span class="n">dev</span>    <span class="n">tracked</span>
-    <span class="n">master</span> <span class="n">tracked</span>
-  <span class="n">Local</span> <span class="n">branch</span> <span class="n">configured</span> <span class="k">for</span> <span class="err">&#39;</span><span class="n">git</span> <span class="n">pull</span><span class="err">&#39;</span><span class="o">:</span>
-    <span class="n">master</span> <span class="n">merges</span> <span class="n">with</span> <span class="n">remote</span> <span class="n">master</span>
-  <span class="n">Local</span> <span class="n">refs</span> <span class="n">configured</span> <span class="k">for</span> <span class="err">&#39;</span><span class="n">git</span> <span class="n">push</span><span class="err">&#39;</span><span class="o">:</span>
-    <span class="n">dev</span>    <span class="n">pushes</span> <span class="n">to</span> <span class="n">dev</span>    <span class="p">(</span><span class="n">up</span> <span class="n">to</span> <span class="n">date</span><span class="p">)</span>
-    <span class="n">master</span> <span class="n">pushes</span> <span class="n">to</span> <span class="n">master</span> <span class="p">(</span><span class="n">up</span> <span class="n">to</span> <span class="n">date</span><span class="p">)</span>
-</pre></div>
-
-
-<p>从返回信息可以看到，远程dev分支已经被追踪，push命令也关联好了，但是pull命令还是没有设置。此时如果将远程dev分支merge到本地dev分支，还是需要输入完整命令"git pull origin dev"，如果简写"git pull"的话会报错。</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="nx">git</span> <span class="nx">pull</span>                                                     <span class="err">~</span><span class="p">/</span><span class="nx">tmp</span><span class="p">/</span><span class="nx">test</span>
-<span class="nx">There</span> <span class="nx">is</span> <span class="nx">no</span> <span class="nx">tracking</span> <span class="nx">information</span> <span class="nb">for</span> <span class="nx">the</span> <span class="nx">current</span> <span class="nx">branch.</span>
-<span class="nx">Please</span> <span class="nx">specify</span> <span class="nx">which</span> <span class="nx">branch</span> <span class="nx">you</span> <span class="nx">want</span> <span class="k">to</span> <span class="nb">merge</span> <span class="k">with</span><span class="nx">.</span>
-<span class="nx">See</span> <span class="nx">git</span><span class="na">-pull</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="nb">for</span> <span class="nx">details</span>
-
-    <span class="nx">git</span> <span class="nx">pull</span> <span class="o">&lt;</span><span class="nx">remote</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="nx">branch</span><span class="o">&gt;</span>
-
-<span class="k">If</span> <span class="nx">you</span> <span class="nx">wish</span> <span class="k">to</span> <span class="nb">set</span> <span class="nx">tracking</span> <span class="nx">information</span> <span class="nb">for</span> <span class="nx">this</span> <span class="nx">branch</span> <span class="nx">you</span> <span class="nx">can</span> <span class="k">do</span> <span class="nx">so</span> <span class="k">with</span><span class="p">:</span>
-
-    <span class="nx">git</span> <span class="nx">branch</span> <span class="o">--</span><span class="nb">set</span><span class="na">-upstream-to</span><span class="o">=</span><span class="nx">origin</span><span class="o">/&lt;</span><span class="nx">branch</span><span class="o">&gt;</span> <span class="nx">dev</span>
-</pre></div>
-
-
-<p>按照返回信息中的提示，设置本地dev分支追踪远程dev分支:</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">git</span> <span class="n">branch</span> <span class="o">--</span><span class="n">set</span><span class="o">-</span><span class="n">upstream</span><span class="o">-</span><span class="n">to</span><span class="o">=</span><span class="n">origin</span><span class="o">/</span><span class="n">dev</span> <span class="n">dev</span>                  <span class="o">~/</span><span class="n">tmp</span><span class="o">/</span><span class="n">test</span>
-<span class="n">Branch</span> <span class="n">dev</span> <span class="n">set</span> <span class="n">up</span> <span class="n">to</span> <span class="n">track</span> <span class="n">remote</span> <span class="n">branch</span> <span class="n">dev</span> <span class="n">from</span> <span class="n">origin</span><span class="p">.</span>
-<span class="err">$</span> <span class="n">git</span> <span class="n">remote</span> <span class="n">show</span> <span class="n">origin</span>                                       <span class="o">~/</span><span class="n">tmp</span><span class="o">/</span><span class="n">test</span>
-<span class="o">*</span> <span class="n">remote</span> <span class="n">origin</span>
-  <span class="n">Fetch</span> <span class="n">URL</span><span class="o">:</span> <span class="n">https</span><span class="o">:</span><span class="c1">//github.com/RichardJing/test.git</span>
-  <span class="n">Push</span>  <span class="n">URL</span><span class="o">:</span> <span class="n">https</span><span class="o">:</span><span class="c1">//github.com/RichardJing/test.git</span>
-  <span class="n">HEAD</span> <span class="n">branch</span><span class="o">:</span> <span class="n">master</span>
-  <span class="n">Remote</span> <span class="n">branches</span><span class="o">:</span>
-    <span class="n">dev</span>    <span class="n">tracked</span>
-    <span class="n">master</span> <span class="n">tracked</span>
-  <span class="n">Local</span> <span class="n">branches</span> <span class="n">configured</span> <span class="k">for</span> <span class="err">&#39;</span><span class="n">git</span> <span class="n">pull</span><span class="err">&#39;</span><span class="o">:</span>
-    <span class="n">dev</span>    <span class="n">merges</span> <span class="n">with</span> <span class="n">remote</span> <span class="n">dev</span>
-    <span class="n">master</span> <span class="n">merges</span> <span class="n">with</span> <span class="n">remote</span> <span class="n">master</span>
-  <span class="n">Local</span> <span class="n">refs</span> <span class="n">configured</span> <span class="k">for</span> <span class="err">&#39;</span><span class="n">git</span> <span class="n">push</span><span class="err">&#39;</span><span class="o">:</span>
-    <span class="n">dev</span>    <span class="n">pushes</span> <span class="n">to</span> <span class="n">dev</span>    <span class="p">(</span><span class="n">up</span> <span class="n">to</span> <span class="n">date</span><span class="p">)</span>
-    <span class="n">master</span> <span class="n">pushes</span> <span class="n">to</span> <span class="n">master</span> <span class="p">(</span><span class="n">up</span> <span class="n">to</span> <span class="n">date</span><span class="p">)</span>
-</pre></div>
-
-
-<p>再说一下fetch命令与pull命令的区别，fetch只是将远程库的数据拉到本地，并不会merge到本地分支，需要手动merge。</p>
-<p>删除远程分支:</p>
-<div class="highlight"><pre><span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="o">--</span><span class="n">delete</span> <span class="n">dev</span>
-</pre></div>
-
-
-<p>如果clone一个远程库到本地，只会在本地创建master分支并设置追踪：</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="o">:</span><span class="c1">//github.com/RichardJing/test.git</span>
-<span class="err">$</span> <span class="n">cd</span> <span class="n">test</span>
-<span class="err">$</span> <span class="n">git</span> <span class="n">branch</span> <span class="o">-</span><span class="n">a</span>                                            <span class="o">~/</span><span class="n">tmp</span><span class="o">/</span><span class="n">test</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="o">*</span> <span class="n">master</span>
-  <span class="n">remotes</span><span class="o">/</span><span class="n">origin</span><span class="o">/</span><span class="n">HEAD</span> <span class="o">-&gt;</span> <span class="n">origin</span><span class="o">/</span><span class="n">master</span>
-  <span class="n">remotes</span><span class="o">/</span><span class="n">origin</span><span class="o">/</span><span class="n">dev</span>
-  <span class="n">remotes</span><span class="o">/</span><span class="n">origin</span><span class="o">/</span><span class="n">master</span>
-</pre></div>
-
-
-<p>用--set-upstream命令可以创建本地分支，合并远程分支到本地，并追踪:</p>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">git</span> <span class="n">branch</span> <span class="o">--</span><span class="n">set</span><span class="o">-</span><span class="n">upstream</span> <span class="n">dev</span> <span class="n">origin</span><span class="o">/</span><span class="n">dev</span>
-<span class="err">$</span> <span class="n">git</span> <span class="n">branch</span> <span class="o">-</span><span class="n">a</span>                                                <span class="o">~/</span><span class="n">tmp</span><span class="o">/</span><span class="n">test</span>
-  <span class="n">dev</span>
-<span class="o">*</span> <span class="n">master</span>
-  <span class="n">remotes</span><span class="o">/</span><span class="n">origin</span><span class="o">/</span><span class="n">HEAD</span> <span class="o">-&gt;</span> <span class="n">origin</span><span class="o">/</span><span class="n">master</span>
-  <span class="n">remotes</span><span class="o">/</span><span class="n">origin</span><span class="o">/</span><span class="n">dev</span>
-  <span class="n">remotes</span><span class="o">/</span><span class="n">origin</span><span class="o">/</span><span class="n">master</span>
-<span class="err">$</span> <span class="n">git</span> <span class="n">remote</span> <span class="n">show</span> <span class="n">origin</span>                                       <span class="o">~/</span><span class="n">tmp</span><span class="o">/</span><span class="n">test</span>
-<span class="o">*</span> <span class="n">remote</span> <span class="n">origin</span>
-  <span class="n">Fetch</span> <span class="n">URL</span><span class="o">:</span> <span class="n">https</span><span class="o">:</span><span class="c1">//github.com/RichardJing/test.git</span>
-  <span class="n">Push</span>  <span class="n">URL</span><span class="o">:</span> <span class="n">https</span><span class="o">:</span><span class="c1">//github.com/RichardJing/test.git</span>
-  <span class="n">HEAD</span> <span class="n">branch</span><span class="o">:</span> <span class="n">master</span>
-  <span class="n">Remote</span> <span class="n">branches</span><span class="o">:</span>
-    <span class="n">dev</span>    <span class="n">tracked</span>
-    <span class="n">master</span> <span class="n">tracked</span>
-  <span class="n">Local</span> <span class="n">branches</span> <span class="n">configured</span> <span class="k">for</span> <span class="err">&#39;</span><span class="n">git</span> <span class="n">pull</span><span class="err">&#39;</span><span class="o">:</span>
-    <span class="n">dev</span>    <span class="n">merges</span> <span class="n">with</span> <span class="n">remote</span> <span class="n">dev</span>
-    <span class="n">master</span> <span class="n">merges</span> <span class="n">with</span> <span class="n">remote</span> <span class="n">master</span>
-  <span class="n">Local</span> <span class="n">refs</span> <span class="n">configured</span> <span class="k">for</span> <span class="err">&#39;</span><span class="n">git</span> <span class="n">push</span><span class="err">&#39;</span><span class="o">:</span>
-    <span class="n">dev</span>    <span class="n">pushes</span> <span class="n">to</span> <span class="n">dev</span>    <span class="p">(</span><span class="n">up</span> <span class="n">to</span> <span class="n">date</span><span class="p">)</span>
-    <span class="n">master</span> <span class="n">pushes</span> <span class="n">to</span> <span class="n">master</span> <span class="p">(</span><span class="n">up</span> <span class="n">to</span> <span class="n">date</span><span class="p">)</span>
-</pre></div>
+<p>alias-name是你为远程库起的一个别名，git默认是“origin”。如果你将一个远程库clone到本地，那么远程库默认会使用origin作为别名。</p>
             </div>
             <!-- /.entry-content -->
     <hr/>
@@ -341,13 +209,13 @@
                             </a>
                         </li>
                         <li class="list-group-item tag-2">
-                            <a href="/tag/git.html">
-                                git
+                            <a href="/tag/github.html">
+                                github
                             </a>
                         </li>
                         <li class="list-group-item tag-2">
-                            <a href="/tag/github.html">
-                                github
+                            <a href="/tag/git.html">
+                                git
                             </a>
                         </li>
                         <li class="list-group-item tag-2">
