@@ -61,6 +61,29 @@
         <div class="col-sm-9">
 
             <article>
+                <h2><a href="/xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html">修改UIWebView请求中的User-Agent</a></h2>
+                <div class="summary"><p>我希望UIWebView在发出HTTP请求时能够自定义header中的User-Agent。 </p>
+<p>首先，修改loadRequest方法的参数，是无效的:</p>
+<div class="highlight"><pre><span class="n">NSMutableURLRequest</span> <span class="o">*</span><span class="n">request</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSMutableURLRequest</span> <span class="n">requestWithURL</span><span class="o">:</span><span class="n">urlInstance</span><span class="p">];</span>
+<span class="p">[</span><span class="n">request</span> <span class="n">setValue</span><span class="o">:</span><span class="s">@&quot;my defined user-agent&quot;</span> <span class="n">forHTTPHeaderField</span><span class="o">:</span><span class="s">@&quot;User-Agent&quot;</span><span class="p">];</span>
+<span class="p">[</span><span class="n">webViewInstance</span> <span class="n">loadRequest</span><span class="o">:</span><span class="n">request</span><span class="p">];</span>
+</pre></div>
+
+
+<p>从iOS 5开始，取消了UIWebView中修改header的API，可以通过修改global user default来改变UIWebView。 我还希望在自定义User-Agent时保留默认的内容:</p>
+<div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">setGlobalUserAgent</span>
+<span class="p">{</span>
+    <span class="c1">//获取默认User-Agent</span>
+    <span class="n">UIWebView</span> <span class="o">*</span><span class="n">webView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIWebView</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">initWithFrame</span><span class="o">:</span><span class="n">CGRectZero</span><span class="p">];</span>
+    <span class="n">NSString</span> <span class="o">*</span><span class="n">oldAgent</span> <span class="o">=</span> <span class="p">[</span><span class="n">webView</span> <span class="n">stringByEvaluatingJavaScriptFromString</span><span class="o">:</span><span class="s">@&quot;navigator.userAgent&quot;</span><span class="p">];</span>
+
+    <span class="c1">//添加自己的User-Agent内容</span>
+    <span class="n">NSString</span> <span class="o">*</span><span class="n">newAgent</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="n">stringWithFormat</span><span class="o">:</span><span class="s">@&quot;%@;%@&quot;</span><span class="p">,</span> <span class="n">oldAgent</span><span class="p">,</span> <span class="s">@&quot;JingChao/250.5 ...</span></pre></div>
+                    <a class="btn btn-default btn-xs" href="/xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html">more ...</a>
+                </div>
+            </article>
+            <hr/>
+            <article>
                 <h2><a href="/gityuan-cheng-fen-zhi-cao-zuo.html">git远程分支操作</a></h2>
                 <div class="summary"><p>如果你将一个远程库clone到本地，那么远程库默认会使用origin作为别名。可以使用git remote -v命令查看远程库的别名和信息。</p>
 <p>远程分支merge到本地分支，以及本地分支push到远程分支的命令如下:</p>
@@ -276,6 +299,11 @@ Undefined symbols for architecture armv7:
                 <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
                     <ul class="list-group" id="recentposts">
                         <li class="list-group-item">
+                            <a href="/xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html">
+                                修改UIWebView请求中的User-Agent
+                            </a>
+                        </li>
+                        <li class="list-group-item">
                             <a href="/gityuan-cheng-fen-zhi-cao-zuo.html">
                                 git远程分支操作
                             </a>
@@ -295,11 +323,6 @@ Undefined symbols for architecture armv7:
                                 百度地图iOS SDK定位返回{0,0}坐标
                             </a>
                         </li>
-                        <li class="list-group-item">
-                            <a href="/yan-zheng-che-pai-hao-shi-fou-he-fa.html">
-                                验证车牌号是否合法
-                            </a>
-                        </li>
                     </ul>
                 </li>
 
@@ -315,9 +338,14 @@ Undefined symbols for architecture armv7:
 
                 <li class="list-group-item"><a href="/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
                     <ul class="list-group " id="tags">
-                        <li class="list-group-item tag-1">
+                        <li class="list-group-item tag-0">
                             <a href="/tag/ios.html">
                                 iOS
+                            </a>
+                        </li>
+                        <li class="list-group-item tag-2">
+                            <a href="/tag/git.html">
+                                git
                             </a>
                         </li>
                         <li class="list-group-item tag-2">
@@ -328,11 +356,6 @@ Undefined symbols for architecture armv7:
                         <li class="list-group-item tag-2">
                             <a href="/tag/github.html">
                                 github
-                            </a>
-                        </li>
-                        <li class="list-group-item tag-2">
-                            <a href="/tag/git.html">
-                                git
                             </a>
                         </li>
                     </ul>

@@ -1,5 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>荆超的小站</title><link href="/" rel="alternate"></link><link href="/feeds/jing-chao.atom.xml" rel="self"></link><id>/</id><updated>2014-09-17T00:00:00+08:00</updated><entry><title>git远程分支操作</title><link href="/gityuan-cheng-fen-zhi-cao-zuo.html" rel="alternate"></link><updated>2014-09-17T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-17:gityuan-cheng-fen-zhi-cao-zuo.html</id><summary type="html">&lt;p&gt;如果你将一个远程库clone到本地，那么远程库默认会使用origin作为别名。可以使用git remote -v命令查看远程库的别名和信息。&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>荆超的小站</title><link href="/" rel="alternate"></link><link href="/feeds/jing-chao.atom.xml" rel="self"></link><id>/</id><updated>2014-09-26T00:00:00+08:00</updated><entry><title>修改UIWebView请求中的User-Agent</title><link href="/xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html" rel="alternate"></link><updated>2014-09-26T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-26:xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html</id><summary type="html">&lt;p&gt;我希望UIWebView在发出HTTP请求时能够自定义header中的User-Agent。 &lt;/p&gt;
+&lt;p&gt;首先，修改loadRequest方法的参数，是无效的:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;NSMutableURLRequest&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NSMutableURLRequest&lt;/span&gt; &lt;span class="n"&gt;requestWithURL&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;urlInstance&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt; &lt;span class="n"&gt;setValue&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;my defined user-agent&amp;quot;&lt;/span&gt; &lt;span class="n"&gt;forHTTPHeaderField&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;User-Agent&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;webViewInstance&lt;/span&gt; &lt;span class="n"&gt;loadRequest&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;从iOS 5开始，取消了UIWebView中修改header的API，可以通过修改global user default来改变UIWebView。 我还希望在自定义User-Agent时保留默认的内容:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="nf"&gt;setGlobalUserAgent&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;//获取默认User-Agent&lt;/span&gt;
+    &lt;span class="n"&gt;UIWebView&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;webView&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="n"&gt;UIWebView&lt;/span&gt; &lt;span class="n"&gt;alloc&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;initWithFrame&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;CGRectZero&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;oldAgent&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;webView&lt;/span&gt; &lt;span class="n"&gt;stringByEvaluatingJavaScriptFromString&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;navigator.userAgent&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+
+    &lt;span class="c1"&gt;//添加自己的User-Agent内容&lt;/span&gt;
+    &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;newAgent&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="n"&gt;stringWithFormat&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;%@;%@&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;oldAgent&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;@&amp;quot;JingChao/250.5&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+
+    &lt;span class="c1"&gt;//设置global user default&lt;/span&gt;
+    &lt;span class="n"&gt;NSDictionary&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;dictionnary&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="n"&gt;NSDictionary&lt;/span&gt; &lt;span class="n"&gt;alloc&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;initWithObjectsAndKeys&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;newAgent&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;@&amp;quot;UserAgent&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nb"&gt;nil&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="n"&gt;NSUserDefaults&lt;/span&gt; &lt;span class="n"&gt;standardUserDefaults&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;registerDefaults&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;dictionnary&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;在初始化UIWebView之前调用上面的方法即可生效。一个好的办法是，在AppDelegate的didFinishLaunchingWithOptions中调用该方法:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;BOOL&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;application:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;UIApplication&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;application&lt;/span&gt; &lt;span class="nf"&gt;didFinishLaunchingWithOptions:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSDictionary&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;launchOptions&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt; &lt;span class="n"&gt;setGlobalUserAgent&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;注: 代码在iOS 8.0上实验成功&lt;/p&gt;
+&lt;h3&gt;网上其它解决方案&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="http://eng.kifi.com/customizing-uiwebview-requests-with-nsurlprotocol/"&gt;修改NSURLProtocol&lt;/a&gt;，有人说到&lt;a href="http://stackoverflow.com/questions/22787356/ios-how-to-add-a-custom-header-field-to-every-request-made-by-my-uiwebview"&gt;这种方法会对登录页产生影响&lt;/a&gt;。我实验该方法失败，UIWebView发出的请求没有任何改变。&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.icab.de/blog/2010/04/07/changing-the-headers-for-uiwebkit-http-requests/"&gt;重载setValue:forHTTPHeaderField&lt;/a&gt;，原理我没有看明白，也没有实验。该文还提到了修改NSURLProtocol在iOS 5中是有效的，不知道上一种方法实验失败是不是因为系统版本问题。&lt;/li&gt;
+&lt;/ol&gt;</summary><category term="iOS"></category></entry><entry><title>git远程分支操作</title><link href="/gityuan-cheng-fen-zhi-cao-zuo.html" rel="alternate"></link><updated>2014-09-17T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-17:gityuan-cheng-fen-zhi-cao-zuo.html</id><summary type="html">&lt;p&gt;如果你将一个远程库clone到本地，那么远程库默认会使用origin作为别名。可以使用git remote -v命令查看远程库的别名和信息。&lt;/p&gt;
 &lt;p&gt;远程分支merge到本地分支，以及本地分支push到远程分支的命令如下:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;pull&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt; &lt;span class="n"&gt;master&lt;/span&gt;
 &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;push&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt; &lt;span class="n"&gt;master&lt;/span&gt;
@@ -156,8 +194,10 @@ Undefined symbols for architecture armv7:
 &lt;p&gt;&lt;img alt="Alt Text" src="/images/选项分成多行.png" /&gt;&lt;/p&gt;
 &lt;p&gt;保持这样就好。我在空格前面加反斜杠之后，可以使自动分行失效，但build时会报错。&lt;/p&gt;
 &lt;p&gt;除此之外，还要做两件事：&lt;/p&gt;
-&lt;p&gt;1   将libbaidumapapi.a从Link Binary With Libaries中删掉
-1   将libbaidumapapi.a从Search Paths中删除&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;将libbaidumapapi.a从Link Binary With Libaries中删掉&lt;/li&gt;
+&lt;li&gt;将libbaidumapapi.a从Search Paths中删除&lt;/li&gt;
+&lt;/ol&gt;
 &lt;p&gt;为了实现2，我还为libbaidumapapi.a单独创建了一个文件夹。&lt;/p&gt;
 &lt;p&gt;Search Paths在Linking下方不远。Link Binary With Libaries在Build Phase中，入下图:&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Alt Text" src="/images/LinkBinaryWithLibaries位置.png" /&gt;&lt;/p&gt;</summary><category term="iOS"></category></entry><entry><title>UITableViewCell文本高度自适应</title><link href="/uitableviewcellwen-ben-gao-du-zi-gua-ying.html" rel="alternate"></link><updated>2014-09-09T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-09:uitableviewcellwen-ben-gao-du-zi-gua-ying.html</id><summary type="html">&lt;p&gt;在UITableViewCell中使用UILabel存储文本，每个cell的高度需要根据其文本内容的长度自适应。&lt;/p&gt;

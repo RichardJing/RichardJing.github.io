@@ -2,7 +2,7 @@
 <html lang="en"
 >
 <head>
-    <title>在Godaddy上给github pages配置自定义域名 - 荆超的小站</title>
+    <title>修改UIWebView请求中的User-Agent - 荆超的小站</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -10,11 +10,11 @@
 
 
 
-<link rel="canonical" href="/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html">
+<link rel="canonical" href="/xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html">
 
         <meta name="author" content="荆超" />
-        <meta name="keywords" content="github" />
-        <meta name="description" content="Github pages默认的域名是username.github.io，十分丑陋。 在repository根目录中添加CNAME文件，并添加你的域名。CNAME文件只能有一行: jingchao.me 打开Godaddy网站，进入“Manage My Domains”: 在Godaddy中配置DNS ZoneFile必须保证Nameserver是Godaddy自己的。在要修改的域名旁边点击向下的三角，然后点击“Set Nameservers”: 保证Nameserver是Standard，即GoDaddy自己的Nameserver: 进入“Manage DNS”: 修改DNS Zone File: 在“A(Host)”区块下，将IP指向: 192.30.252.153 在“CName (Alias)”区块下， 将www指向: username.github.io 保存，等待你的DNS配置更新成功。" />
+        <meta name="keywords" content="iOS" />
+        <meta name="description" content="我希望UIWebView在发出HTTP请求时能够自定义header中的User-Agent。 首先，修改loadRequest方法的参数，是无效的: NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlInstance]; [request setValue:@&#34;my defined user-agent&#34; forHTTPHeaderField:@&#34;User-Agent&#34;]; [webViewInstance loadRequest:request]; 从iOS 5开始，取消了UIWebView中修改header的API，可以通过修改global user default来改变UIWebView。 我还希望在自定义User-Agent时保留默认的内容: - (void) setGlobalUserAgent { //获取默认User-Agent UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectZero]; NSString *oldAgent = [webView stringByEvaluatingJavaScriptFromString:@&#34;navigator.userAgent&#34;]; //添加自己的User-Agent内容 NSString *newAgent = [NSString stringWithFormat:@&#34;%@;%@&#34;, oldAgent, @&#34;JingChao/250.5 ..." />
 
 
 
@@ -60,10 +60,10 @@
         <article>
             <header class="page-header">
                 <h1>
-                    <a href="/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html"
+                    <a href="/xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html"
                        rel="bookmark"
-                       title="Permalink to 在Godaddy上给github pages配置自定义域名">
-                        在Godaddy上给github pages配置自定义域名
+                       title="Permalink to 修改UIWebView请求中的User-Agent">
+                        修改UIWebView请求中的User-Agent
                     </a>
                 </h1>
             </header>
@@ -73,37 +73,55 @@
 <footer class="post-info">
     <span class="label label-default">Date</span>
     <span class="published">
-        <i class="fa fa-calendar"></i><time datetime="2014-08-26T00:00:00+08:00"> 二 26 八月 2014</time>
+        <i class="fa fa-calendar"></i><time datetime="2014-09-26T00:00:00+08:00"> 五 26 九月 2014</time>
     </span>
 
 
 
 <span class="label label-default">Tags</span>
-	<a href="/tag/github.html">github</a>
+	<a href="/tag/ios.html">iOS</a>
     
 </footer><!-- /.post-info -->                    </div>
                 </div>
-                <p>Github pages默认的域名是username.github.io，十分丑陋。</p>
-<p>在repository根目录中添加CNAME文件，并添加你的域名。CNAME文件只能有一行:</p>
-<div class="highlight"><pre><span class="n">jingchao</span><span class="p">.</span><span class="n">me</span>
+                <p>我希望UIWebView在发出HTTP请求时能够自定义header中的User-Agent。 </p>
+<p>首先，修改loadRequest方法的参数，是无效的:</p>
+<div class="highlight"><pre><span class="n">NSMutableURLRequest</span> <span class="o">*</span><span class="n">request</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSMutableURLRequest</span> <span class="n">requestWithURL</span><span class="o">:</span><span class="n">urlInstance</span><span class="p">];</span>
+<span class="p">[</span><span class="n">request</span> <span class="n">setValue</span><span class="o">:</span><span class="s">@&quot;my defined user-agent&quot;</span> <span class="n">forHTTPHeaderField</span><span class="o">:</span><span class="s">@&quot;User-Agent&quot;</span><span class="p">];</span>
+<span class="p">[</span><span class="n">webViewInstance</span> <span class="n">loadRequest</span><span class="o">:</span><span class="n">request</span><span class="p">];</span>
 </pre></div>
 
 
-<p>打开Godaddy网站，进入“Manage My Domains”:</p>
-<p><img alt="Alt Text" src="/images/ManageMyDomains.png" /></p>
-<p>在Godaddy中配置DNS ZoneFile必须保证Nameserver是Godaddy自己的。在要修改的域名旁边点击向下的三角，然后点击“Set Nameservers”:</p>
-<p><img alt="Alt Text" src="/images/SetNameservers.png" /></p>
-<p>保证Nameserver是Standard，即GoDaddy自己的Nameserver:</p>
-<p><img alt="Alt Text" src="/images/StandardNameserver.png" /></p>
-<p>进入“Manage DNS”:</p>
-<p><img alt="Alt Text" src="/images/ManageDNS.png" /></p>
-<p>修改DNS Zone File:</p>
+<p>从iOS 5开始，取消了UIWebView中修改header的API，可以通过修改global user default来改变UIWebView。 我还希望在自定义User-Agent时保留默认的内容:</p>
+<div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">setGlobalUserAgent</span>
+<span class="p">{</span>
+    <span class="c1">//获取默认User-Agent</span>
+    <span class="n">UIWebView</span> <span class="o">*</span><span class="n">webView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIWebView</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">initWithFrame</span><span class="o">:</span><span class="n">CGRectZero</span><span class="p">];</span>
+    <span class="n">NSString</span> <span class="o">*</span><span class="n">oldAgent</span> <span class="o">=</span> <span class="p">[</span><span class="n">webView</span> <span class="n">stringByEvaluatingJavaScriptFromString</span><span class="o">:</span><span class="s">@&quot;navigator.userAgent&quot;</span><span class="p">];</span>
+
+    <span class="c1">//添加自己的User-Agent内容</span>
+    <span class="n">NSString</span> <span class="o">*</span><span class="n">newAgent</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSString</span> <span class="n">stringWithFormat</span><span class="o">:</span><span class="s">@&quot;%@;%@&quot;</span><span class="p">,</span> <span class="n">oldAgent</span><span class="p">,</span> <span class="s">@&quot;JingChao/250.5&quot;</span><span class="p">];</span>
+
+    <span class="c1">//设置global user default</span>
+    <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">dictionnary</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSDictionary</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">initWithObjectsAndKeys</span><span class="o">:</span><span class="n">newAgent</span><span class="p">,</span> <span class="s">@&quot;UserAgent&quot;</span><span class="p">,</span> <span class="nb">nil</span><span class="p">];</span>
+    <span class="p">[[</span><span class="n">NSUserDefaults</span> <span class="n">standardUserDefaults</span><span class="p">]</span> <span class="n">registerDefaults</span><span class="o">:</span><span class="n">dictionnary</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>在初始化UIWebView之前调用上面的方法即可生效。一个好的办法是，在AppDelegate的didFinishLaunchingWithOptions中调用该方法:</p>
+<div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">application:</span><span class="p">(</span><span class="n">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="nv">application</span> <span class="nf">didFinishLaunchingWithOptions:</span><span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">launchOptions</span>
+<span class="p">{</span>
+    <span class="p">[</span><span class="n">self</span> <span class="n">setGlobalUserAgent</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>注: 代码在iOS 8.0上实验成功</p>
+<h3>网上其它解决方案</h3>
 <ol>
-<li>在“A(Host)”区块下，将IP指向: 192.30.252.153</li>
-<li>在“CName (Alias)”区块下， 将www指向: username.github.io</li>
+<li><a href="http://eng.kifi.com/customizing-uiwebview-requests-with-nsurlprotocol/">修改NSURLProtocol</a>，有人说到<a href="http://stackoverflow.com/questions/22787356/ios-how-to-add-a-custom-header-field-to-every-request-made-by-my-uiwebview">这种方法会对登录页产生影响</a>。我实验该方法失败，UIWebView发出的请求没有任何改变。</li>
+<li><a href="http://www.icab.de/blog/2010/04/07/changing-the-headers-for-uiwebkit-http-requests/">重载setValue:forHTTPHeaderField</a>，原理我没有看明白，也没有实验。该文还提到了修改NSURLProtocol在iOS 5中是有效的，不知道上一种方法实验失败是不是因为系统版本问题。</li>
 </ol>
-<p><img alt="Alt Text" src="/images/修改DNSZoneFile.png" /></p>
-<p>保存，等待你的DNS配置更新成功。</p>
             </div>
             <!-- /.entry-content -->
     <hr/>
@@ -115,8 +133,8 @@
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
 
-                    var disqus_identifier = 'zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming';
-                var disqus_url = '/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html';
+                    var disqus_identifier = 'xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent';
+                var disqus_url = '/xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html';
 
             var disqus_config = function () {
                 this.language = "en";
