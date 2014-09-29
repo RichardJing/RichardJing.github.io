@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>荆超的小站</title><link href="/" rel="alternate"></link><link href="/feeds/jing-chao.atom.xml" rel="self"></link><id>/</id><updated>2014-09-28T00:00:00+08:00</updated><entry><title>限制UIWebView只能上下滚动，不能左右滚动</title><link href="/xian-zhi-uiwebviewzhi-neng-shang-xia-gun-dong-bu-neng-zuo-you-gun-dong.html" rel="alternate"></link><updated>2014-09-28T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-28:xian-zhi-uiwebviewzhi-neng-shang-xia-gun-dong-bu-neng-zuo-you-gun-dong.html</id><summary type="html">&lt;p&gt;如果网页内容超过UIWebView的边框，就会自动触发水平或者竖直的滚动功能。如果有个很“长”的页面，我希望网页内容能够与UIWebView等宽，并且只能上下滚动，不能左右滚动。&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>荆超的小站</title><link href="/" rel="alternate"></link><link href="/feeds/jing-chao.atom.xml" rel="self"></link><id>/</id><updated>2014-09-28T00:00:00+08:00</updated><entry><title>限制UIWebView只能竖直滚动，不能水平滚动</title><link href="/xian-zhi-uiwebviewzhi-neng-shu-zhi-gun-dong-bu-neng-shui-ping-gun-dong.html" rel="alternate"></link><updated>2014-09-28T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-28:xian-zhi-uiwebviewzhi-neng-shu-zhi-gun-dong-bu-neng-shui-ping-gun-dong.html</id><summary type="html">&lt;p&gt;如果网页内容超过UIWebView的边框，就会自动触发水平或者竖直的滚动功能。如果有个很“长”的页面，我希望网页内容能够与UIWebView等宽，并且只能上下滚动，不能左右滚动。&lt;/p&gt;
 &lt;p&gt;现有一个HTML页面，只输出一张300*533像素的图片:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nt"&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
 &lt;span class="nt"&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
@@ -86,13 +86,13 @@
 &lt;p&gt;代码中的方法在head中注入了一段meta，注入一段CSS来限制宽度应该也是可以的。&lt;/p&gt;
 &lt;h3&gt;再说说我用过的几个无效方法。&lt;/h3&gt;
 &lt;h4&gt;调用UIWebView自身的方法都无法解决问题&lt;/h4&gt;
-&lt;p&gt;首先，setScalesPageToFit方法对本问题无效
-xcode帮助文档中对这个方法的介绍:
+&lt;p&gt;首先，setScalesPageToFit方法对本问题无效。Xcode帮助文档中对这个方法的介绍:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;
     A Boolean value determining whether the webpage scales to fit the view and the user can change the scale.
     If YES, the webpage is scaled to fit and the user can zoom in and zoom out. If NO, user zooming is disabled. The default value is NO.
 &lt;/code&gt;&lt;/pre&gt;
-第一段后半句话好理解，可以控制用户是否能缩放，前半句“the webpage scales to fit the view ”不知道是指什么。 设置为YES之后，仍旧是之前的模样。&lt;/p&gt;
+
+&lt;p&gt;第一段后半句话好理解，可以控制用户是否能缩放，前半句“the webpage scales to fit the view ”不知道是指什么。 设置为YES之后，仍旧是之前的模样。&lt;/p&gt;
 &lt;p&gt;ScrollView没有直接解决本问题的方法。UIWebView里面有个UIScrollView用来承载网页内容，UIScrollView有几个bounce方法:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;//both  vertically and horizontally&lt;/span&gt;
 &lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;webView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scrollView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bounces&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;NO&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;

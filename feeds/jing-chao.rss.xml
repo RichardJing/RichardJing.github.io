@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>荆超的小站</title><link>/</link><description></description><atom:link href="/feeds/jing-chao.rss.xml" rel="self"></atom:link><lastBuildDate>Sun, 28 Sep 2014 00:00:00 +0800</lastBuildDate><item><title>限制UIWebView只能上下滚动，不能左右滚动</title><link>/xian-zhi-uiwebviewzhi-neng-shang-xia-gun-dong-bu-neng-zuo-you-gun-dong.html</link><description>&lt;p&gt;如果网页内容超过UIWebView的边框，就会自动触发水平或者竖直的滚动功能。如果有个很“长”的页面，我希望网页内容能够与UIWebView等宽，并且只能上下滚动，不能左右滚动。&lt;/p&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>荆超的小站</title><link>/</link><description></description><atom:link href="/feeds/jing-chao.rss.xml" rel="self"></atom:link><lastBuildDate>Sun, 28 Sep 2014 00:00:00 +0800</lastBuildDate><item><title>限制UIWebView只能竖直滚动，不能水平滚动</title><link>/xian-zhi-uiwebviewzhi-neng-shu-zhi-gun-dong-bu-neng-shui-ping-gun-dong.html</link><description>&lt;p&gt;如果网页内容超过UIWebView的边框，就会自动触发水平或者竖直的滚动功能。如果有个很“长”的页面，我希望网页内容能够与UIWebView等宽，并且只能上下滚动，不能左右滚动。&lt;/p&gt;
 &lt;p&gt;现有一个HTML页面，只输出一张300*533像素的图片:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nt"&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
 &lt;span class="nt"&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
@@ -86,13 +86,13 @@
 &lt;p&gt;代码中的方法在head中注入了一段meta，注入一段CSS来限制宽度应该也是可以的。&lt;/p&gt;
 &lt;h3&gt;再说说我用过的几个无效方法。&lt;/h3&gt;
 &lt;h4&gt;调用UIWebView自身的方法都无法解决问题&lt;/h4&gt;
-&lt;p&gt;首先，setScalesPageToFit方法对本问题无效
-xcode帮助文档中对这个方法的介绍:
+&lt;p&gt;首先，setScalesPageToFit方法对本问题无效。Xcode帮助文档中对这个方法的介绍:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;
     A Boolean value determining whether the webpage scales to fit the view and the user can change the scale.
     If YES, the webpage is scaled to fit and the user can zoom in and zoom out. If NO, user zooming is disabled. The default value is NO.
 &lt;/code&gt;&lt;/pre&gt;
-第一段后半句话好理解，可以控制用户是否能缩放，前半句“the webpage scales to fit the view ”不知道是指什么。 设置为YES之后，仍旧是之前的模样。&lt;/p&gt;
+
+&lt;p&gt;第一段后半句话好理解，可以控制用户是否能缩放，前半句“the webpage scales to fit the view ”不知道是指什么。 设置为YES之后，仍旧是之前的模样。&lt;/p&gt;
 &lt;p&gt;ScrollView没有直接解决本问题的方法。UIWebView里面有个UIScrollView用来承载网页内容，UIScrollView有几个bounce方法:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;//both  vertically and horizontally&lt;/span&gt;
 &lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;webView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scrollView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bounces&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;NO&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
@@ -126,7 +126,7 @@ If the value of this property is YES, the scroll view bounces when it encounters
 
 
 &lt;p&gt;重新运行程序，图片能够匹配宽度。虽然图片缩放了，但是scrollView.contentSize没有变化，水平依旧可以拖动，超过图片边界的地方可以看到webView的背景色。如下图:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Alt Text" src="/images/scrollView缩放.png" /&gt;&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">荆超</dc:creator><pubDate>Sun, 28 Sep 2014 00:00:00 +0800</pubDate><guid>tag:,2014-09-28:xian-zhi-uiwebviewzhi-neng-shang-xia-gun-dong-bu-neng-zuo-you-gun-dong.html</guid><category>iOS</category></item><item><title>修改UIWebView请求中的User-Agent</title><link>/xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html</link><description>&lt;p&gt;我希望UIWebView在发出HTTP请求时能够自定义header中的User-Agent。 &lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="/images/scrollView缩放.png" /&gt;&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">荆超</dc:creator><pubDate>Sun, 28 Sep 2014 00:00:00 +0800</pubDate><guid>tag:,2014-09-28:xian-zhi-uiwebviewzhi-neng-shu-zhi-gun-dong-bu-neng-shui-ping-gun-dong.html</guid><category>iOS</category></item><item><title>修改UIWebView请求中的User-Agent</title><link>/xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html</link><description>&lt;p&gt;我希望UIWebView在发出HTTP请求时能够自定义header中的User-Agent。 &lt;/p&gt;
 &lt;p&gt;首先，修改loadRequest方法的参数，是无效的:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;NSMutableURLRequest&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NSMutableURLRequest&lt;/span&gt; &lt;span class="n"&gt;requestWithURL&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;urlInstance&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
 &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt; &lt;span class="n"&gt;setValue&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;my defined user-agent&amp;quot;&lt;/span&gt; &lt;span class="n"&gt;forHTTPHeaderField&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;User-Agent&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
