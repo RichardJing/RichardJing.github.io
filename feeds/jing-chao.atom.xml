@@ -1,5 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>荆超的小站</title><link href="/" rel="alternate"></link><link href="/feeds/jing-chao.atom.xml" rel="self"></link><id>/</id><updated>2014-09-26T00:00:00+08:00</updated><entry><title>修改UIWebView请求中的User-Agent</title><link href="/xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html" rel="alternate"></link><updated>2014-09-26T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-26:xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html</id><summary type="html">&lt;p&gt;我希望UIWebView在发出HTTP请求时能够自定义header中的User-Agent。 &lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>荆超的小站</title><link href="/" rel="alternate"></link><link href="/feeds/jing-chao.atom.xml" rel="self"></link><id>/</id><updated>2014-09-28T00:00:00+08:00</updated><entry><title>限制UIWebView只能上下滚动，不能左右滚动</title><link href="/xian-zhi-uiwebviewzhi-neng-shang-xia-gun-dong-bu-neng-zuo-you-gun-dong.html" rel="alternate"></link><updated>2014-09-28T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-28:xian-zhi-uiwebviewzhi-neng-shang-xia-gun-dong-bu-neng-zuo-you-gun-dong.html</id><summary type="html">&lt;p&gt;如果网页内容超过UIWebView的边框，就会自动触发水平或者竖直的滚动功能。如果有个很“长”的页面，我希望网页内容能够与UIWebView等宽，并且只能上下滚动，不能左右滚动。&lt;/p&gt;
+&lt;p&gt;现有一个HTML页面，只输出一张300*533像素的图片:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nt"&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;title&amp;gt;&lt;/span&gt;UIWebView Test&lt;span class="nt"&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;style &lt;/span&gt;&lt;span class="na"&gt;type=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;text/css&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;body&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="k"&gt;margin&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="m"&gt;0px&lt;/span&gt;&lt;span class="p"&gt;;}&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/style&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;div&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;img&lt;/span&gt; &lt;span class="na"&gt;src=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;images/ad.png&amp;#39;&lt;/span&gt;&lt;span class="nt"&gt;/&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;建立一个200*300的UIWebView，载入页面后是这个样子:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="/images/原始尺寸显示_左右都需要拖拽.png" /&gt;&lt;/p&gt;
+&lt;p&gt;最终实验成功的方法是，载入URL之后，修改返回的HTML，将HTML内容缩放为匹配UIWebView的宽度，然后载入修改后的HTML。代码:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;//&lt;/span&gt;
+&lt;span class="c1"&gt;//  ViewController.m&lt;/span&gt;
+&lt;span class="c1"&gt;//&lt;/span&gt;
+
+&lt;span class="cp"&gt;#import &amp;quot;ViewController.h&amp;quot;&lt;/span&gt;
+
+&lt;span class="k"&gt;@interface&lt;/span&gt; &lt;span class="nc"&gt;ViewController&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;UIWebViewDelegate&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="k"&gt;@property&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;weak&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;nonatomic&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="kt"&gt;IBOutlet&lt;/span&gt; &lt;span class="n"&gt;UIWebView&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;webView&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;@property&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;nonatomic&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;strong&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;NSURL&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;@property&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;nonatomic&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="kt"&gt;BOOL&lt;/span&gt; &lt;span class="n"&gt;isLoadingFinished&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;@end&lt;/span&gt;
+
+&lt;span class="k"&gt;@implementation&lt;/span&gt; &lt;span class="nc"&gt;ViewController&lt;/span&gt;
+
+&lt;span class="k"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;viewDidLoad&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;super&lt;/span&gt; &lt;span class="n"&gt;viewDidLoad&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;webView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;delegate&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;imageURL&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;@&amp;quot;http://testsite/test.html&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NSURL&lt;/span&gt; &lt;span class="n"&gt;URLWithString&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;imageURL&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;webView&lt;/span&gt; &lt;span class="n"&gt;loadRequest&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NSURLRequest&lt;/span&gt; &lt;span class="n"&gt;requestWithURL&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;]];&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="nf"&gt;webViewDidFinishLoad:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;UIWebView&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;webView&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;isLoadingFinished&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+
+    &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;bodyWidthStr&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;webView&lt;/span&gt; &lt;span class="n"&gt;stringByEvaluatingJavaScriptFromString&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s"&gt;@&amp;quot;document.body.scrollWidth &amp;quot;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt; &lt;span class="c1"&gt;//js获取body宽度&lt;/span&gt;
+    &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;bodyWidth&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;bodyWidthStr&lt;/span&gt; &lt;span class="n"&gt;intValue&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+
+    &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;js&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;@&amp;quot;document.documentElement.innerHTML&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;html&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;webView&lt;/span&gt; &lt;span class="n"&gt;stringByEvaluatingJavaScriptFromString&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;js&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt; &lt;span class="c1"&gt;//获取HTML代码&lt;/span&gt;
+
+    &lt;span class="c1"&gt;//修改HTML代码&lt;/span&gt;
+    &lt;span class="n"&gt;html&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt; &lt;span class="n"&gt;htmlAdjustWithPageWidth&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;bodyWidth&lt;/span&gt;
+                                    &lt;span class="nl"&gt;html:&lt;/span&gt;&lt;span class="n"&gt;html&lt;/span&gt;
+                                 &lt;span class="nl"&gt;webView:&lt;/span&gt;&lt;span class="n"&gt;webView&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;isLoadingFinished&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;YES&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;webView&lt;/span&gt; &lt;span class="n"&gt;loadHTMLString&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;html&lt;/span&gt; &lt;span class="n"&gt;baseURL&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;htmlAdjustWithPageWidth:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;CGFloat&lt;/span&gt; &lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;pageWidth&lt;/span&gt;
+                                 &lt;span class="nl"&gt;html:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;html&lt;/span&gt;
+                              &lt;span class="nl"&gt;webView:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;UIWebView&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;webView&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;NSMutableString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;str&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NSMutableString&lt;/span&gt; &lt;span class="n"&gt;stringWithString&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;html&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="n"&gt;CGFloat&lt;/span&gt; &lt;span class="n"&gt;initialScale&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;frame&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;pageWidth&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="c1"&gt;//计算要缩放的比例&lt;/span&gt;
+
+    &lt;span class="c1"&gt;//将&amp;lt;/head&amp;gt;替换为meta+head&lt;/span&gt;
+    &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;stringForReplace&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="n"&gt;stringWithFormat&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;&amp;lt;meta name=&lt;/span&gt;&lt;span class="se"&gt;\&amp;quot;&lt;/span&gt;&lt;span class="s"&gt;viewport&lt;/span&gt;&lt;span class="se"&gt;\&amp;quot;&lt;/span&gt;&lt;span class="s"&gt; content=&lt;/span&gt;&lt;span class="se"&gt;\&amp;quot;&lt;/span&gt;&lt;span class="s"&gt; initial-scale=%f, minimum-scale=0.1, maximum-scale=2.0, user-scalable=yes&lt;/span&gt;&lt;span class="se"&gt;\&amp;quot;&lt;/span&gt;&lt;span class="s"&gt;&amp;gt;&amp;lt;/head&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;initialScale&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+
+    &lt;span class="n"&gt;NSRange&lt;/span&gt; &lt;span class="n"&gt;range&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;  &lt;span class="n"&gt;NSMakeRange&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;str&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;length&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;str&lt;/span&gt; &lt;span class="n"&gt;replaceOccurrencesOfString&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;&amp;lt;/head&amp;gt;&amp;quot;&lt;/span&gt; &lt;span class="n"&gt;withString&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;stringForReplace&lt;/span&gt; &lt;span class="n"&gt;options&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;NSLiteralSearch&lt;/span&gt; &lt;span class="n"&gt;range&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;range&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;str&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="k"&gt;@end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;效果如下图:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="/images/只能竖直拖拽.png" /&gt;&lt;/p&gt;
+&lt;p&gt;从上图可以看出，当网页内容宽度适配UIWebView宽度时，连水平滚动条都消失了。&lt;/p&gt;
+&lt;p&gt;代码中的方法在head中注入了一段meta，注入一段CSS来限制宽度应该也是可以的。&lt;/p&gt;
+&lt;h3&gt;再说说我用过的几个无效方法。&lt;/h3&gt;
+&lt;h4&gt;调用UIWebView自身的方法都无法解决问题&lt;/h4&gt;
+&lt;p&gt;首先，setScalesPageToFit方法对本问题无效
+xcode帮助文档中对这个方法的介绍:
+&lt;pre&gt;&lt;code&gt;
+    A Boolean value determining whether the webpage scales to fit the view and the user can change the scale.
+    If YES, the webpage is scaled to fit and the user can zoom in and zoom out. If NO, user zooming is disabled. The default value is NO.
+&lt;/code&gt;&lt;/pre&gt;
+第一段后半句话好理解，可以控制用户是否能缩放，前半句“the webpage scales to fit the view ”不知道是指什么。 设置为YES之后，仍旧是之前的模样。&lt;/p&gt;
+&lt;p&gt;ScrollView没有直接解决本问题的方法。UIWebView里面有个UIScrollView用来承载网页内容，UIScrollView有几个bounce方法:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;//both  vertically and horizontally&lt;/span&gt;
+&lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;webView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scrollView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bounces&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;NO&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="c1"&gt;// only vertically&lt;/span&gt;
+&lt;span class="n"&gt;webView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scrollView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;alwaysBounceVertical&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;NO&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;webView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scrollView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;alwaysBounceHorizontal&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="no"&gt;YES&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;上面的代码在实验时没有改变任何东西。Xcode文档对于scrollView.bounces的解释:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+A Boolean value that controls whether the scroll view bounces past the edge of content and back again.
+If the value of this property is YES, the scroll view bounces when it encounters a boundary of the content. Bouncing visually indicates that scrolling has reached an edge of the content. If the value is NO, scrolling stops immediately at the content boundary without bouncing. The default value is YES.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我理解bounce只是在到达网页内容边界时给个提示，但没有看到实际的效果是什么样子。&lt;/p&gt;
+&lt;h4&gt;scrollView缩放到宽度跟UIWebView边界匹配&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;webViewDidFinishLoad&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;UIWebView&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;webView&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;CGSize&lt;/span&gt; &lt;span class="n"&gt;contentSize&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scrollView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;contentSize&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="n"&gt;CGSize&lt;/span&gt; &lt;span class="n"&gt;webViewSize&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bounds&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+    &lt;span class="kt"&gt;float&lt;/span&gt; &lt;span class="n"&gt;rate&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webViewSize&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;width&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="n"&gt;contentSize&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;width&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+    &lt;span class="n"&gt;webView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scrollView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;minimumZoomScale&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;rate&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="n"&gt;webView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scrollView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;maximumZoomScale&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;rate&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="n"&gt;webView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;scrollView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;zoomScale&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;rate&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;重新运行程序，图片能够匹配宽度。虽然图片缩放了，但是scrollView.contentSize没有变化，水平依旧可以拖动，超过图片边界的地方可以看到webView的背景色。如下图:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="/images/scrollView缩放.png" /&gt;&lt;/p&gt;</summary><category term="iOS"></category></entry><entry><title>修改UIWebView请求中的User-Agent</title><link href="/xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html" rel="alternate"></link><updated>2014-09-26T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-26:xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html</id><summary type="html">&lt;p&gt;我希望UIWebView在发出HTTP请求时能够自定义header中的User-Agent。 &lt;/p&gt;
 &lt;p&gt;首先，修改loadRequest方法的参数，是无效的:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;NSMutableURLRequest&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NSMutableURLRequest&lt;/span&gt; &lt;span class="n"&gt;requestWithURL&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;urlInstance&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
 &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt; &lt;span class="n"&gt;setValue&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;my defined user-agent&amp;quot;&lt;/span&gt; &lt;span class="n"&gt;forHTTPHeaderField&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;User-Agent&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
@@ -336,7 +463,7 @@ Undefined symbols for architecture armv7:
 &lt;p&gt;参考:&lt;a href="http://blog.csdn.net/swingpyzf/article/details/18093959"&gt;IOS TableView的Cell高度自适应，UILabel自动换行适应&lt;/a&gt;&lt;/p&gt;</summary><category term="iOS"></category></entry><entry><title>百度地图iOS SDK定位返回{0,0}坐标</title><link href="/bai-du-di-tu-ios-sdkding-wei-fan-hui-00zuo-biao.html" rel="alternate"></link><updated>2014-09-08T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-08:bai-du-di-tu-ios-sdkding-wei-fan-hui-00zuo-biao.html</id><summary type="html">&lt;p&gt;我只需要在app打开时给用户定位，不需要一直追踪用户位置的变化。所以在定位成功后，我会立即关闭定位服务。发现返回坐标的经纬度都是零，mapView显示一片空白:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;didUpdateUserLocation:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;BMKUserLocation&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;userLocation&lt;/span&gt;
 &lt;span class="p"&gt;{&lt;/span&gt;
-    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;_mapView&lt;/span&gt; &lt;span class="n"&gt;setCenterCoordinate&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;userLocation&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;location&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;coordinate&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt; &lt;span class="c1"&gt;//_mapView是BMKMapView示例&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;_mapView&lt;/span&gt; &lt;span class="n"&gt;setCenterCoordinate&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;userLocation&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;location&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;coordinate&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt; &lt;span class="c1"&gt;//_mapView是一个BMKMapView实例&lt;/span&gt;
     &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;_locService&lt;/span&gt; &lt;span class="n"&gt;stopUserLocationService&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt; &lt;span class="c1"&gt;//定位成功后就关闭&lt;/span&gt;
 
     &lt;span class="c1"&gt;//打印出来发现都是零:&lt;/span&gt;

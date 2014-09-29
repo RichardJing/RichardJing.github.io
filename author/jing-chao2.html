@@ -2,7 +2,7 @@
 <html lang="en"
 >
 <head>
-    <title>Authors - 荆超的小站</title>
+    <title>Articles by 荆超 - 荆超的小站</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -59,8 +59,70 @@
     <div class="row">
         <div class="col-sm-9">
 
-    <h1>Authors on 荆超的小站</h1>
-        <li><a href="/author/jing-chao.html">荆超</a> (10)</li>
+            <article>
+                <h2><a href="/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html">在Godaddy上给github pages配置自定义域名</a></h2>
+                <div class="summary"><p>Github pages默认的域名是username.github.io，十分丑陋。</p>
+<p>在repository根目录中添加CNAME文件，并添加你的域名。CNAME文件只能有一行:</p>
+<div class="highlight"><pre><span class="n">jingchao</span><span class="p">.</span><span class="n">me</span>
+</pre></div>
+
+
+<p>打开Godaddy网站，进入“Manage My Domains”:</p>
+<p><img alt="Alt Text" src="/images/ManageMyDomains.png" /></p>
+<p>在Godaddy中配置DNS ZoneFile必须保证Nameserver是Godaddy自己的。在要修改的域名旁边点击向下的三角，然后点击“Set Nameservers”:</p>
+<p><img alt="Alt Text" src="/images/SetNameservers.png" /></p>
+<p>保证Nameserver是Standard，即GoDaddy自己的Nameserver:</p>
+<p><img alt="Alt Text" src="/images/StandardNameserver.png" /></p>
+<p>进入“Manage DNS”:</p>
+<p><img alt="Alt Text" src="/images/ManageDNS.png" /></p>
+<p>修改DNS Zone File:</p>
+<ol>
+<li>在“A(Host)”区块下，将IP指向: 192.30.252.153</li>
+<li>在“CName (Alias)”区块下， 将www指向: username.github.io</li>
+</ol>
+<p><img alt="Alt Text" src="/images/修改DNSZoneFile.png" /></p>
+<p>保存，等待你的DNS配置更新成功。</p>
+                    <a class="btn btn-default btn-xs" href="/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html">more ...</a>
+                </div>
+            </article>
+            <hr/>
+            <article>
+                <h2><a href="/bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html">百度LBS开放平台坐标转换及逆地理编码服务</a></h2>
+                <div class="summary"><h3>坐标转换</h3>
+<p>我获得iphone的定位结果后，在百度地图上进行标注，发现位置有上百米的偏差。是因为百度地图SDK和手机GPS定位使用了不同的坐标系统。</p>
+<p>目前常用的坐标系统有三种：</p>
+<ol>
+<li>GCJ-02，国测局经纬度坐标。由中国国家测绘局制订的地理信息系统的坐标系统。引入随机的偏差，对经纬度数据进行加密。google地图、soso地图都使用这种标准。</li>
+<li>WGS84，为GPS全球定位系统使用而建立的坐标系统。在iOS中，使用CLLocationManager接口定位出来的坐标属于该标准。</li>
+<li>bd09ll，百度经纬度坐标。百度地图SDK采用的是百度自有的地理坐标系</li>
+</ol>
+<p>百度LBS开放平台官方文档给出了<a href="http://developer.baidu.com/map/wiki/index.php?title=iossdk/guide/tool#.E5.9D.90.E6.A0.87.E8.BD.AC.E6.8D.A2">其它两种系统转换为百度坐标的方法</a> 。我的Object-C示例代码：</p>
+<div class="highlight"><pre><span class="cp">#import &quot;BMapKit.h&quot;</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">locationManager:</span><span class="p">(</span><span class="n">CLLocationManager</span> <span class="o">*</span><span class="p">)</span><span class="nv">manager</span>
+     <span class="nl">didUpdateLocations:</span><span class="p">(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">locations</span>
+<span class="p">{</span>
+
+    <span class="n">CLLocation</span> <span class="o">*</span><span class="n">location</span> <span class="o">=</span> <span class="p">[</span><span class="n">locations</span> <span class="n">lastObject</span><span class="p">];</span>
+
+    <span class="c1">//GPS坐标换为百度坐标（bd09ll）</span>
+    <span class="n">NSDictionary</span><span class="o">*</span> <span class="n">baiduDic</span> <span class="o">=</span> <span class="n">BMKConvertBaiduCoorFrom</span><span class="p">(</span><span class="n">location</span><span class="p">.</span><span class="n">coordinate</span><span class="p">,</span><span class="n">BMK_COORDTYPE_GPS</span><span class="p">);</span>
+
+    <span class="c1">//坐标是乱码</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;x=%@,y=%@&quot;</span><span class="p">,[</span><span class="n">baiduDic ...</span></pre></div>
+                    <a class="btn btn-default btn-xs" href="/bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html">more ...</a>
+                </div>
+            </article>
+            <hr/>
+
+        <ul class="pagination">
+                <li class="prev"><a href="/author/jing-chao.html">&laquo;</a>
+                </li>
+                    <li class=""><a
+                            href="/author/jing-chao.html">1</a></li>
+                    <li class="active"><a
+                            href="/author/jing-chao2.html">2</a></li>
+                <li class="next disabled"><a href="#">&raquo;</a></li>
+        </ul>
         </div>
         <div class="col-sm-3 well well-sm" id="sidebar">
 

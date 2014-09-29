@@ -61,6 +61,38 @@
         <div class="col-sm-9">
 
             <article>
+                <h2><a href="/xian-zhi-uiwebviewzhi-neng-shang-xia-gun-dong-bu-neng-zuo-you-gun-dong.html">限制UIWebView只能上下滚动，不能左右滚动</a></h2>
+                <div class="summary"><p>如果网页内容超过UIWebView的边框，就会自动触发水平或者竖直的滚动功能。如果有个很“长”的页面，我希望网页内容能够与UIWebView等宽，并且只能上下滚动，不能左右滚动。</p>
+<p>现有一个HTML页面，只输出一张300*533像素的图片:</p>
+<div class="highlight"><pre><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;title&gt;</span>UIWebView Test<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">body</span><span class="p">{</span><span class="k">margin</span><span class="o">:</span><span class="m">0px</span><span class="p">;}</span>
+<span class="nt">&lt;/style&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;div&gt;</span>
+    <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&#39;images/ad.png&#39;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+
+
+<p>建立一个200*300的UIWebView，载入页面后是这个样子:</p>
+<p><img alt="Alt Text" src="/images/原始尺寸显示_左右都需要拖拽.png" /></p>
+<p>最终实验成功的方法是，载入URL之后，修改返回的HTML，将HTML内容缩放为匹配UIWebView的宽度，然后载入修改后的HTML。代码:</p>
+<div class="highlight"><pre><span class="c1">//</span>
+<span class="c1">//  ViewController.m</span>
+<span class="c1">//</span>
+
+<span class="cp">#import &quot;ViewController.h ...</span></pre></div>
+                    <a class="btn btn-default btn-xs" href="/xian-zhi-uiwebviewzhi-neng-shang-xia-gun-dong-bu-neng-zuo-you-gun-dong.html">more ...</a>
+                </div>
+            </article>
+            <hr/>
+            <article>
                 <h2><a href="/xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html">修改UIWebView请求中的User-Agent</a></h2>
                 <div class="summary"><p>我希望UIWebView在发出HTTP请求时能够自定义header中的User-Agent。 </p>
 <p>首先，修改loadRequest方法的参数，是无效的:</p>
@@ -145,7 +177,7 @@ Undefined symbols for architecture armv7:
                 <div class="summary"><p>我只需要在app打开时给用户定位，不需要一直追踪用户位置的变化。所以在定位成功后，我会立即关闭定位服务。发现返回坐标的经纬度都是零，mapView显示一片空白:</p>
 <div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">didUpdateUserLocation:</span><span class="p">(</span><span class="n">BMKUserLocation</span> <span class="o">*</span><span class="p">)</span><span class="nv">userLocation</span>
 <span class="p">{</span>
-    <span class="p">[</span><span class="n">_mapView</span> <span class="n">setCenterCoordinate</span><span class="o">:</span><span class="n">userLocation</span><span class="p">.</span><span class="n">location</span><span class="p">.</span><span class="n">coordinate</span><span class="p">];</span> <span class="c1">//_mapView是BMKMapView示例</span>
+    <span class="p">[</span><span class="n">_mapView</span> <span class="n">setCenterCoordinate</span><span class="o">:</span><span class="n">userLocation</span><span class="p">.</span><span class="n">location</span><span class="p">.</span><span class="n">coordinate</span><span class="p">];</span> <span class="c1">//_mapView是一个BMKMapView实例</span>
     <span class="p">[</span><span class="n">_locService</span> <span class="n">stopUserLocationService</span><span class="p">];</span> <span class="c1">//定位成功后就关闭</span>
 
     <span class="c1">//打印出来发现都是零:</span>
@@ -229,6 +261,11 @@ Undefined symbols for architecture armv7:
                 <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
                     <ul class="list-group" id="recentposts">
                         <li class="list-group-item">
+                            <a href="/xian-zhi-uiwebviewzhi-neng-shang-xia-gun-dong-bu-neng-zuo-you-gun-dong.html">
+                                限制UIWebView只能上下滚动，不能左右滚动
+                            </a>
+                        </li>
+                        <li class="list-group-item">
                             <a href="/xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html">
                                 修改UIWebView请求中的User-Agent
                             </a>
@@ -253,6 +290,11 @@ Undefined symbols for architecture armv7:
                                 验证车牌号是否合法
                             </a>
                         </li>
+                        <li class="list-group-item">
+                            <a href="/bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html">
+                                百度LBS开放平台坐标转换及逆地理编码服务
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
@@ -268,14 +310,14 @@ Undefined symbols for architecture armv7:
 
                 <li class="list-group-item"><a href="/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
                     <ul class="list-group " id="tags">
-                        <li class="list-group-item tag-0">
+                        <li class="list-group-item tag-1">
                             <a href="/tag/ios.html">
                                 iOS
                             </a>
                         </li>
                         <li class="list-group-item tag-2">
-                            <a href="/tag/git.html">
-                                git
+                            <a href="/tag/github.html">
+                                github
                             </a>
                         </li>
                         <li class="list-group-item tag-2">
@@ -284,8 +326,8 @@ Undefined symbols for architecture armv7:
                             </a>
                         </li>
                         <li class="list-group-item tag-2">
-                            <a href="/tag/github.html">
-                                github
+                            <a href="/tag/git.html">
+                                git
                             </a>
                         </li>
                     </ul>
