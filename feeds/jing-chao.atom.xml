@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>荆超的小站</title><link href="/" rel="alternate"></link><link href="/feeds/jing-chao.atom.xml" rel="self"></link><id>/</id><updated>2014-09-28T00:00:00+08:00</updated><entry><title>限制UIWebView只能竖直滚动，不能水平滚动</title><link href="/xian-zhi-uiwebviewzhi-neng-shu-zhi-gun-dong-bu-neng-shui-ping-gun-dong.html" rel="alternate"></link><updated>2014-09-28T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-28:xian-zhi-uiwebviewzhi-neng-shu-zhi-gun-dong-bu-neng-shui-ping-gun-dong.html</id><summary type="html">&lt;p&gt;如果网页内容超过UIWebView的边框，就会自动触发水平或者竖直的滚动功能。如果有个很“长”的页面，我希望网页内容能够与UIWebView等宽，并且只能上下滚动，不能左右滚动。&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>荆超的小站</title><link href="jingchao.me/" rel="alternate"></link><link href="jingchao.me/feeds/jing-chao.atom.xml" rel="self"></link><id>jingchao.me/</id><updated>2014-09-28T00:00:00+08:00</updated><entry><title>限制UIWebView只能竖直滚动，不能水平滚动</title><link href="jingchao.me/xian-zhi-uiwebviewzhi-neng-shu-zhi-gun-dong-bu-neng-shui-ping-gun-dong.html" rel="alternate"></link><updated>2014-09-28T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-28:jingchao.me/xian-zhi-uiwebviewzhi-neng-shu-zhi-gun-dong-bu-neng-shui-ping-gun-dong.html</id><summary type="html">&lt;p&gt;如果网页内容超过UIWebView的边框，就会自动触发水平或者竖直的滚动功能。如果有个很“长”的页面，我希望网页内容能够与UIWebView等宽，并且只能上下滚动，不能左右滚动。&lt;/p&gt;
 &lt;p&gt;现有一个HTML页面，只输出一张300*533像素的图片:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nt"&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
 &lt;span class="nt"&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
@@ -18,7 +18,7 @@
 
 
 &lt;p&gt;建立一个200*300的UIWebView，载入页面后是这个样子:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Alt Text" src="/images/原始尺寸显示_左右都需要拖拽.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="jingchao.me/images/原始尺寸显示_左右都需要拖拽.png" /&gt;&lt;/p&gt;
 &lt;p&gt;最终实验成功的方法是，载入URL之后，修改返回的HTML，将HTML内容缩放为匹配UIWebView的宽度，然后载入修改后的HTML。代码:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;//&lt;/span&gt;
 &lt;span class="c1"&gt;//  ViewController.m&lt;/span&gt;
@@ -81,7 +81,7 @@
 
 
 &lt;p&gt;效果如下图:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Alt Text" src="/images/只能竖直拖拽.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="jingchao.me/images/只能竖直拖拽.png" /&gt;&lt;/p&gt;
 &lt;p&gt;从上图可以看出，当网页内容宽度适配UIWebView宽度时，连水平滚动条都消失了。&lt;/p&gt;
 &lt;p&gt;代码中的方法在head中注入了一段meta，注入一段CSS来限制宽度应该也是可以的。&lt;/p&gt;
 &lt;h3&gt;再说说我用过的几个无效方法。&lt;/h3&gt;
@@ -126,7 +126,7 @@ If the value of this property is YES, the scroll view bounces when it encounters
 
 
 &lt;p&gt;重新运行程序，图片能够匹配宽度。虽然图片缩放了，但是scrollView.contentSize没有变化，水平依旧可以拖动，超过图片边界的地方可以看到webView的背景色。如下图:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Alt Text" src="/images/scrollView缩放.png" /&gt;&lt;/p&gt;</summary><category term="iOS"></category></entry><entry><title>修改UIWebView请求中的User-Agent</title><link href="/xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html" rel="alternate"></link><updated>2014-09-26T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-26:xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html</id><summary type="html">&lt;p&gt;我希望UIWebView在发出HTTP请求时能够自定义header中的User-Agent。 &lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="jingchao.me/images/scrollView缩放.png" /&gt;&lt;/p&gt;</summary><category term="iOS"></category></entry><entry><title>修改UIWebView请求中的User-Agent</title><link href="jingchao.me/xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html" rel="alternate"></link><updated>2014-09-26T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-26:jingchao.me/xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html</id><summary type="html">&lt;p&gt;我希望UIWebView在发出HTTP请求时能够自定义header中的User-Agent。 &lt;/p&gt;
 &lt;p&gt;首先，修改loadRequest方法的参数，是无效的:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;NSMutableURLRequest&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NSMutableURLRequest&lt;/span&gt; &lt;span class="n"&gt;requestWithURL&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;urlInstance&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
 &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt; &lt;span class="n"&gt;setValue&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;my defined user-agent&amp;quot;&lt;/span&gt; &lt;span class="n"&gt;forHTTPHeaderField&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;User-Agent&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
@@ -164,7 +164,7 @@ If the value of this property is YES, the scroll view bounces when it encounters
 &lt;ol&gt;
 &lt;li&gt;&lt;a href="http://eng.kifi.com/customizing-uiwebview-requests-with-nsurlprotocol/"&gt;修改NSURLProtocol&lt;/a&gt;，有人说到&lt;a href="http://stackoverflow.com/questions/22787356/ios-how-to-add-a-custom-header-field-to-every-request-made-by-my-uiwebview"&gt;这种方法会对登录页产生影响&lt;/a&gt;。我实验该方法失败，UIWebView发出的请求没有任何改变。&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://www.icab.de/blog/2010/04/07/changing-the-headers-for-uiwebkit-http-requests/"&gt;重载setValue:forHTTPHeaderField&lt;/a&gt;，原理我没有看明白，也没有实验。该文还提到了修改NSURLProtocol在iOS 5中是有效的，不知道上一种方法实验失败是不是因为系统版本问题。&lt;/li&gt;
-&lt;/ol&gt;</summary><category term="iOS"></category></entry><entry><title>git远程分支操作</title><link href="/gityuan-cheng-fen-zhi-cao-zuo.html" rel="alternate"></link><updated>2014-09-17T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-17:gityuan-cheng-fen-zhi-cao-zuo.html</id><summary type="html">&lt;p&gt;如果你将一个远程库clone到本地，那么远程库默认会使用origin作为别名。可以使用git remote -v命令查看远程库的别名和信息。&lt;/p&gt;
+&lt;/ol&gt;</summary><category term="iOS"></category></entry><entry><title>git远程分支操作</title><link href="jingchao.me/gityuan-cheng-fen-zhi-cao-zuo.html" rel="alternate"></link><updated>2014-09-17T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-17:jingchao.me/gityuan-cheng-fen-zhi-cao-zuo.html</id><summary type="html">&lt;p&gt;如果你将一个远程库clone到本地，那么远程库默认会使用origin作为别名。可以使用git remote -v命令查看远程库的别名和信息。&lt;/p&gt;
 &lt;p&gt;远程分支merge到本地分支，以及本地分支push到远程分支的命令如下:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;pull&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt; &lt;span class="n"&gt;master&lt;/span&gt;
 &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;push&lt;/span&gt; &lt;span class="n"&gt;origin&lt;/span&gt; &lt;span class="n"&gt;master&lt;/span&gt;
@@ -295,7 +295,7 @@ If the value of this property is YES, the scroll view bounces when it encounters
   &lt;span class="n"&gt;Local&lt;/span&gt; &lt;span class="n"&gt;refs&lt;/span&gt; &lt;span class="n"&gt;configured&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;push&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
     &lt;span class="n"&gt;dev&lt;/span&gt;    &lt;span class="n"&gt;pushes&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;dev&lt;/span&gt;    &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;up&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
     &lt;span class="n"&gt;master&lt;/span&gt; &lt;span class="n"&gt;pushes&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;master&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;up&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;date&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;</summary><category term="git"></category></entry><entry><title>Xcode上配置链接器参数-force_load</title><link href="/xcodeshang-pei-zhi-lian-jie-qi-can-shu-force_load.html" rel="alternate"></link><updated>2014-09-16T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-16:xcodeshang-pei-zhi-lian-jie-qi-can-shu-force_load.html</id><summary type="html">&lt;h3&gt;先说一下我为什么用到了-force_load参数&lt;/h3&gt;
+&lt;/pre&gt;&lt;/div&gt;</summary><category term="git"></category></entry><entry><title>Xcode上配置链接器参数-force_load</title><link href="jingchao.me/xcodeshang-pei-zhi-lian-jie-qi-can-shu-force_load.html" rel="alternate"></link><updated>2014-09-16T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-16:jingchao.me/xcodeshang-pei-zhi-lian-jie-qi-can-shu-force_load.html</id><summary type="html">&lt;h3&gt;先说一下我为什么用到了-force_load参数&lt;/h3&gt;
 &lt;p&gt;百度地图iOS SDK的&lt;a href="http://developer.baidu.com/map/index.php?title=iossdk/guide/attention"&gt;注意事项&lt;/a&gt;中已经说明，必须在Xcode的Other Linker Flags中添加-all_load选项。在没有添加这个选项的情况下，我能够正常使用普通地图和定位服务。&lt;/p&gt;
 &lt;p&gt;我还需要使用百度LBS开放平台的&lt;a href="http://developer.baidu.com/map/index.php?title=webapi/guide/webservice-geocoding"&gt;逆地理编码&lt;/a&gt;服务。在官方网站中只介绍了web API，后来发现demo代码提供了iOS API的示例。在使用GEO API时(BMKGeoCodeSearch)，报出了找不到symbol的错误：&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;
@@ -316,9 +316,9 @@ Undefined symbols for architecture armv7:
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;点击TARGETS -&amp;gt; Buliding Settings -&amp;gt; Linking -&amp;gt; Other Linker Flags，添加上面的选项。入下图:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Alt Text" src="/images/添加OtherLinkerFlags选项.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="jingchao.me/images/添加OtherLinkerFlags选项.png" /&gt;&lt;/p&gt;
 &lt;p&gt;如果选项中含有空格，则Xcode会自动分成多行，入下图：&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Alt Text" src="/images/选项分成多行.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="jingchao.me/images/选项分成多行.png" /&gt;&lt;/p&gt;
 &lt;p&gt;保持这样就好。我在空格前面加反斜杠之后，可以使自动分行失效，但build时会报错。&lt;/p&gt;
 &lt;p&gt;除此之外，还要做两件事：&lt;/p&gt;
 &lt;ol&gt;
@@ -327,7 +327,7 @@ Undefined symbols for architecture armv7:
 &lt;/ol&gt;
 &lt;p&gt;为了实现2，我还为libbaidumapapi.a单独创建了一个文件夹。&lt;/p&gt;
 &lt;p&gt;Search Paths在Linking下方不远。Link Binary With Libaries在Build Phase中，入下图:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Alt Text" src="/images/LinkBinaryWithLibaries位置.png" /&gt;&lt;/p&gt;</summary><category term="iOS"></category></entry><entry><title>UITableViewCell文本高度自适应</title><link href="/uitableviewcellwen-ben-gao-du-zi-gua-ying.html" rel="alternate"></link><updated>2014-09-09T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-09:uitableviewcellwen-ben-gao-du-zi-gua-ying.html</id><summary type="html">&lt;p&gt;在UITableViewCell中使用UILabel存储文本，每个cell的高度需要根据其文本内容的长度自适应。&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="jingchao.me/images/LinkBinaryWithLibaries位置.png" /&gt;&lt;/p&gt;</summary><category term="iOS"></category></entry><entry><title>UITableViewCell文本高度自适应</title><link href="jingchao.me/uitableviewcellwen-ben-gao-du-zi-gua-ying.html" rel="alternate"></link><updated>2014-09-09T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-09:jingchao.me/uitableviewcellwen-ben-gao-du-zi-gua-ying.html</id><summary type="html">&lt;p&gt;在UITableViewCell中使用UILabel存储文本，每个cell的高度需要根据其文本内容的长度自适应。&lt;/p&gt;
 &lt;h4&gt;Cell的实现&lt;/h4&gt;
 &lt;p&gt;头文件:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;//&lt;/span&gt;
@@ -460,7 +460,7 @@ Undefined symbols for architecture armv7:
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;参考:&lt;a href="http://blog.csdn.net/swingpyzf/article/details/18093959"&gt;IOS TableView的Cell高度自适应，UILabel自动换行适应&lt;/a&gt;&lt;/p&gt;</summary><category term="iOS"></category></entry><entry><title>百度地图iOS SDK定位返回{0,0}坐标</title><link href="/bai-du-di-tu-ios-sdkding-wei-fan-hui-00zuo-biao.html" rel="alternate"></link><updated>2014-09-08T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-08:bai-du-di-tu-ios-sdkding-wei-fan-hui-00zuo-biao.html</id><summary type="html">&lt;p&gt;我只需要在app打开时给用户定位，不需要一直追踪用户位置的变化。所以在定位成功后，我会立即关闭定位服务。发现返回坐标的经纬度都是零，mapView显示一片空白:&lt;/p&gt;
+&lt;p&gt;参考:&lt;a href="http://blog.csdn.net/swingpyzf/article/details/18093959"&gt;IOS TableView的Cell高度自适应，UILabel自动换行适应&lt;/a&gt;&lt;/p&gt;</summary><category term="iOS"></category></entry><entry><title>百度地图iOS SDK定位返回{0,0}坐标</title><link href="jingchao.me/bai-du-di-tu-ios-sdkding-wei-fan-hui-00zuo-biao.html" rel="alternate"></link><updated>2014-09-08T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-08:jingchao.me/bai-du-di-tu-ios-sdkding-wei-fan-hui-00zuo-biao.html</id><summary type="html">&lt;p&gt;我只需要在app打开时给用户定位，不需要一直追踪用户位置的变化。所以在定位成功后，我会立即关闭定位服务。发现返回坐标的经纬度都是零，mapView显示一片空白:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;didUpdateUserLocation:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;BMKUserLocation&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;userLocation&lt;/span&gt;
 &lt;span class="p"&gt;{&lt;/span&gt;
     &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;_mapView&lt;/span&gt; &lt;span class="n"&gt;setCenterCoordinate&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;userLocation&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;location&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;coordinate&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt; &lt;span class="c1"&gt;//_mapView是一个BMKMapView实例&lt;/span&gt;
@@ -496,7 +496,7 @@ Undefined symbols for architecture armv7:
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;在Object-C中给一个nil对象发消息，如果方法返回类型是数字型(int,float等)，则nil返回一个零；如果返回类型是结构体，则nil返回一个未知内容的结构体。在本例中大家可以看到，如果访问一个nil对象的结构体成员变量，即userLocation.location（CLLocationCoordinate2D），会出现什么情况：不会报错，且结构体的内容都是0。&lt;/p&gt;</summary><category term="iOS"></category><category term="LBS"></category></entry><entry><title>验证车牌号是否合法</title><link href="/yan-zheng-che-pai-hao-shi-fou-he-fa.html" rel="alternate"></link><updated>2014-08-28T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-08-28:yan-zheng-che-pai-hao-shi-fou-he-fa.html</id><summary type="html">&lt;p&gt;中文可以使用下面的正则表达式:
+&lt;p&gt;在Object-C中给一个nil对象发消息，如果方法返回类型是数字型(int,float等)，则nil返回一个零；如果返回类型是结构体，则nil返回一个未知内容的结构体。在本例中大家可以看到，如果访问一个nil对象的结构体成员变量，即userLocation.location（CLLocationCoordinate2D），会出现什么情况：不会报错，且结构体的内容都是0。&lt;/p&gt;</summary><category term="iOS"></category><category term="LBS"></category></entry><entry><title>验证车牌号是否合法</title><link href="jingchao.me/yan-zheng-che-pai-hao-shi-fou-he-fa.html" rel="alternate"></link><updated>2014-08-28T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-08-28:jingchao.me/yan-zheng-che-pai-hao-shi-fou-he-fa.html</id><summary type="html">&lt;p&gt;中文可以使用下面的正则表达式:
 &lt;pre&gt;&lt;code&gt;
     [\u4e00-\u9fa5]
 &lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;
@@ -515,7 +515,7 @@ Undefined symbols for architecture armv7:
     &lt;span class="p"&gt;}&lt;/span&gt;
     &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;isValid&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;</summary><category term="iOS"></category></entry><entry><title>将本地文件添加到github中</title><link href="/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html" rel="alternate"></link><updated>2014-08-26T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-08-26:jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html</id><summary type="html">&lt;h4&gt;第1步: 创建SSH Key&lt;/h4&gt;
+&lt;/pre&gt;&lt;/div&gt;</summary><category term="iOS"></category></entry><entry><title>将本地文件添加到github中</title><link href="jingchao.me/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html" rel="alternate"></link><updated>2014-08-26T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-08-26:jingchao.me/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html</id><summary type="html">&lt;h4&gt;第1步: 创建SSH Key&lt;/h4&gt;
 &lt;p&gt;你和Github之间的通信是通过SSH加密的，所以要把公钥告诉Github。
 看看家目录有没有.ssh文件夹，该文件夹下有没有id_rsa和id_rsa.pub两个文件。如果有这两个文件，就可以跳到下一步了。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;ssh&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;keygen&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="n"&gt;rsa&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;C&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;youremail@example.com&amp;quot;&lt;/span&gt;
@@ -524,8 +524,8 @@ Undefined symbols for architecture armv7:
 
 &lt;p&gt;id_rsa是私钥，id_rsa.pub是公钥。&lt;/p&gt;
 &lt;h4&gt;第2步: 上传公钥&lt;/h4&gt;
-&lt;p&gt;登录Github -&amp;gt; Settings -&amp;gt; SSH Keys -&amp;gt; Add SSH Key，输入Title及rsa文件内容，点击Add key，如下图:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Alt Text" src="/images/AddSSHKey.png" /&gt;&lt;/p&gt;
+&lt;p&gt;登录Github -&amp;gt; Settings -&amp;gt; SSH Keys -&amp;gt; Add SSH Key，输入Title及id_rsa.pub文件内容，点击Add key，如下图:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="jingchao.me/images/AddSSHKey.png" /&gt;&lt;/p&gt;
 &lt;h4&gt;第3步: 第一次push文件&lt;/h4&gt;
 &lt;p&gt;在github页面中新建repository: yourproject&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="o"&gt;~/&lt;/span&gt;&lt;span class="n"&gt;localproject&lt;/span&gt;
@@ -542,27 +542,27 @@ Undefined symbols for architecture armv7:
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;alias-name是你为远程库起的一个别名，git默认是“origin”。如果你将一个远程库clone到本地，那么远程库默认会使用origin作为别名。&lt;/p&gt;</summary><category term="git"></category><category term="github"></category></entry><entry><title>在Godaddy上给github pages配置自定义域名</title><link href="/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html" rel="alternate"></link><updated>2014-08-26T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-08-26:zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html</id><summary type="html">&lt;p&gt;Github pages默认的域名是username.github.io，十分丑陋。&lt;/p&gt;
+&lt;p&gt;alias-name是你为远程库起的一个别名，git默认是“origin”。如果你将一个远程库clone到本地，那么远程库默认会使用origin作为别名。&lt;/p&gt;</summary><category term="git"></category><category term="github"></category></entry><entry><title>在Godaddy上给github pages配置自定义域名</title><link href="jingchao.me/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html" rel="alternate"></link><updated>2014-08-26T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-08-26:jingchao.me/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html</id><summary type="html">&lt;p&gt;Github pages默认的域名是username.github.io，十分丑陋。&lt;/p&gt;
 &lt;p&gt;在repository根目录中添加CNAME文件，并添加你的域名。CNAME文件只能有一行:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;jingchao&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;me&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;打开Godaddy网站，进入“Manage My Domains”:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Alt Text" src="/images/ManageMyDomains.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="jingchao.me/images/ManageMyDomains.png" /&gt;&lt;/p&gt;
 &lt;p&gt;在Godaddy中配置DNS ZoneFile必须保证Nameserver是Godaddy自己的。在要修改的域名旁边点击向下的三角，然后点击“Set Nameservers”:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Alt Text" src="/images/SetNameservers.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="jingchao.me/images/SetNameservers.png" /&gt;&lt;/p&gt;
 &lt;p&gt;保证Nameserver是Standard，即GoDaddy自己的Nameserver:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Alt Text" src="/images/StandardNameserver.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="jingchao.me/images/StandardNameserver.png" /&gt;&lt;/p&gt;
 &lt;p&gt;进入“Manage DNS”:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Alt Text" src="/images/ManageDNS.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="jingchao.me/images/ManageDNS.png" /&gt;&lt;/p&gt;
 &lt;p&gt;修改DNS Zone File:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;在“A(Host)”区块下，将IP指向: 192.30.252.153&lt;/li&gt;
 &lt;li&gt;在“CName (Alias)”区块下， 将www指向: username.github.io&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img alt="Alt Text" src="/images/修改DNSZoneFile.png" /&gt;&lt;/p&gt;
-&lt;p&gt;保存，等待你的DNS配置更新成功。&lt;/p&gt;</summary><category term="github"></category></entry><entry><title>百度LBS开放平台坐标转换及逆地理编码服务</title><link href="/bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html" rel="alternate"></link><updated>2014-08-25T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-08-25:bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html</id><summary type="html">&lt;h3&gt;坐标转换&lt;/h3&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="jingchao.me/images/修改DNSZoneFile.png" /&gt;&lt;/p&gt;
+&lt;p&gt;保存，等待你的DNS配置更新成功。&lt;/p&gt;</summary><category term="github"></category></entry><entry><title>百度LBS开放平台坐标转换及逆地理编码服务</title><link href="jingchao.me/bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html" rel="alternate"></link><updated>2014-08-25T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-08-25:jingchao.me/bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html</id><summary type="html">&lt;h3&gt;坐标转换&lt;/h3&gt;
 &lt;p&gt;我获得iphone的定位结果后，在百度地图上进行标注，发现位置有上百米的偏差。是因为百度地图SDK和手机GPS定位使用了不同的坐标系统。&lt;/p&gt;
 &lt;p&gt;目前常用的坐标系统有三种：&lt;/p&gt;
 &lt;ol&gt;
@@ -627,7 +627,7 @@ Undefined symbols for architecture armv7:
 &lt;h3&gt;逆地理编码服务&lt;/h3&gt;
 &lt;p&gt;将经纬度转换为地址时，也面临着坐标系统的问题。iOS提供了逆地理编码服务接口CLGeocoder，在百度坐标面前就没用了。&lt;/p&gt;
 &lt;p&gt;百度LBS开放平台的逆地理编码服务只有&lt;a href="http://developer.baidu.com/map/webservice-geocoding.htm#.E8.BF.94.E5.9B.9E.E6.95.B0.E6.8D.AE.E8.AF.B4.E6.98.8E"&gt;web接口&lt;/a&gt;。mobile类型的开发密钥不能使用该接口，服务会被拒绝(status=101)。要申请一个server类型的密钥:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Alt Text" src="/images/申请server密钥.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="jingchao.me/images/申请server密钥.png" /&gt;&lt;/p&gt;
 &lt;p&gt;还要注意的是，设定返回结果为JSON格式时，该web接口返回的字符串头尾还包括了接口名称，需要去掉这些内容才能按照JSON格式正确解析。比如GEOENCODING接口返回的内容格式为:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;
     renderReverse&amp;&amp;renderReverse(JSON字符串)
@@ -635,4 +635,4 @@ Undefined symbols for architecture armv7:
 
 &lt;p&gt;详情请见官方文档给出的JSON示例。&lt;/p&gt;
 &lt;h4&gt;补充&lt;/h4&gt;
-&lt;p&gt;后来在SDK demo中发现了逆地理编码的iOS API，使用过程中遇到了&lt;a href="/xcodeshang-pei-zhi-lian-jie-qi-can-shu-force_load.html"&gt;链接器参数&lt;/a&gt;问题。&lt;/p&gt;</summary><category term="iOS"></category><category term="LBS"></category></entry></feed>
+&lt;p&gt;后来在SDK demo中发现了逆地理编码的iOS API，使用过程中遇到了&lt;a href="jingchao.me/xcodeshang-pei-zhi-lian-jie-qi-can-shu-force_load.html"&gt;链接器参数&lt;/a&gt;问题。&lt;/p&gt;</summary><category term="iOS"></category><category term="LBS"></category></entry></feed>
