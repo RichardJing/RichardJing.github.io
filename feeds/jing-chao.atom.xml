@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>荆超的小站</title><link href="/" rel="alternate"></link><link href="/feeds/jing-chao.atom.xml" rel="self"></link><id>/</id><updated>2014-09-28T00:00:00+08:00</updated><entry><title>限制UIWebView只能竖直滚动，不能水平滚动</title><link href="/xian-zhi-uiwebviewzhi-neng-shu-zhi-gun-dong-bu-neng-shui-ping-gun-dong.html" rel="alternate"></link><updated>2014-09-28T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-28:xian-zhi-uiwebviewzhi-neng-shu-zhi-gun-dong-bu-neng-shui-ping-gun-dong.html</id><summary type="html">&lt;p&gt;如果网页内容超过UIWebView的边框，就会自动触发水平或者竖直的滚动功能。如果有个很“长”的页面，我希望网页内容能够与UIWebView等宽，并且只能上下滚动，不能左右滚动。&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>荆超的小站</title><link href="/" rel="alternate"></link><link href="/feeds/jing-chao.atom.xml" rel="self"></link><id>/</id><updated>2014-10-14T00:00:00+08:00</updated><entry><title>对客户端UI的两点心得</title><link href="/dui-ke-hu-duan-uide-liang-dian-xin-de.html" rel="alternate"></link><updated>2014-10-14T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-10-14:dui-ke-hu-duan-uide-liang-dian-xin-de.html</id><summary type="html">&lt;h3&gt;App打开要快&lt;/h3&gt;
+&lt;p&gt;本来这是很明显的事情，但经过需求的不断增改，在不知不觉中打开你的App变得慢如龟速。一个App打开不应超过2秒，否则用户不会有耐心再去探索你App有什么功能。&lt;/p&gt;
+&lt;p&gt;我遇到的情况是，App首页有很多活动宣传，活动标题、图片都要用HTTP请求获得。这些请求不能一次性都在打开页面时完成。&lt;/p&gt;
+&lt;h3&gt;给用户的信息，都是他们需要的；用户需要的信息，要给全&lt;/h3&gt;
+&lt;p&gt;这句话很绕，而且前后两句看起来也都是废话。&lt;/p&gt;
+&lt;p&gt;之前对于什么是“用户需要的信息”一直没有概念，现在觉得应该是“用户做出操作、选择时所需的必要信息”。 也就是说， 能够影响用户操作行为的信息，都必须清楚地告知用户；不能对用户决定造成影响的，都没必要告知用户。&lt;/p&gt;</summary><category term="iOS"></category><category term="UI"></category></entry><entry><title>限制UIWebView只能竖直滚动，不能水平滚动</title><link href="/xian-zhi-uiwebviewzhi-neng-shu-zhi-gun-dong-bu-neng-shui-ping-gun-dong.html" rel="alternate"></link><updated>2014-09-28T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-09-28:xian-zhi-uiwebviewzhi-neng-shu-zhi-gun-dong-bu-neng-shui-ping-gun-dong.html</id><summary type="html">&lt;p&gt;如果网页内容超过UIWebView的边框，就会自动触发水平或者竖直的滚动功能。如果有个很“长”的页面，我希望网页内容能够与UIWebView等宽，并且只能上下滚动，不能左右滚动。&lt;/p&gt;
 &lt;p&gt;现有一个HTML页面，只输出一张300*533像素的图片:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nt"&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
 &lt;span class="nt"&gt;&amp;lt;head&amp;gt;&lt;/span&gt;

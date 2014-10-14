@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>荆超的小站</title><link>/</link><description></description><atom:link href="/feeds/jing-chao.rss.xml" rel="self"></atom:link><lastBuildDate>Sun, 28 Sep 2014 00:00:00 +0800</lastBuildDate><item><title>限制UIWebView只能竖直滚动，不能水平滚动</title><link>/xian-zhi-uiwebviewzhi-neng-shu-zhi-gun-dong-bu-neng-shui-ping-gun-dong.html</link><description>&lt;p&gt;如果网页内容超过UIWebView的边框，就会自动触发水平或者竖直的滚动功能。如果有个很“长”的页面，我希望网页内容能够与UIWebView等宽，并且只能上下滚动，不能左右滚动。&lt;/p&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>荆超的小站</title><link>/</link><description></description><atom:link href="/feeds/jing-chao.rss.xml" rel="self"></atom:link><lastBuildDate>Tue, 14 Oct 2014 00:00:00 +0800</lastBuildDate><item><title>对客户端UI的两点心得</title><link>/dui-ke-hu-duan-uide-liang-dian-xin-de.html</link><description>&lt;h3&gt;App打开要快&lt;/h3&gt;
+&lt;p&gt;本来这是很明显的事情，但经过需求的不断增改，在不知不觉中打开你的App变得慢如龟速。一个App打开不应超过2秒，否则用户不会有耐心再去探索你App有什么功能。&lt;/p&gt;
+&lt;p&gt;我遇到的情况是，App首页有很多活动宣传，活动标题、图片都要用HTTP请求获得。这些请求不能一次性都在打开页面时完成。&lt;/p&gt;
+&lt;h3&gt;给用户的信息，都是他们需要的；用户需要的信息，要给全&lt;/h3&gt;
+&lt;p&gt;这句话很绕，而且前后两句看起来也都是废话。&lt;/p&gt;
+&lt;p&gt;之前对于什么是“用户需要的信息”一直没有概念，现在觉得应该是“用户做出操作、选择时所需的必要信息”。 也就是说， 能够影响用户操作行为的信息，都必须清楚地告知用户；不能对用户决定造成影响的，都没必要告知用户。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">荆超</dc:creator><pubDate>Tue, 14 Oct 2014 00:00:00 +0800</pubDate><guid>tag:,2014-10-14:dui-ke-hu-duan-uide-liang-dian-xin-de.html</guid><category>iOS</category><category>UI</category></item><item><title>限制UIWebView只能竖直滚动，不能水平滚动</title><link>/xian-zhi-uiwebviewzhi-neng-shu-zhi-gun-dong-bu-neng-shui-ping-gun-dong.html</link><description>&lt;p&gt;如果网页内容超过UIWebView的边框，就会自动触发水平或者竖直的滚动功能。如果有个很“长”的页面，我希望网页内容能够与UIWebView等宽，并且只能上下滚动，不能左右滚动。&lt;/p&gt;
 &lt;p&gt;现有一个HTML页面，只输出一张300*533像素的图片:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nt"&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
 &lt;span class="nt"&gt;&amp;lt;head&amp;gt;&lt;/span&gt;

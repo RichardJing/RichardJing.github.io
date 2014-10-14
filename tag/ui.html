@@ -2,7 +2,7 @@
 <html lang="en"
 >
 <head>
-    <title>Tech - 荆超的小站</title>
+    <title>UI - 荆超的小站</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -12,7 +12,7 @@
 
 
     <meta name="author" content="荆超" />
-    <meta name="keywords" content="Tech" />
+    <meta name="keywords" content="UI" />
 
     <!-- Open Graph tags -->
         <meta property="og:site_name" content="荆超的小站" />
@@ -61,42 +61,18 @@
         <div class="col-sm-9">
 
             <article>
-                <h2><a href="/bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html">百度LBS开放平台坐标转换及逆地理编码服务</a></h2>
-                <div class="summary"><h3>坐标转换</h3>
-<p>我获得iphone的定位结果后，在百度地图上进行标注，发现位置有上百米的偏差。是因为百度地图SDK和手机GPS定位使用了不同的坐标系统。</p>
-<p>目前常用的坐标系统有三种：</p>
-<ol>
-<li>GCJ-02，国测局经纬度坐标。由中国国家测绘局制订的地理信息系统的坐标系统。引入随机的偏差，对经纬度数据进行加密。google地图、soso地图都使用这种标准。</li>
-<li>WGS84，为GPS全球定位系统使用而建立的坐标系统。在iOS中，使用CLLocationManager接口定位出来的坐标属于该标准。</li>
-<li>bd09ll，百度经纬度坐标。百度地图SDK采用的是百度自有的地理坐标系</li>
-</ol>
-<p>百度LBS开放平台官方文档给出了<a href="http://developer.baidu.com/map/wiki/index.php?title=iossdk/guide/tool#.E5.9D.90.E6.A0.87.E8.BD.AC.E6.8D.A2">其它两种系统转换为百度坐标的方法</a> 。我的Object-C示例代码：</p>
-<div class="highlight"><pre><span class="cp">#import &quot;BMapKit.h&quot;</span>
-<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">locationManager:</span><span class="p">(</span><span class="n">CLLocationManager</span> <span class="o">*</span><span class="p">)</span><span class="nv">manager</span>
-     <span class="nl">didUpdateLocations:</span><span class="p">(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">locations</span>
-<span class="p">{</span>
-
-    <span class="n">CLLocation</span> <span class="o">*</span><span class="n">location</span> <span class="o">=</span> <span class="p">[</span><span class="n">locations</span> <span class="n">lastObject</span><span class="p">];</span>
-
-    <span class="c1">//GPS坐标换为百度坐标（bd09ll）</span>
-    <span class="n">NSDictionary</span><span class="o">*</span> <span class="n">baiduDic</span> <span class="o">=</span> <span class="n">BMKConvertBaiduCoorFrom</span><span class="p">(</span><span class="n">location</span><span class="p">.</span><span class="n">coordinate</span><span class="p">,</span><span class="n">BMK_COORDTYPE_GPS</span><span class="p">);</span>
-
-    <span class="c1">//坐标是乱码</span>
-    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;x=%@,y=%@&quot;</span><span class="p">,[</span><span class="n">baiduDic ...</span></pre></div>
-                    <a class="btn btn-default btn-xs" href="/bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html">more ...</a>
+                <h2><a href="/dui-ke-hu-duan-uide-liang-dian-xin-de.html">对客户端UI的两点心得</a></h2>
+                <div class="summary"><h3>App打开要快</h3>
+<p>本来这是很明显的事情，但经过需求的不断增改，在不知不觉中打开你的App变得慢如龟速。一个App打开不应超过2秒，否则用户不会有耐心再去探索你App有什么功能。</p>
+<p>我遇到的情况是，App首页有很多活动宣传，活动标题、图片都要用HTTP请求获得。这些请求不能一次性都在打开页面时完成。</p>
+<h3>给用户的信息，都是他们需要的；用户需要的信息，要给全</h3>
+<p>这句话很绕，而且前后两句看起来也都是废话。</p>
+<p>之前对于什么是“用户需要的信息”一直没有概念，现在觉得应该是“用户做出操作、选择时所需的必要信息”。 也就是说， 能够影响用户操作行为的信息，都必须清楚地告知用户；不能对用户决定造成影响的，都没必要告知用户。</p>
+                    <a class="btn btn-default btn-xs" href="/dui-ke-hu-duan-uide-liang-dian-xin-de.html">more ...</a>
                 </div>
             </article>
             <hr/>
 
-        <ul class="pagination">
-                <li class="prev"><a href="/category/tech.html">&laquo;</a>
-                </li>
-                    <li class=""><a
-                            href="/category/tech.html">1</a></li>
-                    <li class="active"><a
-                            href="/category/tech2.html">2</a></li>
-                <li class="next disabled"><a href="#">&raquo;</a></li>
-        </ul>
         </div>
         <div class="col-sm-3 well well-sm" id="sidebar">
 
@@ -115,51 +91,6 @@
                         <li class="list-group-item">
                             <a href="/dui-ke-hu-duan-uide-liang-dian-xin-de.html">
                                 对客户端UI的两点心得
-                            </a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="/xian-zhi-uiwebviewzhi-neng-shu-zhi-gun-dong-bu-neng-shui-ping-gun-dong.html">
-                                限制UIWebView只能竖直滚动，不能水平滚动
-                            </a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="/xiu-gai-uiwebviewqing-qiu-zhong-de-user-agent.html">
-                                修改UIWebView请求中的User-Agent
-                            </a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="/gityuan-cheng-fen-zhi-cao-zuo.html">
-                                git远程分支操作
-                            </a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="/xcodeshang-pei-zhi-lian-jie-qi-can-shu-force_load.html">
-                                Xcode上配置链接器参数-force_load
-                            </a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="/uitableviewcellwen-ben-gao-du-zi-gua-ying.html">
-                                UITableViewCell文本高度自适应
-                            </a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="/bai-du-di-tu-ios-sdkding-wei-fan-hui-00zuo-biao.html">
-                                百度地图iOS SDK定位返回{0,0}坐标
-                            </a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="/yan-zheng-che-pai-hao-shi-fou-he-fa.html">
-                                验证车牌号是否合法
-                            </a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html">
-                                将本地文件添加到github中
-                            </a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html">
-                                在Godaddy上给github pages配置自定义域名
                             </a>
                         </li>
                     </ul>
