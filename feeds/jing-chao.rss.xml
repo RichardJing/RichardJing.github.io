@@ -1,5 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>荆超的小站</title><link>/</link><description></description><atom:link href="/feeds/jing-chao.rss.xml" rel="self"></atom:link><lastBuildDate>Tue, 14 Oct 2014 00:00:00 +0800</lastBuildDate><item><title>对客户端UI的两点心得</title><link>/dui-ke-hu-duan-uide-liang-dian-xin-de.html</link><description>&lt;h3&gt;App打开要快&lt;/h3&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>荆超的小站</title><link>/</link><description></description><atom:link href="/feeds/jing-chao.rss.xml" rel="self"></atom:link><lastBuildDate>Sun, 23 Nov 2014 00:00:00 +0800</lastBuildDate><item><title>将图片截取为圆形，并且截掉的部分设置为透明</title><link>/jiang-tu-pian-jie-qu-wei-yuan-xing-bing-qie-jie-diao-de-bu-fen-she-zhi-wei-tou-ming.html</link><description>&lt;p&gt;有这样一个需求：传给我一张矩形图片，只需要显示正中的圆形部分，而其它部分设置为透明。&lt;/p&gt;
+&lt;p&gt;实现方案是，在drawRect方法中使用Path + Clip方法截取出圆形，然后再绘制图片。代码如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;// CircleView.h&lt;/span&gt;
+&lt;span class="k"&gt;@interface&lt;/span&gt; &lt;span class="nc"&gt;CircleView&lt;/span&gt; : &lt;span class="nc"&gt;UIView&lt;/span&gt;
+&lt;span class="k"&gt;@property&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;nonatomic&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;strong&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;UIImage&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;image&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;@end&lt;/span&gt;
+
+&lt;span class="c1"&gt;// CircleView.m&lt;/span&gt;
+&lt;span class="k"&gt;@implementation&lt;/span&gt; &lt;span class="nc"&gt;CircleView&lt;/span&gt;
+&lt;span class="k"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;drawRect:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;CGRect&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;rect&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;CGContextRef&lt;/span&gt; &lt;span class="n"&gt;context&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;UIGraphicsGetCurrentContext&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+    &lt;span class="n"&gt;CGContextBeginPath&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;CGContextAddArc&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;frame&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;width&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;frame&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;height&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;frame&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;height&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;M_PI&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;CGContextClosePath&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;CGContextClip&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="c1"&gt;//    CGContextDrawImage(context, rect, self.image.CGImage);//绘制出来的图片是倒立的&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;image&lt;/span&gt; &lt;span class="n"&gt;drawInRect&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;rect&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt; 
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="k"&gt;@end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;对代码的几点说明：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;使用CGContextAddArc可以很方便地添加一个圆形Path。 &lt;/li&gt;
+&lt;li&gt;需要先执行CGContextClip，再进行图片绘制，才会有Clip效果。&lt;/li&gt;
+&lt;li&gt;CGContextDrawImage方法绘制出的图片是倒立的，因为Quartz2d的坐标系以左下角作为原点，&lt;a href="http://stackoverflow.com/questions/506622/cgcontextdrawimage-draws-image-upside-down-when-passed-uiimage-cgimage"&gt;详情&lt;/a&gt;。 所以使用UIImage的方法来代替。&lt;/li&gt;
+&lt;li&gt;圆形之外的部分会以CircleView对象的backgroundColor显示，所以要达到透明，需要将CircleView对象的backgroundColor设置为clearColor&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在我的实现方法中，CircleView继承自UIView，然后添加了一个image成员变量。很自然地会想到，如果从UIImageView继承，并且使用继承来的image变量是否可以呢？ 答案是不行的，在为imageView.image赋值之后，图片仍旧是矩形。这说明，我们自定义的drawRect方法是在imageView.image绘制完成之后才执行的，CGContextClip方法已经不能对图片产生效果。&lt;/p&gt;
+&lt;p&gt;利用Path + Clip可以绘制出很多自定义形状的View(其实View的边界还是一个Rect)。&lt;a href="https://developer.apple.com/library/ios/samplecode/QuartzDemo/Introduction/Intro.html"&gt;苹果官方示例&lt;/a&gt;中给出了镂空五角星的实现。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">荆超</dc:creator><pubDate>Sun, 23 Nov 2014 00:00:00 +0800</pubDate><guid>tag:,2014-11-23:jiang-tu-pian-jie-qu-wei-yuan-xing-bing-qie-jie-diao-de-bu-fen-she-zhi-wei-tou-ming.html</guid><category>iOS</category></item><item><title>一个翻页图片查看器的实现</title><link>/yi-ge-fan-ye-tu-pian-cha-kan-qi-de-shi-xian.html</link><description>&lt;p&gt;需要实现一个可翻页的图片浏览功能，就像在微信朋友圈中点开大图的效果。具体功能点如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;在图片查看器中通过翻页显示一组图片。进入图片查看器时，可以选择打开第几张图片&lt;/li&gt;
+&lt;li&gt;有页码标识&lt;/li&gt;
+&lt;li&gt;图片适配屏幕大小并居中&lt;/li&gt;
+&lt;li&gt;可以通过双指捏合来放大/缩小图片&lt;/li&gt;
+&lt;li&gt;可以通过双击来放大图片至原始尺寸，并且将点击位置居中，再次双击则取消放大。&lt;/li&gt;
+&lt;li&gt;图片放大时，也可以翻页，但是再翻回来时，放大效果取消&lt;/li&gt;
+&lt;li&gt;翻页时，图片之间有间隙&lt;/li&gt;
+&lt;li&gt;图片内容从网络下载。为了节省流量，图片被翻到时才开始下载，下载过程中有进度条提示。第一次下载后，图片被缓存。&lt;/li&gt;
+&lt;li&gt;单击屏幕，退出图片查看器，清空图片缓存&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;翻页时的效果如下:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Alt Text" src="/images/翻页中效果.jpg" /&gt;&lt;/p&gt;
+&lt;p&gt;其它效果请&lt;a href="https://github.com/RichardJing/ImageBrowser/"&gt;下载代码&lt;/a&gt;体会&lt;/p&gt;
+&lt;p&gt;目前还有一个小bug，放大图片后，再翻页时，图片之间的间隙就消失了。&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">荆超</dc:creator><pubDate>Sun, 23 Nov 2014 00:00:00 +0800</pubDate><guid>tag:,2014-11-23:yi-ge-fan-ye-tu-pian-cha-kan-qi-de-shi-xian.html</guid><category>iOS</category></item><item><title>对客户端UI的两点心得</title><link>/dui-ke-hu-duan-uide-liang-dian-xin-de.html</link><description>&lt;h3&gt;App打开要快&lt;/h3&gt;
 &lt;p&gt;本来这是很明显的事情，但经过需求的不断增改，在不知不觉中打开你的App变得慢如龟速。一个App打开不应超过2秒，否则用户不会有耐心再去探索你App有什么功能。&lt;/p&gt;
 &lt;p&gt;我遇到的情况是，App首页有很多活动宣传，活动标题、图片都要用HTTP请求获得。这些请求不能一次性都在打开页面时完成。&lt;/p&gt;
 &lt;h3&gt;给用户的信息，都是他们需要的；用户需要的信息，要给全&lt;/h3&gt;

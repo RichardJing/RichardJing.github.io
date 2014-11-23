@@ -60,6 +60,56 @@
         <div class="col-sm-9">
 
             <article>
+                <h2><a href="/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html">将本地文件添加到github中</a></h2>
+                <div class="summary"><h4>第1步: 创建SSH Key</h4>
+<p>你和Github之间的通信是通过SSH加密的，所以要把公钥告诉Github。
+看看家目录有没有.ssh文件夹，该文件夹下有没有id_rsa和id_rsa.pub两个文件。如果有这两个文件，就可以跳到下一步了。</p>
+<div class="highlight"><pre><span class="n">ssh</span><span class="o">-</span><span class="n">keygen</span> <span class="o">-</span><span class="n">t</span> <span class="n">rsa</span> <span class="o">-</span><span class="n">C</span> <span class="s">&quot;youremail@example.com&quot;</span>
+</pre></div>
+
+
+<p>id_rsa是私钥，id_rsa.pub是公钥。</p>
+<h4>第2步: 上传公钥</h4>
+<p>登录Github -&gt; Settings -&gt; SSH Keys -&gt; Add SSH Key，输入Title及id_rsa.pub文件内容，点击Add key，如下图:</p>
+<p><img alt="Alt Text" src="/images/AddSSHKey.png" /></p>
+<h4>第3步: 第一次push文件</h4>
+<p>在github页面中新建repository: yourproject</p>
+<div class="highlight"><pre><span class="n">cd</span> <span class="o">~/</span><span class="n">localproject</span>
+<span class="n">git</span> <span class="n">init</span>
+<span class="n">git</span> <span class="n">add</span> <span class="p">.</span>
+<span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s">&quot;本地文件添加到github中 ...</span></pre></div>
+                    <a class="btn btn-default btn-xs" href="/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html">more ...</a>
+                </div>
+            </article>
+            <hr/>
+            <article>
+                <h2><a href="/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html">在Godaddy上给github pages配置自定义域名</a></h2>
+                <div class="summary"><p>Github pages默认的域名是username.github.io，十分丑陋。</p>
+<p>在repository根目录中添加CNAME文件，并添加你的域名。CNAME文件只能有一行:</p>
+<div class="highlight"><pre><span class="n">jingchao</span><span class="p">.</span><span class="n">me</span>
+</pre></div>
+
+
+<p>打开Godaddy网站，进入“Manage My Domains”:</p>
+<p><img alt="Alt Text" src="/images/ManageMyDomains.png" /></p>
+<p>在Godaddy中配置DNS ZoneFile必须保证Nameserver是Godaddy自己的。在要修改的域名旁边点击向下的三角，然后点击“Set Nameservers”:</p>
+<p><img alt="Alt Text" src="/images/SetNameservers.png" /></p>
+<p>保证Nameserver是Standard，即GoDaddy自己的Nameserver:</p>
+<p><img alt="Alt Text" src="/images/StandardNameserver.png" /></p>
+<p>进入“Manage DNS”:</p>
+<p><img alt="Alt Text" src="/images/ManageDNS.png" /></p>
+<p>修改DNS Zone File:</p>
+<ol>
+<li>在“A(Host)”区块下，将IP指向: 192.30.252.153</li>
+<li>在“CName (Alias)”区块下， 将www指向: username.github.io</li>
+</ol>
+<p><img alt="Alt Text" src="/images/修改DNSZoneFile.png" /></p>
+<p>保存，等待你的DNS配置更新成功。</p>
+                    <a class="btn btn-default btn-xs" href="/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html">more ...</a>
+                </div>
+            </article>
+            <hr/>
+            <article>
                 <h2><a href="/bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html">百度LBS开放平台坐标转换及逆地理编码服务</a></h2>
                 <div class="summary"><h3>坐标转换</h3>
 <p>我获得iphone的定位结果后，在百度地图上进行标注，发现位置有上百米的偏差。是因为百度地图SDK和手机GPS定位使用了不同的坐标系统。</p>
@@ -112,6 +162,16 @@
                 <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
                     <ul class="list-group" id="recentposts">
                         <li class="list-group-item">
+                            <a href="/jiang-tu-pian-jie-qu-wei-yuan-xing-bing-qie-jie-diao-de-bu-fen-she-zhi-wei-tou-ming.html">
+                                将图片截取为圆形，并且截掉的部分设置为透明
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="/yi-ge-fan-ye-tu-pian-cha-kan-qi-de-shi-xian.html">
+                                一个翻页图片查看器的实现
+                            </a>
+                        </li>
+                        <li class="list-group-item">
                             <a href="/dui-ke-hu-duan-uide-liang-dian-xin-de.html">
                                 对客户端UI的两点心得
                             </a>
@@ -151,16 +211,6 @@
                                 验证车牌号是否合法
                             </a>
                         </li>
-                        <li class="list-group-item">
-                            <a href="/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html">
-                                将本地文件添加到github中
-                            </a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html">
-                                在Godaddy上给github pages配置自定义域名
-                            </a>
-                        </li>
                     </ul>
                 </li>
 
@@ -187,13 +237,13 @@
                             </a>
                         </li>
                         <li class="list-group-item tag-3">
-                            <a href="/tag/git.html">
-                                git
+                            <a href="/tag/github.html">
+                                github
                             </a>
                         </li>
                         <li class="list-group-item tag-3">
-                            <a href="/tag/github.html">
-                                github
+                            <a href="/tag/git.html">
+                                git
                             </a>
                         </li>
                         <li class="list-group-item tag-4">

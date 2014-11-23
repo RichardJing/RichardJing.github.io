@@ -2,7 +2,7 @@
 <html lang="en"
 >
 <head>
-    <title>验证车牌号是否合法 - 荆超的小站</title>
+    <title>一个翻页图片查看器的实现 - 荆超的小站</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -10,11 +10,11 @@
 
 
 
-<link rel="canonical" href="/yan-zheng-che-pai-hao-shi-fou-he-fa.html">
+<link rel="canonical" href="/yi-ge-fan-ye-tu-pian-cha-kan-qi-de-shi-xian.html">
 
         <meta name="author" content="荆超" />
         <meta name="keywords" content="iOS" />
-        <meta name="description" content="中文可以使用下面的正则表达式: [\u4e00-\u9fa5] Object-C示例代码: - (BOOL) validateCarNo:(NSString *) carNo { BOOL isValid = NO; if ([carNo length] != 7) { NSLog(@&#34;车牌必须是7位&#34;); } else { NSString *carRegex = @&#34;^[\u4e00-\u9fa5]{1}[A-Za-z]{1}[A-Za-z_0-9]{5}$&#34;; NSRange range = [carNo rangeOfString:carRegex options:NSRegularExpressionSearch]; if (range.location != NSNotFound) { isValid = YES; } } return isValid; }" />
+        <meta name="description" content="需要实现一个可翻页的图片浏览功能，就像在微信朋友圈中点开大图的效果。具体功能点如下： 在图片查看器中通过翻页显示一组图片。进入图片查看器时，可以选择打开第几张图片 有页码标识 图片适配屏幕大小并居中 可以通过双指捏合来放大/缩小图片 可以通过双击来放大图片至原始尺寸，并且将点击位置居中，再次双击则取消放大。 图片放大时，也可以翻页，但是再翻回来时，放大效果取消 翻页时，图片之间有间隙 图片内容从网络下载。为了节省流量，图片被翻到时才开始下载，下载过程中有进度条提示。第一次下载后，图片被缓存。 单击屏幕，退出图片查看器，清空图片缓存 翻页时的效果如下: 其它效果请下载代码体会 目前还有一个小bug，放大图片后，再翻页时，图片之间的间隙就消失了。" />
 
 
 
@@ -60,10 +60,10 @@
         <article>
             <header class="page-header">
                 <h1>
-                    <a href="/yan-zheng-che-pai-hao-shi-fou-he-fa.html"
+                    <a href="/yi-ge-fan-ye-tu-pian-cha-kan-qi-de-shi-xian.html"
                        rel="bookmark"
-                       title="Permalink to 验证车牌号是否合法">
-                        验证车牌号是否合法
+                       title="Permalink to 一个翻页图片查看器的实现">
+                        一个翻页图片查看器的实现
                     </a>
                 </h1>
             </header>
@@ -73,7 +73,7 @@
 <footer class="post-info">
     <span class="label label-default">Date</span>
     <span class="published">
-        <i class="fa fa-calendar"></i><time datetime="2014-08-28T00:00:00+08:00"> 四 28 八月 2014</time>
+        <i class="fa fa-calendar"></i><time datetime="2014-11-23T00:00:00+08:00"> 日 23 十一月 2014</time>
     </span>
 
 
@@ -83,26 +83,22 @@
     
 </footer><!-- /.post-info -->                    </div>
                 </div>
-                <p>中文可以使用下面的正则表达式:
-<pre><code>
-    [\u4e00-\u9fa5]
-</code></pre></p>
-<p>Object-C示例代码:</p>
-<div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span> <span class="nf">validateCarNo:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span> <span class="n">carNo</span>
-<span class="p">{</span>
-    <span class="kt">BOOL</span> <span class="n">isValid</span> <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">([</span><span class="n">carNo</span> <span class="n">length</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">7</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;车牌必须是7位&quot;</span><span class="p">);</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="n">NSString</span> <span class="o">*</span><span class="n">carRegex</span> <span class="o">=</span> <span class="s">@&quot;^[</span><span class="se">\u4e00</span><span class="s">-</span><span class="se">\u9fa5</span><span class="s">]{1}[A-Za-z]{1}[A-Za-z_0-9]{5}$&quot;</span><span class="p">;</span>
-        <span class="n">NSRange</span> <span class="n">range</span> <span class="o">=</span> <span class="p">[</span><span class="n">carNo</span> <span class="n">rangeOfString</span><span class="o">:</span><span class="n">carRegex</span> <span class="n">options</span><span class="o">:</span><span class="n">NSRegularExpressionSearch</span><span class="p">];</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">range</span><span class="p">.</span><span class="n">location</span> <span class="o">!=</span> <span class="n">NSNotFound</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">isValid</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">isValid</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
+                <p>需要实现一个可翻页的图片浏览功能，就像在微信朋友圈中点开大图的效果。具体功能点如下：</p>
+<ol>
+<li>在图片查看器中通过翻页显示一组图片。进入图片查看器时，可以选择打开第几张图片</li>
+<li>有页码标识</li>
+<li>图片适配屏幕大小并居中</li>
+<li>可以通过双指捏合来放大/缩小图片</li>
+<li>可以通过双击来放大图片至原始尺寸，并且将点击位置居中，再次双击则取消放大。</li>
+<li>图片放大时，也可以翻页，但是再翻回来时，放大效果取消</li>
+<li>翻页时，图片之间有间隙</li>
+<li>图片内容从网络下载。为了节省流量，图片被翻到时才开始下载，下载过程中有进度条提示。第一次下载后，图片被缓存。</li>
+<li>单击屏幕，退出图片查看器，清空图片缓存</li>
+</ol>
+<p>翻页时的效果如下:</p>
+<p><img alt="Alt Text" src="/images/翻页中效果.jpg" /></p>
+<p>其它效果请<a href="https://github.com/RichardJing/ImageBrowser/">下载代码</a>体会</p>
+<p>目前还有一个小bug，放大图片后，再翻页时，图片之间的间隙就消失了。</p>
             </div>
             <!-- /.entry-content -->
     <hr/>
@@ -114,8 +110,8 @@
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
 
-                    var disqus_identifier = 'yan-zheng-che-pai-hao-shi-fou-he-fa';
-                var disqus_url = 'http://jingchao.me/yan-zheng-che-pai-hao-shi-fou-he-fa.html';
+                    var disqus_identifier = 'yi-ge-fan-ye-tu-pian-cha-kan-qi-de-shi-xian';
+                var disqus_url = 'http://jingchao.me/yi-ge-fan-ye-tu-pian-cha-kan-qi-de-shi-xian.html';
 
             var disqus_config = function () {
                 this.language = "en";
