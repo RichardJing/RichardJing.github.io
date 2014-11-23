@@ -166,51 +166,8 @@
 
 <p>效果如下图:</p>
 <p><img alt="Alt Text" src="/images/只能竖直拖拽.png" /></p>
-<p>从上图可以看出，当网页内容宽度适配UIWebView宽度时，连水平滚动条都消失了。</p>
 <p>代码中的方法在head中注入了一段meta，注入一段CSS来限制宽度应该也是可以的。</p>
-<h3>再说说我用过的几个无效方法。</h3>
-<h4>调用UIWebView自身的方法都无法解决问题</h4>
-<p>首先，setScalesPageToFit方法对本问题无效。Xcode帮助文档中对这个方法的介绍:</p>
-<pre><code>
-    A Boolean value determining whether the webpage scales to fit the view and the user can change the scale.
-    If YES, the webpage is scaled to fit and the user can zoom in and zoom out. If NO, user zooming is disabled. The default value is NO.
-</code></pre>
-
-<p>第一段后半句话好理解，可以控制用户是否能缩放，前半句“the webpage scales to fit the view ”不知道是指什么。 设置为YES之后，仍旧是之前的模样。</p>
-<p>ScrollView没有直接解决本问题的方法。UIWebView里面有个UIScrollView用来承载网页内容，UIScrollView有几个bounce方法:</p>
-<div class="highlight"><pre><span class="c1">//both  vertically and horizontally</span>
-<span class="n">self</span><span class="p">.</span><span class="n">webView</span><span class="p">.</span><span class="n">scrollView</span><span class="p">.</span><span class="n">bounces</span> <span class="o">=</span> <span class="no">NO</span><span class="p">;</span>
-
-<span class="c1">// only vertically</span>
-<span class="n">webView</span><span class="p">.</span><span class="n">scrollView</span><span class="p">.</span><span class="n">alwaysBounceVertical</span> <span class="o">=</span> <span class="no">NO</span><span class="p">;</span>
-<span class="n">webView</span><span class="p">.</span><span class="n">scrollView</span><span class="p">.</span><span class="n">alwaysBounceHorizontal</span> <span class="o">=</span> <span class="no">YES</span><span class="p">;</span>
-</pre></div>
-
-
-<p>上面的代码在实验时没有改变任何东西。Xcode文档对于scrollView.bounces的解释:</p>
-<pre><code>
-A Boolean value that controls whether the scroll view bounces past the edge of content and back again.
-If the value of this property is YES, the scroll view bounces when it encounters a boundary of the content. Bouncing visually indicates that scrolling has reached an edge of the content. If the value is NO, scrolling stops immediately at the content boundary without bouncing. The default value is YES.
-</code></pre>
-
-<p>我理解bounce只是在到达网页内容边界时给个提示，但没有看到实际的效果是什么样子。</p>
-<h4>scrollView缩放到宽度跟UIWebView边界匹配</h4>
-<div class="highlight"><pre><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">webViewDidFinishLoad</span><span class="o">:</span><span class="p">(</span><span class="n">UIWebView</span> <span class="o">*</span><span class="p">)</span><span class="n">webView</span>
-<span class="p">{</span>
-    <span class="n">CGSize</span> <span class="n">contentSize</span> <span class="o">=</span> <span class="n">webView</span><span class="p">.</span><span class="n">scrollView</span><span class="p">.</span><span class="n">contentSize</span><span class="p">;</span>
-    <span class="n">CGSize</span> <span class="n">webViewSize</span> <span class="o">=</span> <span class="n">webView</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
-
-    <span class="kt">float</span> <span class="n">rate</span> <span class="o">=</span> <span class="n">webViewSize</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">contentSize</span><span class="p">.</span><span class="n">width</span><span class="p">;</span>
-
-    <span class="n">webView</span><span class="p">.</span><span class="n">scrollView</span><span class="p">.</span><span class="n">minimumZoomScale</span> <span class="o">=</span> <span class="n">rate</span><span class="p">;</span>
-    <span class="n">webView</span><span class="p">.</span><span class="n">scrollView</span><span class="p">.</span><span class="n">maximumZoomScale</span> <span class="o">=</span> <span class="n">rate</span><span class="p">;</span>
-    <span class="n">webView</span><span class="p">.</span><span class="n">scrollView</span><span class="p">.</span><span class="n">zoomScale</span> <span class="o">=</span> <span class="n">rate</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>重新运行程序，图片能够匹配宽度。虽然图片缩放了，但是scrollView.contentSize没有变化，水平依旧可以拖动，超过图片边界的地方可以看到webView的背景色。如下图:</p>
-<p><img alt="Alt Text" src="/images/scrollView缩放.png" /></p>
+<p>UIWebView使用一个UIScrollView对象来展示网页内容。对于UIScrollView，只要其contentSize大于自己的边界就可以被拖动。在本文所面对的问题中，只能将网页内容修改至scrollView宽度，才能阻止水平滚动。</p>
             </div>
             <!-- /.entry-content -->
     <hr/>
@@ -332,8 +289,8 @@ If the value of this property is YES, the scroll view bounces when it encounters
                             </a>
                         </li>
                         <li class="list-group-item tag-3">
-                            <a href="/tag/lbs.html">
-                                LBS
+                            <a href="/tag/git.html">
+                                git
                             </a>
                         </li>
                         <li class="list-group-item tag-3">
@@ -342,8 +299,8 @@ If the value of this property is YES, the scroll view bounces when it encounters
                             </a>
                         </li>
                         <li class="list-group-item tag-3">
-                            <a href="/tag/git.html">
-                                git
+                            <a href="/tag/lbs.html">
+                                LBS
                             </a>
                         </li>
                         <li class="list-group-item tag-4">
