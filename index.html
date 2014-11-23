@@ -61,7 +61,7 @@
 
             <article>
                 <h2><a href="/jiang-tu-pian-jie-qu-wei-yuan-xing-bing-qie-jie-diao-de-bu-fen-she-zhi-wei-tou-ming.html">将图片截取为圆形，并且截掉的部分设置为透明</a></h2>
-                <div class="summary"><p>有这样一个需求：传给我一张矩形图片，只需要显示正中的圆形部分，而其它部分设置为透明。</p>
+                <div class="summary"><p>有这样一个需求：传给我一张矩形图片（width &gt; height），只需要显示正中的圆形部分，而其它部分设置为透明。</p>
 <p>实现方案是，在drawRect方法中使用Path + Clip方法截取出圆形，然后再绘制图片。代码如下：</p>
 <div class="highlight"><pre><span class="c1">// CircleView.h</span>
 <span class="k">@interface</span> <span class="nc">CircleView</span> : <span class="nc">UIView</span>
@@ -73,7 +73,7 @@
 <span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">drawRect:</span><span class="p">(</span><span class="n">CGRect</span><span class="p">)</span><span class="nv">rect</span> <span class="p">{</span>
     <span class="n">CGContextRef</span> <span class="n">context</span> <span class="o">=</span> <span class="n">UIGraphicsGetCurrentContext</span><span class="p">();</span>
     <span class="n">CGContextBeginPath</span> <span class="p">(</span><span class="n">context</span><span class="p">);</span>
-    <span class="n">CGContextAddArc</span> <span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2 ...</span></pre></div>
+    <span class="n">CGContextAddArc</span> <span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size ...</span></pre></div>
                     <a class="btn btn-default btn-xs" href="/jiang-tu-pian-jie-qu-wei-yuan-xing-bing-qie-jie-diao-de-bu-fen-she-zhi-wei-tou-ming.html">more ...</a>
                 </div>
             </article>
@@ -94,6 +94,7 @@
 </ol>
 <p>翻页时的效果如下:</p>
 <p><img alt="Alt Text" src="/images/翻页中效果.jpg" /></p>
+<p>加载网络图片时的进度效果使用<a href="https://github.com/jdg/MBProgressHUD">MBProgressHUD</a>实现</p>
 <p>其它效果请<a href="https://github.com/RichardJing/ImageBrowser/">下载代码</a>体会</p>
 <p>目前还有一个小bug，放大图片后，再翻页时，图片之间的间隙就消失了。</p>
                     <a class="btn btn-default btn-xs" href="/yi-ge-fan-ye-tu-pian-cha-kan-qi-de-shi-xian.html">more ...</a>

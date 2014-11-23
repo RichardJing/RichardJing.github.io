@@ -14,7 +14,7 @@
 
         <meta name="author" content="荆超" />
         <meta name="keywords" content="iOS" />
-        <meta name="description" content="有这样一个需求：传给我一张矩形图片，只需要显示正中的圆形部分，而其它部分设置为透明。 实现方案是，在drawRect方法中使用Path + Clip方法截取出圆形，然后再绘制图片。代码如下： // CircleView.h @interface CircleView : UIView @property (nonatomic, strong) UIImage *image; @end // CircleView.m @implementation CircleView - (void)drawRect:(CGRect)rect { CGContextRef context = UIGraphicsGetCurrentContext(); CGContextBeginPath (context); CGContextAddArc (context, self.frame.size.width / 2, self.frame.size.height / 2, self.frame.size.height / 2 ..." />
+        <meta name="description" content="有这样一个需求：传给我一张矩形图片（width &gt; height），只需要显示正中的圆形部分，而其它部分设置为透明。 实现方案是，在drawRect方法中使用Path + Clip方法截取出圆形，然后再绘制图片。代码如下： // CircleView.h @interface CircleView : UIView @property (nonatomic, strong) UIImage *image; @end // CircleView.m @implementation CircleView - (void)drawRect:(CGRect)rect { CGContextRef context = UIGraphicsGetCurrentContext(); CGContextBeginPath (context); CGContextAddArc (context, self.frame.size.width / 2, self.frame.size.height / 2, self.frame.size ..." />
 
 
 
@@ -83,7 +83,7 @@
     
 </footer><!-- /.post-info -->                    </div>
                 </div>
-                <p>有这样一个需求：传给我一张矩形图片，只需要显示正中的圆形部分，而其它部分设置为透明。</p>
+                <p>有这样一个需求：传给我一张矩形图片（width &gt; height），只需要显示正中的圆形部分，而其它部分设置为透明。</p>
 <p>实现方案是，在drawRect方法中使用Path + Clip方法截取出圆形，然后再绘制图片。代码如下：</p>
 <div class="highlight"><pre><span class="c1">// CircleView.h</span>
 <span class="k">@interface</span> <span class="nc">CircleView</span> : <span class="nc">UIView</span>
@@ -111,6 +111,8 @@
 <li>需要先执行CGContextClip，再进行图片绘制，才会有Clip效果。</li>
 <li>CGContextDrawImage方法绘制出的图片是倒立的，因为Quartz2d的坐标系以左下角作为原点，<a href="http://stackoverflow.com/questions/506622/cgcontextdrawimage-draws-image-upside-down-when-passed-uiimage-cgimage">详情</a>。 所以使用UIImage的方法来代替。</li>
 <li>圆形之外的部分会以CircleView对象的backgroundColor显示，所以要达到透明，需要将CircleView对象的backgroundColor设置为clearColor</li>
+<li>页码效果使用UIPageControl实现</li>
+<li>加载网络图片时的进度效果使用<a href="https://github.com/jdg/MBProgressHUD">MBProgressHUD</a>实现</li>
 </ol>
 <p>在我的实现方法中，CircleView继承自UIView，然后添加了一个image成员变量。很自然地会想到，如果从UIImageView继承，并且使用继承来的image变量是否可以呢？ 答案是不行的，在为imageView.image赋值之后，图片仍旧是矩形。这说明，我们自定义的drawRect方法是在imageView.image绘制完成之后才执行的，CGContextClip方法已经不能对图片产生效果。</p>
 <p>利用Path + Clip可以绘制出很多自定义形状的View(其实View的边界还是一个Rect)。<a href="https://developer.apple.com/library/ios/samplecode/QuartzDemo/Introduction/Intro.html">苹果官方示例</a>中给出了镂空五角星的实现。</p>
