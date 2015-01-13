@@ -14,7 +14,7 @@
 
         <meta name="author" content="荆超" />
         <meta name="keywords" content="Objective-C,iOS" />
-        <meta name="description" content="面向对象语言中，子类可以覆盖父类的方法，使得一个方法可以有多个实现。动态分派的意思是，在运行时才决定执行哪个实现。 类A有一个方法f()，B是A的子类并且覆盖了f()方法。对于下面的代码，如果是动态分派语言则会执行B定义的方法。如果是静态分派，则会执行A定义的方法，因为静态分派只关注对象的声明类型。 B b = new B(); b.f(); Objective-C 通过runtime的objc_msgSend()函数将消息分派给对象。像这样的代码[target doMethodWith:var1]，会被翻译为objc_msgSend(target,@selector(doMethodWith:),var1) 可以看到objc_msgSend有三个参数: 接收消息的对象 消息的selector 消息的参数列表(可选) 这个分派机制决定了Objective-C的方法名必须唯一，不能支持重载(overload) 那么runtime如何知道该调用方法的哪个实现呢？ Objective-C中，每个类实际上也是一个对象。每个实例对象中有一个名为isa的指针，它指向一个类对象。类对象保持了实例对象的信息，包括成员变量列表、成员函数列表等。 objc_msgSend() 函数通过isa指针找到类对象，并查看它的函数列表中是否有参数中的方法 ..." />
+        <meta name="description" content="面向对象语言中，子类可以覆盖父类的方法，使得一个方法可以有多个实现。动态分派的意思是，在运行时才决定执行哪个实现。 类A有一个方法f()，B是A的子类并且覆盖了f()方法。对于下面的代码，如果是动态分派语言则会执行B定义的方法。如果是静态分派，则会执行A定义的方法，因为静态分派只关注对象的声明类型。 A b = new B(); b.f(); Objective-C 通过runtime的objc_msgSend()函数将消息分派给对象。像这样的代码[target doMethodWith:var1]，会被翻译为objc_msgSend(target,@selector(doMethodWith:),var1) 可以看到objc_msgSend有三个参数: 接收消息的对象 消息的selector 消息的参数列表(可选) 这个分派机制决定了Objective-C的方法名必须唯一，不能支持重载(overload) 那么runtime如何知道该调用方法的哪个实现呢？ Objective-C中，每个类实际上也是一个对象。每个实例对象中有一个名为isa的指针，它指向一个类对象。类对象保持了实例对象的信息，包括成员变量列表、成员函数列表等。 objc_msgSend() 函数通过isa指针找到类对象，并查看它的函数列表中是否有参数中的方法 ..." />
 
 
 
@@ -87,7 +87,7 @@
                 </div>
                 <p>面向对象语言中，子类可以覆盖父类的方法，使得一个方法可以有多个实现。动态分派的意思是，在运行时才决定执行哪个实现。</p>
 <p>类A有一个方法f()，B是A的子类并且覆盖了f()方法。对于下面的代码，如果是动态分派语言则会执行B定义的方法。如果是静态分派，则会执行A定义的方法，因为静态分派只关注对象的声明类型。</p>
-<div class="highlight"><pre>  <span class="n">B</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">B</span><span class="o">();</span>
+<div class="highlight"><pre>  <span class="n">A</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">B</span><span class="o">();</span>
   <span class="n">b</span><span class="o">.</span><span class="na">f</span><span class="o">();</span>
 </pre></div>
 
@@ -232,13 +232,13 @@
                             </a>
                         </li>
                         <li class="list-group-item tag-3">
-                            <a href="/tag/lbs.html">
-                                LBS
+                            <a href="/tag/github.html">
+                                github
                             </a>
                         </li>
                         <li class="list-group-item tag-3">
-                            <a href="/tag/github.html">
-                                github
+                            <a href="/tag/lbs.html">
+                                LBS
                             </a>
                         </li>
                         <li class="list-group-item tag-3">
