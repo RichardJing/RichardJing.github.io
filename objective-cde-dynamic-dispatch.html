@@ -2,7 +2,7 @@
 <html lang="en"
 >
 <head>
-    <title>Articles by 荆超 - 荆超的小站</title>
+    <title>Objective-C的dynamic dispatch - 荆超的小站</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -10,15 +10,12 @@
 
 
 
+<link rel="canonical" href="/objective-cde-dynamic-dispatch.html">
 
         <meta name="author" content="荆超" />
+        <meta name="keywords" content="Objective-C,iOS" />
+        <meta name="description" content="面向对象语言中，子类可以覆盖父类的方法，使得一个方法可以有多个实现。动态分派的意思是，在运行时才决定执行哪个实现。 类A有一个方法f()，B是A的子类并且覆盖了f()方法。对于下面的代码，如果是动态分派语言则会执行B定义的方法。如果是静态分派，则会执行A定义的方法，因为静态分派只关注对象的声明类型。 B b = new B(); b.f(); Objective-C 通过runtime的objc_msgSend()函数将消息分派给对象。像这样的代码[target doMethodWith:var1]，会被翻译为objc_msgSend(target,@selector(doMethodWith:),var1) 可以看到objc_msgSend有三个参数: 接收消息的对象 消息的selector 消息的参数列表(可选) 这个分派机制决定了Objective-C的方法名必须唯一，不能支持重载(overload) 那么runtime如何知道该调用方法的哪个实现呢？ Objective-C中，每个类实际上也是一个对象。每个实例对象中有一个名为isa的指针，它指向一个类对象。类对象保持了实例对象的信息，包括成员变量列表、成员函数列表等。 objc_msgSend() 函数通过isa指针找到类对象，并查看它的函数列表中是否有参数中的方法 ..." />
 
-    <!-- Open Graph tags -->
-        <meta property="og:site_name" content="荆超的小站" />
-        <meta property="og:type" content="website"/>
-        <meta property="og:title" content="荆超的小站"/>
-        <meta property="og:url" content=""/>
-        <meta property="og:description" content="荆超的小站"/>
 
 
     <!-- Bootstrap -->
@@ -59,119 +56,96 @@
     <div class="row">
         <div class="col-sm-9">
 
-            <article>
-                <h2><a href="/yan-zheng-che-pai-hao-shi-fou-he-fa.html">验证车牌号是否合法</a></h2>
-                <div class="summary"><p>中文可以使用下面的正则表达式:
-<pre><code>
-    [\u4e00-\u9fa5]
-</code></pre></p>
-<p>Object-C示例代码:</p>
-<div class="highlight"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span> <span class="nf">validateCarNo:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span> <span class="n">carNo</span>
-<span class="p">{</span>
-    <span class="kt">BOOL</span> <span class="n">isValid</span> <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">([</span><span class="n">carNo</span> <span class="n">length</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">7</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;车牌必须是7位&quot;</span><span class="p">);</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="n">NSString</span> <span class="o">*</span><span class="n">carRegex</span> <span class="o">=</span> <span class="s">@&quot;^[</span><span class="se">\u4e00</span><span class="s">-</span><span class="se">\u9fa5</span><span class="s">]{1}[A-Za-z]{1}[A-Za-z_0-9]{5}$&quot;</span><span class="p">;</span>
-        <span class="n">NSRange</span> <span class="n">range</span> <span class="o">=</span> <span class="p">[</span><span class="n">carNo</span> <span class="n">rangeOfString</span><span class="o">:</span><span class="n">carRegex</span> <span class="n">options</span><span class="o">:</span><span class="n">NSRegularExpressionSearch</span><span class="p">];</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">range</span><span class="p">.</span><span class="n">location</span> <span class="o">!=</span> <span class="n">NSNotFound</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">isValid</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">isValid</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-                    <a class="btn btn-default btn-xs" href="/yan-zheng-che-pai-hao-shi-fou-he-fa.html">more ...</a>
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="/objective-cde-dynamic-dispatch.html"
+                       rel="bookmark"
+                       title="Permalink to Objective-C的dynamic dispatch">
+                        Objective-C的dynamic dispatch
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2015-01-13T00:00:00+08:00"> 二 13 一月 2015</time>
+    </span>
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="/tag/objective-c.html">Objective-C</a>
+        /
+	<a href="/tag/ios.html">iOS</a>
+    
+</footer><!-- /.post-info -->                    </div>
                 </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html">将本地文件添加到github中</a></h2>
-                <div class="summary"><h4>第1步: 创建SSH Key</h4>
-<p>你和Github之间的通信是通过SSH加密的，所以要把公钥告诉Github。
-看看家目录有没有.ssh文件夹，该文件夹下有没有id_rsa和id_rsa.pub两个文件。如果有这两个文件，就可以跳到下一步了。</p>
-<div class="highlight"><pre><span class="n">ssh</span><span class="o">-</span><span class="n">keygen</span> <span class="o">-</span><span class="n">t</span> <span class="n">rsa</span> <span class="o">-</span><span class="n">C</span> <span class="s">&quot;youremail@example.com&quot;</span>
+                <p>面向对象语言中，子类可以覆盖父类的方法，使得一个方法可以有多个实现。动态分派的意思是，在运行时才决定执行哪个实现。</p>
+<p>类A有一个方法f()，B是A的子类并且覆盖了f()方法。对于下面的代码，如果是动态分派语言则会执行B定义的方法。如果是静态分派，则会执行A定义的方法，因为静态分派只关注对象的声明类型。</p>
+<div class="highlight"><pre>  <span class="n">B</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">B</span><span class="o">();</span>
+  <span class="n">b</span><span class="o">.</span><span class="na">f</span><span class="o">();</span>
 </pre></div>
 
 
-<p>id_rsa是私钥，id_rsa.pub是公钥。</p>
-<h4>第2步: 上传公钥</h4>
-<p>登录Github -&gt; Settings -&gt; SSH Keys -&gt; Add SSH Key，输入Title及id_rsa.pub文件内容，点击Add key，如下图:</p>
-<p><img alt="Alt Text" src="/images/AddSSHKey.png" /></p>
-<h4>第3步: 第一次push文件</h4>
-<p>在github页面中新建repository: yourproject</p>
-<div class="highlight"><pre><span class="n">cd</span> <span class="o">~/</span><span class="n">localproject</span>
-<span class="n">git</span> <span class="n">init</span>
-<span class="n">git</span> <span class="n">add</span> <span class="p">.</span>
-<span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s">&quot;本地文件添加到github中 ...</span></pre></div>
-                    <a class="btn btn-default btn-xs" href="/jiang-ben-di-wen-jian-tian-jia-dao-githubzhong.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html">在Godaddy上给github pages配置自定义域名</a></h2>
-                <div class="summary"><p>Github pages默认的域名是username.github.io，十分丑陋。</p>
-<p>在repository根目录中添加CNAME文件，并添加你的域名。CNAME文件只能有一行:</p>
-<div class="highlight"><pre><span class="n">jingchao</span><span class="p">.</span><span class="n">me</span>
-</pre></div>
-
-
-<p>打开Godaddy网站，进入“Manage My Domains”:</p>
-<p><img alt="Alt Text" src="/images/ManageMyDomains.png" /></p>
-<p>在Godaddy中配置DNS ZoneFile必须保证Nameserver是Godaddy自己的。在要修改的域名旁边点击向下的三角，然后点击“Set Nameservers”:</p>
-<p><img alt="Alt Text" src="/images/SetNameservers.png" /></p>
-<p>保证Nameserver是Standard，即GoDaddy自己的Nameserver:</p>
-<p><img alt="Alt Text" src="/images/StandardNameserver.png" /></p>
-<p>进入“Manage DNS”:</p>
-<p><img alt="Alt Text" src="/images/ManageDNS.png" /></p>
-<p>修改DNS Zone File:</p>
+<p>Objective-C 通过runtime的objc_msgSend()函数将消息分派给对象。像这样的代码[target doMethodWith:var1]，会被翻译为objc_msgSend(target,@selector(doMethodWith:),var1)</p>
+<p>可以看到objc_msgSend有三个参数:</p>
 <ol>
-<li>在“A(Host)”区块下，将IP指向: 192.30.252.153</li>
-<li>在“CName (Alias)”区块下， 将www指向: username.github.io</li>
+<li>接收消息的对象</li>
+<li>消息的selector</li>
+<li>消息的参数列表(可选)</li>
 </ol>
-<p><img alt="Alt Text" src="/images/修改DNSZoneFile.png" /></p>
-<p>保存，等待你的DNS配置更新成功。</p>
-                    <a class="btn btn-default btn-xs" href="/zai-godaddyshang-gei-github-pagespei-zhi-zi-ding-yi-yu-ming.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html">百度LBS开放平台坐标转换及逆地理编码服务</a></h2>
-                <div class="summary"><h3>坐标转换</h3>
-<p>我获得iphone的定位结果后，在百度地图上进行标注，发现位置有上百米的偏差。是因为百度地图SDK和手机GPS定位使用了不同的坐标系统。</p>
-<p>目前常用的坐标系统有三种：</p>
+<p>这个分派机制决定了Objective-C的方法名必须唯一，不能支持重载(overload)</p>
+<p>那么runtime如何知道该调用方法的哪个实现呢？ Objective-C中，每个类实际上也是一个对象。每个实例对象中有一个名为isa的指针，它指向一个类对象。类对象保持了实例对象的信息，包括成员变量列表、成员函数列表等。</p>
+<p>objc_msgSend() 函数通过isa指针找到类对象，并查看它的函数列表中是否有参数中的方法。如果没有，则查询父类对象，直到NSObject还没找到则会抛出exception</p>
+<p>因为类对象也是对象，所以它也必须是另一个类的实例，这个类就是元类(metaclass)。元类保持了类方法的列表。为了保证父类的类方法在子类中可以被调用，所有子类的元类都会继承父类的元类，换而言之，类对象和元类对象有着同样的继承关系<sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">1</a></sup>。</p>
+<div class="footnote">
+<hr />
 <ol>
-<li>GCJ-02，国测局经纬度坐标。由中国国家测绘局制订的地理信息系统的坐标系统。引入随机的偏差，对经纬度数据进行加密。google地图、soso地图都使用这种标准。</li>
-<li>WGS84，为GPS全球定位系统使用而建立的坐标系统。在iOS中，使用CLLocationManager接口定位出来的坐标属于该标准。</li>
-<li>bd09ll，百度经纬度坐标。百度地图SDK采用的是百度自有的地理坐标系</li>
+<li id="fn:1">
+<p>唐巧 《iOS开发进阶》 第19章 第2节 isa指针 电子工业出版社&#160;<a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
 </ol>
-<p>百度LBS开放平台官方文档给出了<a href="http://developer.baidu.com/map/wiki/index.php?title=iossdk/guide/tool#.E5.9D.90.E6.A0.87.E8.BD.AC.E6.8D.A2">其它两种系统转换为百度坐标的方法</a> 。我的Object-C示例代码：</p>
-<div class="highlight"><pre><span class="cp">#import &quot;BMapKit.h&quot;</span>
-<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">locationManager:</span><span class="p">(</span><span class="n">CLLocationManager</span> <span class="o">*</span><span class="p">)</span><span class="nv">manager</span>
-     <span class="nl">didUpdateLocations:</span><span class="p">(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nv">locations</span>
-<span class="p">{</span>
+</div>
+            </div>
+            <!-- /.entry-content -->
+    <hr/>
+    <section class="comments" id="comments">
+        <h2>Comments</h2>
 
-    <span class="n">CLLocation</span> <span class="o">*</span><span class="n">location</span> <span class="o">=</span> <span class="p">[</span><span class="n">locations</span> <span class="n">lastObject</span><span class="p">];</span>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
 
-    <span class="c1">//GPS坐标换为百度坐标（bd09ll）</span>
-    <span class="n">NSDictionary</span><span class="o">*</span> <span class="n">baiduDic</span> <span class="o">=</span> <span class="n">BMKConvertBaiduCoorFrom</span><span class="p">(</span><span class="n">location</span><span class="p">.</span><span class="n">coordinate</span><span class="p">,</span><span class="n">BMK_COORDTYPE_GPS</span><span class="p">);</span>
+                    var disqus_identifier = 'objective-cde-dynamic-dispatch';
+                var disqus_url = 'http://jingchao.me/objective-cde-dynamic-dispatch.html';
 
-    <span class="c1">//坐标是乱码</span>
-    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;x=%@,y=%@&quot;</span><span class="p">,[</span><span class="n">baiduDic ...</span></pre></div>
-                    <a class="btn btn-default btn-xs" href="/bai-du-lbskai-fang-ping-tai-zuo-biao-zhuan-huan-ji-ni-di-li-bian-ma-fu-wu.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
+            var disqus_config = function () {
+                this.language = "en";
+            };
 
-        <ul class="pagination">
-                <li class="prev"><a href="/author/jing-chao.html">&laquo;</a>
-                </li>
-                    <li class=""><a
-                            href="/author/jing-chao.html">1</a></li>
-                    <li class="active"><a
-                            href="/author/jing-chao2.html">2</a></li>
-                <li class="next disabled"><a href="#">&raquo;</a></li>
-        </ul>
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+            Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </section>
+        </article>
+    </section>
+
         </div>
         <div class="col-sm-3 well well-sm" id="sidebar">
 

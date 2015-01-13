@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>荆超的小站</title><link href="/" rel="alternate"></link><link href="/feeds/jing-chao.atom.xml" rel="self"></link><id>/</id><updated>2014-11-23T00:00:00+08:00</updated><entry><title>将图片截取为圆形，并且截掉的部分设置为透明</title><link href="/jiang-tu-pian-jie-qu-wei-yuan-xing-bing-qie-jie-diao-de-bu-fen-she-zhi-wei-tou-ming.html" rel="alternate"></link><updated>2014-11-23T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-11-23:jiang-tu-pian-jie-qu-wei-yuan-xing-bing-qie-jie-diao-de-bu-fen-she-zhi-wei-tou-ming.html</id><summary type="html">&lt;p&gt;有这样一个需求：传给我一张矩形图片（width &amp;gt; height），只需要显示正中的圆形部分，而其它部分设置为透明。&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>荆超的小站</title><link href="/" rel="alternate"></link><link href="/feeds/jing-chao.atom.xml" rel="self"></link><id>/</id><updated>2015-01-13T00:00:00+08:00</updated><entry><title>Objective-C的dynamic dispatch</title><link href="/objective-cde-dynamic-dispatch.html" rel="alternate"></link><updated>2015-01-13T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2015-01-13:objective-cde-dynamic-dispatch.html</id><summary type="html">&lt;p&gt;面向对象语言中，子类可以覆盖父类的方法，使得一个方法可以有多个实现。动态分派的意思是，在运行时才决定执行哪个实现。&lt;/p&gt;
+&lt;p&gt;类A有一个方法f()，B是A的子类并且覆盖了f()方法。对于下面的代码，如果是动态分派语言则会执行B定义的方法。如果是静态分派，则会执行A定义的方法，因为静态分派只关注对象的声明类型。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;  &lt;span class="n"&gt;B&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;B&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+  &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;f&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Objective-C 通过runtime的objc_msgSend()函数将消息分派给对象。像这样的代码[target doMethodWith:var1]，会被翻译为objc_msgSend(target,@selector(doMethodWith:),var1)&lt;/p&gt;
+&lt;p&gt;可以看到objc_msgSend有三个参数:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;接收消息的对象&lt;/li&gt;
+&lt;li&gt;消息的selector&lt;/li&gt;
+&lt;li&gt;消息的参数列表(可选)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这个分派机制决定了Objective-C的方法名必须唯一，不能支持重载(overload)&lt;/p&gt;
+&lt;p&gt;那么runtime如何知道该调用方法的哪个实现呢？ Objective-C中，每个类实际上也是一个对象。每个实例对象中有一个名为isa的指针，它指向一个类对象。类对象保持了实例对象的信息，包括成员变量列表、成员函数列表等。&lt;/p&gt;
+&lt;p&gt;objc_msgSend() 函数通过isa指针找到类对象，并查看它的函数列表中是否有参数中的方法。如果没有，则查询父类对象，直到NSObject还没找到则会抛出exception&lt;/p&gt;
+&lt;p&gt;因为类对象也是对象，所以它也必须是另一个类的实例，这个类就是元类(metaclass)。元类保持了类方法的列表。为了保证父类的类方法在子类中可以被调用，所有子类的元类都会继承父类的元类，换而言之，类对象和元类对象有着同样的继承关系&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;唐巧 《iOS开发进阶》 第19章 第2节 isa指针 电子工业出版社&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</summary><category term="Objective-C"></category><category term="iOS"></category></entry><entry><title>将图片截取为圆形，并且截掉的部分设置为透明</title><link href="/jiang-tu-pian-jie-qu-wei-yuan-xing-bing-qie-jie-diao-de-bu-fen-she-zhi-wei-tou-ming.html" rel="alternate"></link><updated>2014-11-23T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-11-23:jiang-tu-pian-jie-qu-wei-yuan-xing-bing-qie-jie-diao-de-bu-fen-she-zhi-wei-tou-ming.html</id><summary type="html">&lt;p&gt;有这样一个需求：传给我一张矩形图片（width &amp;gt; height），只需要显示正中的圆形部分，而其它部分设置为透明。&lt;/p&gt;
 &lt;p&gt;实现方案是，在drawRect方法中使用Path + Clip方法截取出圆形，然后再绘制图片。代码如下：&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;// CircleView.h&lt;/span&gt;
 &lt;span class="k"&gt;@interface&lt;/span&gt; &lt;span class="nc"&gt;CircleView&lt;/span&gt; : &lt;span class="nc"&gt;UIView&lt;/span&gt;
@@ -27,8 +52,6 @@
 &lt;li&gt;需要先执行CGContextClip，再进行图片绘制，才会有Clip效果。&lt;/li&gt;
 &lt;li&gt;CGContextDrawImage方法绘制出的图片是倒立的，因为Quartz2d的坐标系以左下角作为原点，&lt;a href="http://stackoverflow.com/questions/506622/cgcontextdrawimage-draws-image-upside-down-when-passed-uiimage-cgimage"&gt;详情&lt;/a&gt;。 所以使用UIImage的方法来代替。&lt;/li&gt;
 &lt;li&gt;圆形之外的部分会以CircleView对象的backgroundColor显示，所以要达到透明，需要将CircleView对象的backgroundColor设置为clearColor&lt;/li&gt;
-&lt;li&gt;页码效果使用UIPageControl实现&lt;/li&gt;
-&lt;li&gt;加载网络图片时的进度效果使用&lt;a href="https://github.com/jdg/MBProgressHUD"&gt;MBProgressHUD&lt;/a&gt;实现&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;在我的实现方法中，CircleView继承自UIView，然后添加了一个image成员变量。很自然地会想到，如果从UIImageView继承，并且使用继承来的image变量是否可以呢？ 答案是不行的，在为imageView.image赋值之后，图片仍旧是矩形。这说明，我们自定义的drawRect方法是在imageView.image绘制完成之后才执行的，CGContextClip方法已经不能对图片产生效果。&lt;/p&gt;
 &lt;p&gt;利用Path + Clip可以绘制出很多自定义形状的View(其实View的边界还是一个Rect)。&lt;a href="https://developer.apple.com/library/ios/samplecode/QuartzDemo/Introduction/Intro.html"&gt;苹果官方示例&lt;/a&gt;中给出了镂空五角星的实现。&lt;/p&gt;</summary><category term="iOS"></category></entry><entry><title>一个翻页图片查看器的实现</title><link href="/yi-ge-fan-ye-tu-pian-cha-kan-qi-de-shi-xian.html" rel="alternate"></link><updated>2014-11-23T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2014-11-23:yi-ge-fan-ye-tu-pian-cha-kan-qi-de-shi-xian.html</id><summary type="html">&lt;p&gt;需要实现一个可翻页的图片浏览功能，就像在微信朋友圈中点开大图的效果。具体功能点如下：&lt;/p&gt;
