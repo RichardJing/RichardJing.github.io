@@ -114,6 +114,7 @@
 <p>如果你自定义了getter或setter，那么编译器在synthesize时就不会再自动生成相应方法了。 如果你自定义了所有的访问器，编译器就不会帮你执行synthesize，也意味着跟实例变量的捆绑也不会自动完成。 对于readwrite的property, 如果你自定义了getter以及setter; 对于readonly的property你自定义了getter，那么需要手动执行synthesize.</p>
 <p>苹果官方文档推荐使用property而不是实例变量。 使用property不但可以省去许多getter和setter，还能够通过点操作符直接调用它们，何乐而不为呢？ </p>
 <p>回到文章最初的那段代码，该作者定义了property之后，还不辞辛苦地定义了一个实例变量，是多此一举。编译器会自动帮你生成那个实例变量的。</p>
+<p>在类内部代码中，也尽量使用property，但是在初始化方法以及自定义访问器中应当直接操作实例变量。</p>
 <p>最后再多说一下, property可以不绑定到一个实例变量上，例如一个readonly的property这样自定义了getter:</p>
 <div class="highlight"><pre><span class="nd">@property</span> <span class="o">(</span><span class="n">readonly</span><span class="o">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">firstName</span><span class="o">;</span>
 <span class="o">-(</span><span class="n">NSString</span> <span class="o">*)</span><span class="n">firstName</span>
@@ -242,8 +243,8 @@
                             </a>
                         </li>
                         <li class="list-group-item tag-3">
-                            <a href="/tag/objective-c.html">
-                                Objective-C
+                            <a href="/tag/git.html">
+                                git
                             </a>
                         </li>
                         <li class="list-group-item tag-3">
@@ -257,8 +258,8 @@
                             </a>
                         </li>
                         <li class="list-group-item tag-3">
-                            <a href="/tag/git.html">
-                                git
+                            <a href="/tag/objective-c.html">
+                                Objective-C
                             </a>
                         </li>
                         <li class="list-group-item tag-4">
