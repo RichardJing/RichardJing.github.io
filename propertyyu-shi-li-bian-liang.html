@@ -2,7 +2,7 @@
 <html lang="en"
 >
 <head>
-    <title>Objective-C的dynamic dispatch - 荆超的小站</title>
+    <title>property与实例变量 - 荆超的小站</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -10,11 +10,11 @@
 
 
 
-<link rel="canonical" href="/objective-cde-dynamic-dispatch.html">
+<link rel="canonical" href="/propertyyu-shi-li-bian-liang.html">
 
         <meta name="author" content="荆超" />
         <meta name="keywords" content="Objective-C,iOS" />
-        <meta name="description" content="面向对象语言中，子类可以覆盖父类的方法，使得一个方法可以有多个实现。动态分派的意思是，在运行时才决定执行哪个实现。 类A有一个方法f()，B是A的子类并且覆盖了f()方法。对于下面的代码，如果是动态分派语言则会执行B定义的方法。如果是静态分派，则会执行A定义的方法，因为静态分派只关注对象的声明类型。 A b = new B(); b.f(); Objective-C 通过runtime的objc_msgSend()函数将消息分派给对象。像这样的代码[target doMethodWith:var1]，会被翻译为objc_msgSend(target,@selector(doMethodWith:),var1) 可以看到objc_msgSend有三个参数: 接收消息的对象 消息的selector 消息的参数列表(可选) 这个分派机制决定了Objective-C的方法名必须唯一，不能支持重载(overload) 那么runtime如何知道该调用方法的哪个实现呢？ Objective-C中，每个类实际上也是一个对象。每个实例对象中有一个名为isa的指针，它指向一个类对象。类对象保持了实例对象的信息，包括成员变量列表、成员函数列表等。 objc_msgSend() 函数通过isa指针找到类对象，并查看它的函数列表中是否有参数中的方法 ..." />
+        <meta name="description" content="当我第一次看到如下语法时，非常困惑: @interface PersonalInfo : NSObject { NSString *_firstName; } @property NSString *firstName; @end firstName与_firstName长得这么像，它俩啥关系呢？ firstName是一个property, 而_firstName是一个实例变量(instance variable)。它俩是不同的两种东西，本应该没有啥关系，但是编译器从中做了一些手脚。 Objective-C定义了一个实例变量之后，必须自己写访问器来访问实例变量，如getter和setter。可能是为了体恤程序员，Objective-C提供了synthesize语法自动帮你生成getter和setter. 只要你定义了一个property就能用synthesize. 一个property背后可以有一个实例变量作为信息存放处，如果你用了如下语法: @property NSString *firstName; @synthesize firstName; 那么编译器除了自动生成property的getter和setter，还会帮你生成一个实例变量。实例变量默认以property的名字加前置下划线命名，即_firstName. 通过synthesize还可以将property捆绑到指定实例变量上: @property NSString *firstName; @synthesize firstName = otherInstanceVariable; Objective-C更加体恤程序员的是，连synthesize都不用你做，只要你声明了一个property，编译器会自动帮你完成访问器及实例变量的synthesize操作。但是实例变量的synthesize操作是有条件的。 如果你自定义了getter或setter ..." />
 
 
 
@@ -60,10 +60,10 @@
         <article>
             <header class="page-header">
                 <h1>
-                    <a href="/objective-cde-dynamic-dispatch.html"
+                    <a href="/propertyyu-shi-li-bian-liang.html"
                        rel="bookmark"
-                       title="Permalink to Objective-C的dynamic dispatch">
-                        Objective-C的dynamic dispatch
+                       title="Permalink to property与实例变量">
+                        property与实例变量
                     </a>
                 </h1>
             </header>
@@ -73,7 +73,7 @@
 <footer class="post-info">
     <span class="label label-default">Date</span>
     <span class="published">
-        <i class="fa fa-calendar"></i><time datetime="2015-01-13T00:00:00+08:00"> 二 13 一月 2015</time>
+        <i class="fa fa-calendar"></i><time datetime="2015-01-15T00:00:00+08:00"> 四 15 一月 2015</time>
     </span>
 
 
@@ -85,32 +85,42 @@
     
 </footer><!-- /.post-info -->                    </div>
                 </div>
-                <p>面向对象语言中，子类可以覆盖父类的方法，使得一个方法可以有多个实现。动态分派的意思是，在运行时才决定执行哪个实现。</p>
-<p>类A有一个方法f()，B是A的子类并且覆盖了f()方法。对于下面的代码，如果是动态分派语言则会执行B定义的方法。如果是静态分派，则会执行A定义的方法，因为静态分派只关注对象的声明类型。</p>
-<div class="highlight"><pre>  <span class="n">A</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">B</span><span class="o">();</span>
-  <span class="n">b</span><span class="o">.</span><span class="na">f</span><span class="o">();</span>
+                <p>当我第一次看到如下语法时，非常困惑:</p>
+<div class="highlight"><pre><span class="nd">@interface</span> <span class="n">PersonalInfo</span> <span class="o">:</span> <span class="n">NSObject</span> <span class="o">{</span>
+    <span class="n">NSString</span> <span class="o">*</span><span class="n">_firstName</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="nd">@property</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">firstName</span><span class="o">;</span>
+<span class="nd">@end</span>
 </pre></div>
 
 
-<p>Objective-C 通过runtime的objc_msgSend()函数将消息分派给对象。像这样的代码[target doMethodWith:var1]，会被翻译为objc_msgSend(target,@selector(doMethodWith:),var1)</p>
-<p>可以看到objc_msgSend有三个参数:</p>
-<ol>
-<li>接收消息的对象</li>
-<li>消息的selector</li>
-<li>消息的参数列表(可选)</li>
-</ol>
-<p>这个分派机制决定了Objective-C的方法名必须唯一，不能支持重载(overload)</p>
-<p>那么runtime如何知道该调用方法的哪个实现呢？ Objective-C中，每个类实际上也是一个对象。每个实例对象中有一个名为isa的指针，它指向一个类对象。类对象保持了实例对象的信息，包括成员变量列表、成员函数列表等。</p>
-<p>objc_msgSend() 函数通过isa指针找到类对象，并查看它的函数列表中是否有参数中的方法。如果没有，则查询父类对象，直到NSObject还没找到则会抛出exception</p>
-<p>因为类对象也是对象，所以它也必须是另一个类的实例，这个类就是元类(metaclass)。元类保持了类方法的列表。为了保证父类的类方法在子类中可以被调用，所有子类的元类都会继承父类的元类，换而言之，类对象和元类对象有着同样的继承关系<sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">1</a></sup>。</p>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>唐巧 《iOS开发进阶》 第19章 第2节 isa指针 电子工业出版社&#160;<a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
+<p>firstName与_firstName长得这么像，它俩啥关系呢？ </p>
+<p>firstName是一个property, 而_firstName是一个实例变量(instance variable)。它俩是不同的两种东西，本应该没有啥关系，但是编译器从中做了一些手脚。</p>
+<p>Objective-C定义了一个实例变量之后，必须自己写访问器来访问实例变量，如getter和setter。可能是为了体恤程序员，Objective-C提供了synthesize语法自动帮你生成getter和setter. 只要你定义了一个property就能用synthesize.</p>
+<p>一个property背后可以有一个实例变量作为信息存放处，如果你用了如下语法:</p>
+<div class="highlight"><pre><span class="nd">@property</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">firstName</span><span class="o">;</span>
+<span class="nd">@synthesize</span> <span class="n">firstName</span><span class="o">;</span>
+</pre></div>
+
+
+<p>那么编译器除了自动生成property的getter和setter，还会帮你生成一个实例变量。实例变量默认以property的名字加前置下划线命名，即_firstName. </p>
+<p>通过synthesize还可以将property捆绑到指定实例变量上:</p>
+<div class="highlight"><pre><span class="nd">@property</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">firstName</span><span class="o">;</span>
+<span class="nd">@synthesize</span> <span class="n">firstName</span> <span class="o">=</span> <span class="n">otherInstanceVariable</span><span class="o">;</span>
+</pre></div>
+
+
+<p>Objective-C更加体恤程序员的是，连synthesize都不用你做，只要你声明了一个property，编译器会自动帮你完成访问器及实例变量的synthesize操作。但是实例变量的synthesize操作是有条件的。</p>
+<p>如果你自定义了getter或setter，那么编译器在synthesize时就不会再自动生成相应方法了。 如果你自定义了所有的访问器，编译器就不会帮你执行synthesize，也意味着跟实例变量的捆绑也不会自动完成。 对于readwrite的property, 如果你自定义了getter以及setter; 对于readonly的property你自定义了getter，那么需要手动执行synthesize.</p>
+<p>苹果官方文档推荐使用property而不是实例变量。 使用property不但可以省去许多getter和setter，还能够通过点操作符直接调用它们，何乐而不为呢？ </p>
+<p>回到文章最初的那段代码，该作者定义了property之后，还不辞辛苦地定义了一个实例变量，是多此一举。编译器会自动帮你生成那个实例变量的。</p>
+<p>最后再多说一下, property可以不绑定到一个实例变量上，例如一个readonly的property这样自定义了getter:</p>
+<div class="highlight"><pre><span class="nd">@property</span> <span class="o">(</span><span class="n">readonly</span><span class="o">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">firstName</span><span class="o">;</span>
+<span class="o">-(</span><span class="n">NSString</span> <span class="o">*)</span><span class="n">firstName</span>
+<span class="o">{</span>
+    <span class="k">return</span> <span class="err">@</span><span class="s">&quot;JingChao&quot;</span><span class="o">;</span>
+<span class="o">}</span>
+</pre></div>
             </div>
             <!-- /.entry-content -->
     <hr/>
@@ -122,8 +132,8 @@
             /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
             var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
 
-                    var disqus_identifier = 'objective-cde-dynamic-dispatch';
-                var disqus_url = 'http://jingchao.me/objective-cde-dynamic-dispatch.html';
+                    var disqus_identifier = 'propertyyu-shi-li-bian-liang';
+                var disqus_url = 'http://jingchao.me/propertyyu-shi-li-bian-liang.html';
 
             var disqus_config = function () {
                 this.language = "en";

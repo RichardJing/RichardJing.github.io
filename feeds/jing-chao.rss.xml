@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>荆超的小站</title><link>/</link><description></description><atom:link href="/feeds/jing-chao.rss.xml" rel="self"></atom:link><lastBuildDate>Tue, 13 Jan 2015 00:00:00 +0800</lastBuildDate><item><title>Objective-C的dynamic dispatch</title><link>/objective-cde-dynamic-dispatch.html</link><description>&lt;p&gt;面向对象语言中，子类可以覆盖父类的方法，使得一个方法可以有多个实现。动态分派的意思是，在运行时才决定执行哪个实现。&lt;/p&gt;
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>荆超的小站</title><link>/</link><description></description><atom:link href="/feeds/jing-chao.rss.xml" rel="self"></atom:link><lastBuildDate>Thu, 15 Jan 2015 00:00:00 +0800</lastBuildDate><item><title>property与实例变量</title><link>/propertyyu-shi-li-bian-liang.html</link><description>&lt;p&gt;当我第一次看到如下语法时，非常困惑:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nd"&gt;@interface&lt;/span&gt; &lt;span class="n"&gt;PersonalInfo&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;NSObject&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;_firstName&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;span class="nd"&gt;@property&lt;/span&gt; &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;firstName&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;span class="nd"&gt;@end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;firstName与_firstName长得这么像，它俩啥关系呢？ &lt;/p&gt;
+&lt;p&gt;firstName是一个property, 而_firstName是一个实例变量(instance variable)。它俩是不同的两种东西，本应该没有啥关系，但是编译器从中做了一些手脚。&lt;/p&gt;
+&lt;p&gt;Objective-C定义了一个实例变量之后，必须自己写访问器来访问实例变量，如getter和setter。可能是为了体恤程序员，Objective-C提供了synthesize语法自动帮你生成getter和setter. 只要你定义了一个property就能用synthesize.&lt;/p&gt;
+&lt;p&gt;一个property背后可以有一个实例变量作为信息存放处，如果你用了如下语法:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nd"&gt;@property&lt;/span&gt; &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;firstName&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;span class="nd"&gt;@synthesize&lt;/span&gt; &lt;span class="n"&gt;firstName&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;那么编译器除了自动生成property的getter和setter，还会帮你生成一个实例变量。实例变量默认以property的名字加前置下划线命名，即_firstName. &lt;/p&gt;
+&lt;p&gt;通过synthesize还可以将property捆绑到指定实例变量上:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nd"&gt;@property&lt;/span&gt; &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;firstName&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;span class="nd"&gt;@synthesize&lt;/span&gt; &lt;span class="n"&gt;firstName&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;otherInstanceVariable&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Objective-C更加体恤程序员的是，连synthesize都不用你做，只要你声明了一个property，编译器会自动帮你完成访问器及实例变量的synthesize操作。但是实例变量的synthesize操作是有条件的。&lt;/p&gt;
+&lt;p&gt;如果你自定义了getter或setter，那么编译器在synthesize时就不会再自动生成相应方法了。 如果你自定义了所有的访问器，编译器就不会帮你执行synthesize，也意味着跟实例变量的捆绑也不会自动完成。 对于readwrite的property, 如果你自定义了getter以及setter; 对于readonly的property你自定义了getter，那么需要手动执行synthesize.&lt;/p&gt;
+&lt;p&gt;苹果官方文档推荐使用property而不是实例变量。 使用property不但可以省去许多getter和setter，还能够通过点操作符直接调用它们，何乐而不为呢？ &lt;/p&gt;
+&lt;p&gt;回到文章最初的那段代码，该作者定义了property之后，还不辞辛苦地定义了一个实例变量，是多此一举。编译器会自动帮你生成那个实例变量的。&lt;/p&gt;
+&lt;p&gt;最后再多说一下, property可以不绑定到一个实例变量上，例如一个readonly的property这样自定义了getter:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nd"&gt;@property&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;readonly&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;firstName&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;span class="o"&gt;-(&lt;/span&gt;&lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*)&lt;/span&gt;&lt;span class="n"&gt;firstName&lt;/span&gt;
+&lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;JingChao&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">荆超</dc:creator><pubDate>Thu, 15 Jan 2015 00:00:00 +0800</pubDate><guid>tag:,2015-01-15:propertyyu-shi-li-bian-liang.html</guid><category>Objective-C</category><category>iOS</category></item><item><title>Objective-C的dynamic dispatch</title><link>/objective-cde-dynamic-dispatch.html</link><description>&lt;p&gt;面向对象语言中，子类可以覆盖父类的方法，使得一个方法可以有多个实现。动态分派的意思是，在运行时才决定执行哪个实现。&lt;/p&gt;
 &lt;p&gt;类A有一个方法f()，B是A的子类并且覆盖了f()方法。对于下面的代码，如果是动态分派语言则会执行B定义的方法。如果是静态分派，则会执行A定义的方法，因为静态分派只关注对象的声明类型。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;  &lt;span class="n"&gt;A&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;B&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
   &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;f&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
