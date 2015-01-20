@@ -28,7 +28,8 @@
 &lt;p&gt;如果你自定义了getter或setter，那么编译器在synthesize时就不会再自动生成相应方法了。 如果你自定义了所有的访问器，编译器就不会帮你执行synthesize，也意味着跟实例变量的捆绑也不会自动完成。 对于readwrite的property, 如果你自定义了getter以及setter; 对于readonly的property你自定义了getter，那么需要手动执行synthesize.&lt;/p&gt;
 &lt;p&gt;苹果官方文档推荐使用property而不是实例变量。 使用property不但可以省去许多getter和setter，还能够通过点操作符直接调用它们，何乐而不为呢？ &lt;/p&gt;
 &lt;p&gt;回到文章最初的那段代码，该作者定义了property之后，还不辞辛苦地定义了一个实例变量，是多此一举。编译器会自动帮你生成那个实例变量的。&lt;/p&gt;
-&lt;p&gt;在类内部代码中，也尽量使用property，但是在初始化方法以及自定义访问器中应当直接操作实例变量。&lt;/p&gt;
+&lt;p&gt;但是在初始化方法和dealloc方法中不宜使用访问器，因为在这两个地方不确定对象是否存在，所以发送的消息可能不会成功。在这两个地方应当使用实例变量。&lt;/p&gt;
+&lt;p&gt;上述说的都是property为nonatomic情况，而property默认是atomic的。atomic访问器的实现和同步都是私有的，意味着你不能将一个同步访问器和自定义的访问器进行组合。 例如， 你对一个readwrite atomic property自定义了setter，不要指望编译帮你synthesize一个getter，你会得到编译警告。&lt;/p&gt;
 &lt;p&gt;最后再多说一下, property可以不绑定到一个实例变量上，例如一个readonly的property这样自定义了getter:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nd"&gt;@property&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;readonly&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;firstName&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
 &lt;span class="o"&gt;-(&lt;/span&gt;&lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*)&lt;/span&gt;&lt;span class="n"&gt;firstName&lt;/span&gt;
