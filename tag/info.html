@@ -2,7 +2,7 @@
 <html lang="en"
 >
 <head>
-    <title>Objective-C - 荆超的小站</title>
+    <title>Info - 荆超的小站</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -12,7 +12,7 @@
 
 
     <meta name="author" content="荆超" />
-    <meta name="keywords" content="Objective-C" />
+    <meta name="keywords" content="Info" />
 
     <!-- Open Graph tags -->
         <meta property="og:site_name" content="荆超的小站" />
@@ -61,58 +61,42 @@
         <div class="col-sm-9">
 
             <article>
-                <h2><a href="/propertyyu-shi-li-bian-liang.html">property与实例变量</a></h2>
-                <div class="summary"><p>当我第一次看到如下语法时，非常困惑:</p>
-<div class="highlight"><pre><span class="nd">@interface</span> <span class="n">PersonalInfo</span> <span class="o">:</span> <span class="n">NSObject</span> <span class="o">{</span>
-    <span class="n">NSString</span> <span class="o">*</span><span class="n">_firstName</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="nd">@property</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">firstName</span><span class="o">;</span>
-<span class="nd">@end</span>
-</pre></div>
-
-
-<p>firstName与_firstName长得这么像，它俩啥关系呢？ </p>
-<p>firstName是一个property, 而_firstName是一个实例变量(instance variable)。它俩是不同的两种东西，本应该没有啥关系，但是编译器从中做了一些手脚。</p>
-<p>Objective-C定义了一个实例变量之后，必须自己写访问器来访问实例变量，如getter和setter。可能是为了体恤程序员，Objective-C提供了synthesize语法自动帮你生成getter和setter. 只要你定义了一个property就能用synthesize.</p>
-<p>一个property背后可以有一个实例变量作为信息存放处，如果你用了如下语法:</p>
-<div class="highlight"><pre><span class="nd">@property</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">firstName</span><span class="o">;</span>
-<span class="nd">@synthesize</span> <span class="n">firstName</span><span class="o">;</span>
-</pre></div>
-
-
-<p>那么编译器除了自动生成property的getter和setter，还会帮你生成一个实例变量。实例变量默认以property的名字加前置下划线命名，即_firstName. </p>
-<p>通过synthesize还可以将property捆绑到指定实例变量上:</p>
-<div class="highlight"><pre><span class="nd">@property</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">firstName</span><span class="o">;</span>
-<span class="nd">@synthesize</span> <span class="n">firstName</span> <span class="o">=</span> <span class="n">otherInstanceVariable</span><span class="o">;</span>
-</pre></div>
-
-
-<p>Objective-C更加体恤程序员的是，连synthesize都不用你做，只要你声明了一个property，编译器会自动帮你完成访问器及实例变量的synthesize操作。但是实例变量的synthesize操作是有条件的。</p>
-<p>如果你自定义了getter或setter ...</p>
-                    <a class="btn btn-default btn-xs" href="/propertyyu-shi-li-bian-liang.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/objective-cde-dynamic-dispatch.html">Objective-C的dynamic dispatch</a></h2>
-                <div class="summary"><p>面向对象语言中，子类可以覆盖父类的方法，使得一个方法可以有多个实现。动态分派的意思是，在运行时才决定执行哪个实现。</p>
-<p>类A有一个方法f()，B是A的子类并且覆盖了f()方法。对于下面的代码，如果是动态分派语言则会执行B定义的方法。如果是静态分派，则会执行A定义的方法，因为静态分派只关注对象的声明类型。</p>
-<div class="highlight"><pre>  <span class="n">A</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">B</span><span class="o">();</span>
-  <span class="n">b</span><span class="o">.</span><span class="na">f</span><span class="o">();</span>
-</pre></div>
-
-
-<p>Objective-C 通过runtime的objc_msgSend()函数将消息分派给对象。像这样的代码[target doMethodWith:var1]，会被翻译为objc_msgSend(target,@selector(doMethodWith:),var1)</p>
-<p>可以看到objc_msgSend有三个参数:</p>
+                <h2><a href="/bai-du-tie-ba-yan-fa-zhao-xian-zheng-shi-shi-xi.html">百度贴吧研发招贤 正式+实习</a></h2>
+                <div class="summary"><p>正式员工目标级别在T3-T6，职位及描述：</p>
 <ol>
-<li>接收消息的对象</li>
-<li>消息的selector</li>
-<li>消息的参数列表(可选)</li>
+<li>
+<p><a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=F3EDE18E87726C12D81D0CD878BAC807&amp;brandCode=1&amp;recruitType=2&amp;lanType=1&amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEA">Android研发工程师</a></p>
+</li>
+<li>
+<p><a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=61BF1954E91775F7AC33796963D90F2D&amp;brandCode=1&amp;recruitType=2&amp;lanType=1&amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEA">iOS研发工程师</a></p>
+</li>
+<li>
+<p><a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=1CB9B7936F25EFF7&amp;brandCode=1&amp;recruitType=2&amp;lanType=1&amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEAC9F8C487108CCBE3">高级数据挖掘工程师</a></p>
+</li>
+<li>
+<p><a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=2FFF3F645E8BFB41D81D0CD878BAC807&amp;brandCode=1&amp;recruitType=2&amp;lanType=1&amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEA">分布式存储高级研发工程师</a></p>
+</li>
+<li>
+<p><a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=958B5A728CDCF6570B861EE66D2667D5&amp;brandCode=1&amp;recruitType=2&amp;lanType=1&amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEA">分布式计算研发工程师</a></p>
+</li>
+<li>
+<p><a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=7AEFEA6191F79E75AC33796963D90F2D&amp;brandCode=1&amp;recruitType=2&amp;lanType=1&amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEA">云平台高级研发工程师</a></p>
+</li>
+<li>
+<p><a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=6AB63BF344190356CD9200FA4D0CA727&amp;brandCode=1&amp;recruitType=2&amp;lanType=1&amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEAC9F8C487108CCBE39D45983B54F375AA1CAE83E6A21F36A7DBB429FDA1AA45697C458F4E39A7ED57320CF14949D6ACA566E2190118EBA987F36831DA12D1C827440FC854E070CC3EA9E3A1161C8FE41D11E20AFFA9511543837DA597ADA993F4A79495C679D35888897C39FD21D98BCC2FE67575CAED499E9C86325CC3D44DA1C73F4DA945C7FA90CE9460F2">PHP高级研发工程师</a></p>
+</li>
+<li>
+<p><a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=1F7D1B48855DCF9E&amp;brandCode=1&amp;recruitType=2&amp;lanType=1&amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEAC9F8C487108CCBE3">web前端研发工程师</a></p>
+</li>
+<li>
+<p><a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=55674E6B11ECE2C4D81D0CD878BAC807&amp;brandCode=1&amp;recruitType=2&amp;lanType=1&amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEA">移动端测试开发工程师</a></p>
+</li>
+<li>
+<p><a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=9E911D2CB7860B17&amp;brandCode=1&amp;recruitType=2&amp;lanType=1&amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEAC9F8C487108CCBE3">server端测试开发工程师</a></p>
+</li>
 </ol>
-<p>这个分派机制决定了Objective-C的方法名必须唯一，不能支持重载(overload)</p>
-<p>那么runtime如何知道该调用方法的哪个实现呢？ Objective-C中，每个类实际上也是一个对象。每个实例对象中有一个名为isa的指针，它指向一个类对象。类对象保持了实例对象的信息，包括成员变量列表、成员函数列表等。</p>
-<p>objc_msgSend() 函数通过isa指针找到类对象，并查看它的函数列表中是否有参数中的方法 ...</p>
-                    <a class="btn btn-default btn-xs" href="/objective-cde-dynamic-dispatch.html">more ...</a>
+<h3>JD要求写的真高啊，别管那么多，有意向就联系我！！！</h3>
+                    <a class="btn btn-default btn-xs" href="/bai-du-tie-ba-yan-fa-zhao-xian-zheng-shi-shi-xi.html">more ...</a>
                 </div>
             </article>
             <hr/>
@@ -134,13 +118,8 @@
                 <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
                     <ul class="list-group" id="recentposts">
                         <li class="list-group-item">
-                            <a href="/propertyyu-shi-li-bian-liang.html">
-                                property与实例变量
-                            </a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="/objective-cde-dynamic-dispatch.html">
-                                Objective-C的dynamic dispatch
+                            <a href="/bai-du-tie-ba-yan-fa-zhao-xian-zheng-shi-shi-xi.html">
+                                百度贴吧研发招贤 正式+实习
                             </a>
                         </li>
                     </ul>

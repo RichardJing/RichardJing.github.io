@@ -116,13 +116,16 @@
 <p>回到文章最初的那段代码，该作者定义了property之后，还不辞辛苦地定义了一个实例变量，是多此一举。编译器会自动帮你生成那个实例变量的。</p>
 <p>但是在初始化方法和dealloc方法中不宜使用访问器，因为在这两个地方不确定对象是否存在，所以发送的消息可能不会成功。在这两个地方应当使用实例变量。</p>
 <p>上述说的都是property为nonatomic情况，而property默认是atomic的。atomic访问器的实现和同步都是私有的，意味着你不能将一个同步访问器和自定义的访问器进行组合。 例如， 你对一个readwrite atomic property自定义了setter，不要指望编译帮你synthesize一个getter，你会得到编译警告。</p>
-<p>最后再多说一下, property可以不绑定到一个实例变量上，例如一个readonly的property这样自定义了getter:</p>
+<p>property也可以不绑定到一个实例变量上，例如一个readonly的property这样自定义了getter:</p>
 <div class="highlight"><pre><span class="nd">@property</span> <span class="o">(</span><span class="n">readonly</span><span class="o">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">firstName</span><span class="o">;</span>
 <span class="o">-(</span><span class="n">NSString</span> <span class="o">*)</span><span class="n">firstName</span>
 <span class="o">{</span>
     <span class="k">return</span> <span class="err">@</span><span class="s">&quot;JingChao&quot;</span><span class="o">;</span>
 <span class="o">}</span>
 </pre></div>
+
+
+<p>最后说明一下，编译器自动为property执行synthesis，是modern runtime中才有的，legacy runtime没有这个特性。</p>
             </div>
             <!-- /.entry-content -->
     <hr/>
@@ -175,6 +178,11 @@
                 <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
                     <ul class="list-group" id="recentposts">
                         <li class="list-group-item">
+                            <a href="/bai-du-tie-ba-yan-fa-zhao-xian-zheng-shi-shi-xi.html">
+                                百度贴吧研发招贤 正式+实习
+                            </a>
+                        </li>
+                        <li class="list-group-item">
                             <a href="/propertyyu-shi-li-bian-liang.html">
                                 property与实例变量
                             </a>
@@ -219,11 +227,6 @@
                                 Xcode上配置链接器参数-force_load
                             </a>
                         </li>
-                        <li class="list-group-item">
-                            <a href="/uitableviewcellwen-ben-gao-du-zi-gua-ying.html">
-                                UITableViewCell文本高度自适应
-                            </a>
-                        </li>
                     </ul>
                 </li>
 
@@ -250,11 +253,6 @@
                             </a>
                         </li>
                         <li class="list-group-item tag-3">
-                            <a href="/tag/git.html">
-                                git
-                            </a>
-                        </li>
-                        <li class="list-group-item tag-3">
                             <a href="/tag/objective-c.html">
                                 Objective-C
                             </a>
@@ -262,6 +260,16 @@
                         <li class="list-group-item tag-3">
                             <a href="/tag/lbs.html">
                                 LBS
+                            </a>
+                        </li>
+                        <li class="list-group-item tag-3">
+                            <a href="/tag/git.html">
+                                git
+                            </a>
+                        </li>
+                        <li class="list-group-item tag-4">
+                            <a href="/tag/info.html">
+                                Info
                             </a>
                         </li>
                         <li class="list-group-item tag-4">

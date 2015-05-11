@@ -1,5 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>荆超的小站</title><link href="/" rel="alternate"></link><link href="/feeds/jing-chao.atom.xml" rel="self"></link><id>/</id><updated>2015-01-15T00:00:00+08:00</updated><entry><title>property与实例变量</title><link href="/propertyyu-shi-li-bian-liang.html" rel="alternate"></link><updated>2015-01-15T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2015-01-15:propertyyu-shi-li-bian-liang.html</id><summary type="html">&lt;p&gt;当我第一次看到如下语法时，非常困惑:&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>荆超的小站</title><link href="/" rel="alternate"></link><link href="/feeds/jing-chao.atom.xml" rel="self"></link><id>/</id><updated>2015-05-11T00:00:00+08:00</updated><entry><title>百度贴吧研发招贤 正式+实习</title><link href="/bai-du-tie-ba-yan-fa-zhao-xian-zheng-shi-shi-xi.html" rel="alternate"></link><updated>2015-05-11T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2015-05-11:bai-du-tie-ba-yan-fa-zhao-xian-zheng-shi-shi-xi.html</id><summary type="html">&lt;p&gt;正式员工目标级别在T3-T6，职位及描述：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=F3EDE18E87726C12D81D0CD878BAC807&amp;amp;brandCode=1&amp;amp;recruitType=2&amp;amp;lanType=1&amp;amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEA"&gt;Android研发工程师&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=61BF1954E91775F7AC33796963D90F2D&amp;amp;brandCode=1&amp;amp;recruitType=2&amp;amp;lanType=1&amp;amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEA"&gt;iOS研发工程师&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=1CB9B7936F25EFF7&amp;amp;brandCode=1&amp;amp;recruitType=2&amp;amp;lanType=1&amp;amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEAC9F8C487108CCBE3"&gt;高级数据挖掘工程师&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=2FFF3F645E8BFB41D81D0CD878BAC807&amp;amp;brandCode=1&amp;amp;recruitType=2&amp;amp;lanType=1&amp;amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEA"&gt;分布式存储高级研发工程师&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=958B5A728CDCF6570B861EE66D2667D5&amp;amp;brandCode=1&amp;amp;recruitType=2&amp;amp;lanType=1&amp;amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEA"&gt;分布式计算研发工程师&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=7AEFEA6191F79E75AC33796963D90F2D&amp;amp;brandCode=1&amp;amp;recruitType=2&amp;amp;lanType=1&amp;amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEA"&gt;云平台高级研发工程师&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=6AB63BF344190356CD9200FA4D0CA727&amp;amp;brandCode=1&amp;amp;recruitType=2&amp;amp;lanType=1&amp;amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEAC9F8C487108CCBE39D45983B54F375AA1CAE83E6A21F36A7DBB429FDA1AA45697C458F4E39A7ED57320CF14949D6ACA566E2190118EBA987F36831DA12D1C827440FC854E070CC3EA9E3A1161C8FE41D11E20AFFA9511543837DA597ADA993F4A79495C679D35888897C39FD21D98BCC2FE67575CAED499E9C86325CC3D44DA1C73F4DA945C7FA90CE9460F2"&gt;PHP高级研发工程师&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=1F7D1B48855DCF9E&amp;amp;brandCode=1&amp;amp;recruitType=2&amp;amp;lanType=1&amp;amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEAC9F8C487108CCBE3"&gt;web前端研发工程师&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=55674E6B11ECE2C4D81D0CD878BAC807&amp;amp;brandCode=1&amp;amp;recruitType=2&amp;amp;lanType=1&amp;amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEA"&gt;移动端测试开发工程师&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="http://talent.baidu.com/baidu/web/templet1000/index/corpwebPosition1000baidu!getOnePosition?postIdEnc=9E911D2CB7860B17&amp;amp;brandCode=1&amp;amp;recruitType=2&amp;amp;lanType=1&amp;amp;operational=6637AA56FA08745E71A74EA6AC68D5FFF28F462DA4C19FB3FABC8882DE74DA1C0FDB6AEAC9F8C487108CCBE3"&gt;server端测试开发工程师&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;JD要求写的真高啊，别管那么多，有意向就联系我！！！&lt;/h3&gt;</summary><category term="Info"></category></entry><entry><title>property与实例变量</title><link href="/propertyyu-shi-li-bian-liang.html" rel="alternate"></link><updated>2015-01-15T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2015-01-15:propertyyu-shi-li-bian-liang.html</id><summary type="html">&lt;p&gt;当我第一次看到如下语法时，非常困惑:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nd"&gt;@interface&lt;/span&gt; &lt;span class="n"&gt;PersonalInfo&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;NSObject&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
     &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;_firstName&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
 &lt;span class="o"&gt;}&lt;/span&gt;
@@ -30,13 +63,16 @@
 &lt;p&gt;回到文章最初的那段代码，该作者定义了property之后，还不辞辛苦地定义了一个实例变量，是多此一举。编译器会自动帮你生成那个实例变量的。&lt;/p&gt;
 &lt;p&gt;但是在初始化方法和dealloc方法中不宜使用访问器，因为在这两个地方不确定对象是否存在，所以发送的消息可能不会成功。在这两个地方应当使用实例变量。&lt;/p&gt;
 &lt;p&gt;上述说的都是property为nonatomic情况，而property默认是atomic的。atomic访问器的实现和同步都是私有的，意味着你不能将一个同步访问器和自定义的访问器进行组合。 例如， 你对一个readwrite atomic property自定义了setter，不要指望编译帮你synthesize一个getter，你会得到编译警告。&lt;/p&gt;
-&lt;p&gt;最后再多说一下, property可以不绑定到一个实例变量上，例如一个readonly的property这样自定义了getter:&lt;/p&gt;
+&lt;p&gt;property也可以不绑定到一个实例变量上，例如一个readonly的property这样自定义了getter:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nd"&gt;@property&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;readonly&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;firstName&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
 &lt;span class="o"&gt;-(&lt;/span&gt;&lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*)&lt;/span&gt;&lt;span class="n"&gt;firstName&lt;/span&gt;
 &lt;span class="o"&gt;{&lt;/span&gt;
     &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;JingChao&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
 &lt;span class="o"&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;</summary><category term="Objective-C"></category><category term="iOS"></category></entry><entry><title>Objective-C的dynamic dispatch</title><link href="/objective-cde-dynamic-dispatch.html" rel="alternate"></link><updated>2015-01-13T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2015-01-13:objective-cde-dynamic-dispatch.html</id><summary type="html">&lt;p&gt;面向对象语言中，子类可以覆盖父类的方法，使得一个方法可以有多个实现。动态分派的意思是，在运行时才决定执行哪个实现。&lt;/p&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;最后说明一下，编译器自动为property执行synthesis，是modern runtime中才有的，legacy runtime没有这个特性。&lt;/p&gt;</summary><category term="Objective-C"></category><category term="iOS"></category></entry><entry><title>Objective-C的dynamic dispatch</title><link href="/objective-cde-dynamic-dispatch.html" rel="alternate"></link><updated>2015-01-13T00:00:00+08:00</updated><author><name>荆超</name></author><id>tag:,2015-01-13:objective-cde-dynamic-dispatch.html</id><summary type="html">&lt;p&gt;面向对象语言中，子类可以覆盖父类的方法，使得一个方法可以有多个实现。动态分派的意思是，在运行时才决定执行哪个实现。&lt;/p&gt;
 &lt;p&gt;类A有一个方法f()，B是A的子类并且覆盖了f()方法。对于下面的代码，如果是动态分派语言则会执行B定义的方法。如果是静态分派，则会执行A定义的方法，因为静态分派只关注对象的声明类型。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;  &lt;span class="n"&gt;A&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;B&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
   &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;f&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
