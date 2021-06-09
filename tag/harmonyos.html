@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
 <head>
-    <title>性能 - 荆超的小站</title>
+    <title>HarmonyOS - 荆超的小站</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -11,7 +11,7 @@
 
 
     <meta name="author" content="荆超" />
-    <meta name="keywords" content="性能" />
+    <meta name="keywords" content="HarmonyOS" />
 
     <!-- Open Graph tags -->
         <meta property="og:site_name" content="荆超的小站" />
@@ -59,9 +59,26 @@
     <div class="row">
         <div class="col-sm-9">
             <article>
-                <h2><a href="/fan-yi-shi-yong-metrickitjian-kong-iosru-men.html">【翻译】使用MetricKit监控iOS：入门</a></h2>
-                <div class="summary"><p>学习如何在你的iOS应用中使用MetricKit来监控电量、性能，并进行诊断</p>
-                    <a class="btn btn-default btn-xs" href="/fan-yi-shi-yong-metrickitjian-kong-iosru-men.html">more ...</a>
+                <h2><a href="/xue-xi-bi-ji-harmonyosdao-di-shi-bu-shi-androidtao-pi.html">【学习笔记】HarmonyOS到底是不是Android套皮？</a></h2>
+                <div class="summary"><blockquote>
+<p>本文为学习笔记，并非原创。<a href="https://mp.weixin.qq.com/s/RkJ_2WLf7MTL-f-kAOGxAw">原文链接</a></p>
+</blockquote>
+<h1>HarmonyOS分析</h1>
+<p>原作者通过分析HarmonyOS应用的构建产物，得出如下结论：</p>
+<p>1.构建产物中，包含一个标准Android的apk文件。该apk内AndroidManifest.xml文件中做了两件事：</p>
+<p>1）定义Application为ShellApplication</p>
+<p>2）定义MainActivity为MainAbilityShellActivity</p>
+<p>2.ShellApplication最终继承自Android的Application。</p>
+<p>3.MainAbilityShellActivity继承自Android的Activity。</p>
+<p>原作者认为鸿蒙的<code>分布式软总线</code>是一个私有RPC协议。通过<a href="https://gitee.com/openharmony">OpenHarmony</a>源码分析，<code>分布式软总线</code>主要有以下几个模块：</p>
+<ol>
+<li>设备发现：采用了CoAP协议作为设备发现协议，通过在一个局域网内发送广播来实现。</li>
+<li>数据传输：基于Session提供统一的数据传输功能。</li>
+<li>设备认证与管理：主要是安全。</li>
+<li><a href="https://gitee.com/openharmony/ace_engine_lite">AceEngineLite</a>：应该就是JS开发的Ability页面如何编译以及 在嵌入式设备上如何渲染的相关实现，这也许就是为什么HarmonyOS可以采用多种开发语言开发界面的关键所在。各种小程序、Flutter相关设计都是这样的，设计思想都是：自创UI框架以屏蔽系统差异。</li>
+</ol>
+<p>原作者认为，<strong>HarmonyOS = Android - GMS + HMS + 分布式软总线 + 以Ability为核心的应用开发框架</strong>，用图表示 …</p>
+                    <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-harmonyosdao-di-shi-bu-shi-androidtao-pi.html">more ...</a>
                 </div>
             </article>
             <hr/>
@@ -86,7 +103,7 @@
 <li class="list-group-item">
   <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
   <ul class="list-group" id="recentposts">
-    <li class="list-group-item"><a href="/fan-yi-shi-yong-metrickitjian-kong-iosru-men.html">【翻译】使用MetricKit监控iOS：入门</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-harmonyosdao-di-shi-bu-shi-androidtao-pi.html">【学习笔记】HarmonyOS到底是不是Android套皮？</a></li>
   </ul>
 </li>
 <!-- End Sidebar/Recent Posts -->
