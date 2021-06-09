@@ -59,6 +59,35 @@
     <div class="row">
         <div class="col-sm-9">
             <article>
+                <h2><a href="/xue-xi-bi-ji-ji-zhi-shou-zheng-bo-fang-fang-an-ling-shou-zheng-jie-jue-fang-an.html">【学习笔记】极致首帧播放方案 - 零首帧解决方案</a></h2>
+                <div class="summary"><blockquote>
+<p>本文为学习笔记，并非原创。<a href="https://mp.weixin.qq.com/s/IGA3caeXMB-upTFiV8MuYg">原文链接</a></p>
+</blockquote>
+<h1>背景介绍</h1>
+<p>「零首帧」并不是真的0毫秒启播，而是用户几乎感知不到有首帧时间的存在，在我们的播放质量埋点中对应小于100ms以内的首帧时间。</p>
+<p>在现实业务中，有些场景是无法使用所有的优化条件的，比如在随机播放的场景不能进行预加载、某些场景不适合使用播放器复用技术等。</p>
+<h1>首帧的构成</h1>
+<p><img alt="firset frame" src="/images/2021/first-frame.png"></p>
+<p>从上图可以看出首帧时间主要包含这么几个部分: 获取视频播放链接，网络建连，下载视频头部数据，音视频解码和渲染。</p>
+<h1>通用的首帧优化方法</h1>
+<h2>获取播放地址</h2>
+<p>优化方案：播放地址随feed下发。</p>
+<p>通常而言，视频资源会有唯一标识 video id , 在点播的服务端会有一个根据 video id 信息获取播放链接的服务，如果 app server 端能够调用 vod 服务生成播放地址，然后将播放地址随 feed 流一起下发，则省去了客户端的一次网络请求耗时。</p>
+<h2>网络建连</h2>
+<p>优化方案：预解析。预连接&amp;连接复用。避免TLS握手。</p>
+<p>拿到播放地址，播放器与DNS建连，首先会做DNS解析。为了防止DNS劫持 …</p>
+                    <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-ji-zhi-shou-zheng-bo-fang-fang-an-ling-shou-zheng-jie-jue-fang-an.html">more ...</a>
+                </div>
+            </article>
+            <hr/>
+            <article>
+                <h2><a href="/fan-yi-shi-yong-metrickitjian-kong-iosru-men.html">【翻译】使用MetricKit监控iOS：入门</a></h2>
+                <div class="summary"><p>学习如何在你的iOS应用中使用MetricKit来监控电量、性能，并进行诊断</p>
+                    <a class="btn btn-default btn-xs" href="/fan-yi-shi-yong-metrickitjian-kong-iosru-men.html">more ...</a>
+                </div>
+            </article>
+            <hr/>
+            <article>
                 <h2><a href="/iphoneping-mu-fen-bian-lu.html">iPhone屏幕分辨率</a></h2>
                 <div class="summary"><table>
 <thead>
@@ -119,6 +148,8 @@
 <li class="list-group-item">
   <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
   <ul class="list-group" id="recentposts">
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-ji-zhi-shou-zheng-bo-fang-fang-an-ling-shou-zheng-jie-jue-fang-an.html">【学习笔记】极致首帧播放方案 - 零首帧解决方案</a></li>
+    <li class="list-group-item"><a href="/fan-yi-shi-yong-metrickitjian-kong-iosru-men.html">【翻译】使用MetricKit监控iOS：入门</a></li>
     <li class="list-group-item"><a href="/iphoneping-mu-fen-bian-lu.html">iPhone屏幕分辨率</a></li>
   </ul>
 </li>
@@ -132,6 +163,9 @@
       <a href="/category/blog.html"><i class="fa fa-folder-open fa-lg"></i>Blog</a>
     </li>
     <li class="list-group-item">
+      <a href="/category/fan-yi.html"><i class="fa fa-folder-open fa-lg"></i>翻译</a>
+    </li>
+    <li class="list-group-item">
       <a href="/category/xue-xi-bi-ji.html"><i class="fa fa-folder-open fa-lg"></i>学习笔记</a>
     </li>
   </ul>
@@ -142,11 +176,20 @@
 <li class="list-group-item">
   <a href="/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
   <ul class="list-group " id="tags">
-    <li class="list-group-item tag-4">
+    <li class="list-group-item tag-1">
       <a href="/tag/ios.html">iOS</a>
     </li>
     <li class="list-group-item tag-4">
+      <a href="/tag/xing-neng.html">性能</a>
+    </li>
+    <li class="list-group-item tag-4">
       <a href="/tag/git.html">git</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/yin-shi-pin.html">音视频</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/jian-kong.html">监控</a>
     </li>
   </ul>
 </li>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>【学习笔记】极致首帧播放方案 - 零首帧解决方案 - 荆超的小站</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="/xue-xi-bi-ji-ji-zhi-shou-zheng-bo-fang-fang-an-ling-shou-zheng-jie-jue-fang-an.html">
+
+        <meta name="author" content="荆超" />
+        <meta name="keywords" content="iOS,音视频" />
+        <meta name="description" content="本文为学习笔记，并非原创。原文链接 背景介绍 「零首帧」并不是真的0毫秒启播，而是用户几乎感知不到有首帧时间的存在，在我们的播放质量埋点中对应小于100ms以内的首帧时间。 在现实业务中，有些场景是无法使用所有的优化条件的，比如在随机播放的场景不能进行预加载、某些场景不适合使用播放器复用技术等。 首帧的构成 从上图可以看出首帧时间主要包含这么几个部分: 获取视频播放链接，网络建连，下载视频头部数据，音视频解码和渲染。 通用的首帧优化方法 获取播放地址 优化方案：播放地址随feed下发。 通常而言，视频资源会有唯一标识 video id , 在点播的服务端会有一个根据 video id 信息获取播放链接的服务，如果 app server 端能够调用 vod 服务生成播放地址，然后将播放地址随 feed 流一起下发，则省去了客户端的一次网络请求耗时。 网络建连 优化方案：预解析。预连接&amp;连接复用。避免TLS握手。 拿到播放地址，播放器与DNS建连，首先会做DNS解析。为了防止DNS劫持 …" />
+
+        <meta property="og:site_name" content="荆超的小站" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="【学习笔记】极致首帧播放方案 - 零首帧解决方案"/>
+        <meta property="og:url" content="/xue-xi-bi-ji-ji-zhi-shou-zheng-bo-fang-fang-an-ling-shou-zheng-jie-jue-fang-an.html"/>
+        <meta property="og:description" content="本文为学习笔记，并非原创。原文链接 背景介绍 「零首帧」并不是真的0毫秒启播，而是用户几乎感知不到有首帧时间的存在，在我们的播放质量埋点中对应小于100ms以内的首帧时间。 在现实业务中，有些场景是无法使用所有的优化条件的，比如在随机播放的场景不能进行预加载、某些场景不适合使用播放器复用技术等。 首帧的构成 从上图可以看出首帧时间主要包含这么几个部分: 获取视频播放链接，网络建连，下载视频头部数据，音视频解码和渲染。 通用的首帧优化方法 获取播放地址 优化方案：播放地址随feed下发。 通常而言，视频资源会有唯一标识 video id , 在点播的服务端会有一个根据 video id 信息获取播放链接的服务，如果 app server 端能够调用 vod 服务生成播放地址，然后将播放地址随 feed 流一起下发，则省去了客户端的一次网络请求耗时。 网络建连 优化方案：预解析。预连接&amp;连接复用。避免TLS握手。 拿到播放地址，播放器与DNS建连，首先会做DNS解析。为了防止DNS劫持 …"/>
+        <meta property="article:published_time" content="2021-05-21" />
+            <meta property="article:section" content="学习笔记" />
+            <meta property="article:tag" content="iOS" />
+            <meta property="article:tag" content="音视频" />
+            <meta property="article:author" content="荆超" />
+
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css"/>
+    <link href="/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
+
+
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="/" class="navbar-brand">
+荆超的小站            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+
+<!-- Banner -->
+<!-- End Banner -->
+
+<!-- Content Container -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="/xue-xi-bi-ji-ji-zhi-shou-zheng-bo-fang-fang-an-ling-shou-zheng-jie-jue-fang-an.html"
+                       rel="bookmark"
+                       title="Permalink to 【学习笔记】极致首帧播放方案 - 零首帧解决方案">
+                        【学习笔记】极致首帧播放方案 - 零首帧解决方案
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2021-05-21T00:00:00+08:00"> 五 21 五月 2021</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="/tag/ios.html">iOS</a>
+        /
+	<a href="/tag/yin-shi-pin.html">音视频</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <blockquote>
+<p>本文为学习笔记，并非原创。<a href="https://mp.weixin.qq.com/s/IGA3caeXMB-upTFiV8MuYg">原文链接</a></p>
+</blockquote>
+<h1>背景介绍</h1>
+<p>「零首帧」并不是真的0毫秒启播，而是用户几乎感知不到有首帧时间的存在，在我们的播放质量埋点中对应小于100ms以内的首帧时间。</p>
+<p>在现实业务中，有些场景是无法使用所有的优化条件的，比如在随机播放的场景不能进行预加载、某些场景不适合使用播放器复用技术等。</p>
+<h1>首帧的构成</h1>
+<p><img alt="firset frame" src="/images/2021/first-frame.png"></p>
+<p>从上图可以看出首帧时间主要包含这么几个部分: 获取视频播放链接，网络建连，下载视频头部数据，音视频解码和渲染。</p>
+<h1>通用的首帧优化方法</h1>
+<h2>获取播放地址</h2>
+<p>优化方案：播放地址随feed下发。</p>
+<p>通常而言，视频资源会有唯一标识 video id , 在点播的服务端会有一个根据 video id 信息获取播放链接的服务，如果 app server 端能够调用 vod 服务生成播放地址，然后将播放地址随 feed 流一起下发，则省去了客户端的一次网络请求耗时。</p>
+<h2>网络建连</h2>
+<p>优化方案：预解析。预连接&amp;连接复用。避免TLS握手。</p>
+<p>拿到播放地址，播放器与DNS建连，首先会做DNS解析。为了防止DNS劫持，大部分客户单会做HTTPDNS，这会涉及到一个网络耗时。可以采取DNS预解析的策略，例如在APP启动时，就可以下发APP可能用到的域名，客户端可以提前对这些域名做解析并缓存。</p>
+<p>在HTTP 1.1中支持连接复用，因此我们可以预先创建几个与CDN的socket连接，然后在播放时直接复用连接即可。</p>
+<p>HTTPS比HTTP多了TLS握手过程，多了两个RTT。通过TLS False Start加上session复用，可以实现0RTT。</p>
+<h2>音视频首包</h2>
+<p>优化方案：减少 probe、moov 位置。</p>
+<p>在播放器与CDN完成建连后，播放器就开始下载视频文件。首先播放器会尝试探测视频文件的格式、编码等信息。如果视频经过服务器统一转码，则可以略过这个步骤。</p>
+<p>mp4 视频文件，有一个 moov box，这里面会存储音视频流 track 信息比如解码信息、以及音视频帧与文件对应的关系(用于 seek )，因此通常播放器都会先下载 moov 的数据。而 moov 的位置则会对起播造成一定的影响。举个例子，如果 moov 在文件尾部，当下载了视频前面部分数据，发现 moov 没找到，就去尾部查找 moov，这样就又多了两次网络请求。对于这个问题，我们可以通过转码将 moov 挪到视频文件的头部，从而缩短首帧耗时。</p>
+<h2>音视频解码</h2>
+<p>优化方案：解码器异步初始化、解码器复用。</p>
+<p>通常情况下，在播放器读取到视频数据，拿到视频的解码信息后就可以开始创建解码器解码了。不过解码器创建这个过程，尤其是在 Android 平台上 MediaCodec 的创建是一个比较耗时的操作。这里我主要介绍两个优化: 解码器异步初始化和复用。如果 app server 提前把视频的解码信息传递给播放器，那么播放器就可以在建连的同时去异步初始化解码器，这样就可以减小硬解创建耗时的影响。而解码器复用则可以完全消除这个耗时，顺着这个思路，我们可以做播放器线程的复用甚至整个播放器的复用，这些方法都可以大幅优化首帧耗时。</p>
+<h2>起播水位</h2>
+<p>首帧解析后就立即播放，来做到极致首帧，但是会引起卡顿增多，尤其是起播后的1~3秒卡顿增加。</p>
+<p>缓存一定数据再起播，可以减少卡顿，而且对首帧影响不大。</p>
+<h2>预加载</h2>
+<p>需要考虑：</p>
+<ol>
+<li>什么时候预加载？</li>
+</ol>
+<p>对于15s的短视频，可以等当前视频加载完成后就预加载下一条。对于时长超过1min的视频，需要考虑当前播放视频的可用缓存、当前网络的下载速度、当前视频的码率以及即将预加载视频的码率、并行预加载数量，通过这些数据我们能够构建一个模型去预测接下来视频播放的卡顿状况，如果大概率是不会发生卡顿，则可以开启预加载，反之则不启用或者暂停预加载。</p>
+<ol>
+<li>预加载多少内容？</li>
+</ol>
+<p>一个粗略的估算方法是 moov 大小加上视频的平均码率 * 预加载时长，这样就可以通过服务端下发 moov 头大小及视频的平均码率，然后在 app 端上通过实验去调整预加载时长参数，进而调整预加载大小。</p>
+<ol>
+<li>并行加载数量。</li>
+</ol>
+<h2>预渲染</h2>
+<p>预加载只能将网络请求的耗时消除掉，但播放器还是需要经历解复用、解码、渲染的步骤，在中低端机器上有200ms以上的耗时。将视频的首帧提前渲染好而不播放。</p>
+<p>举个例子，在小视频场景上，当滑动视频卡片时，就已经开始启动预渲染，在卡片滑动过程中，视频的首帧很可能就已经通过预渲染加载出来，这样当卡片滑到中央时，则直接启动播放，这时候用户基本上感受不到视频的加载。</p>
+            </div>
+            <!-- /.entry-content -->
+    <hr/>
+    <section class="comments" id="comments">
+        <h2>Comments</h2>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
+
+            var disqus_config = function () {
+                this.language = "zh";
+
+                        this.page.identifier = '2021-05-21-xue-xi-bi-ji-ji-zhi-shou-zheng-bo-fang-fang-an-ling-shou-zheng-jie-jue-fang-an';
+            };
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+            Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </section>
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+<!-- Sidebar -->
+<section class="well well-sm">
+  <ul class="list-group list-group-flush">
+
+<!-- Sidebar/Social -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+  <ul class="list-group" id="social">
+    <li class="list-group-item"><a href="https://www.linkedin.com/in/chao-jing-8470a895/"><i class="fa fa-linkedin-square fa-lg"></i> LinkedIn</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Social -->
+
+<!-- Sidebar/Recent Posts -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
+  <ul class="list-group" id="recentposts">
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-ji-zhi-shou-zheng-bo-fang-fang-an-ling-shou-zheng-jie-jue-fang-an.html">【学习笔记】极致首帧播放方案 - 零首帧解决方案</a></li>
+    <li class="list-group-item"><a href="/fan-yi-shi-yong-metrickitjian-kong-iosru-men.html">【翻译】使用MetricKit监控iOS：入门</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-gitge-ming-ling-de-ben-zhi-zhen-shi-tong-su-yi-dong-a.html">【学习笔记】Git各命令的本质，真是通俗易懂啊</a></li>
+    <li class="list-group-item"><a href="/iphoneping-mu-fen-bian-lu.html">iPhone屏幕分辨率</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Recent Posts -->
+
+<!-- Sidebar/Categories -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Categories</span></h4>
+  <ul class="list-group" id="categories">
+    <li class="list-group-item">
+      <a href="/category/blog.html"><i class="fa fa-folder-open fa-lg"></i>Blog</a>
+    </li>
+    <li class="list-group-item">
+      <a href="/category/fan-yi.html"><i class="fa fa-folder-open fa-lg"></i>翻译</a>
+    </li>
+    <li class="list-group-item">
+      <a href="/category/xue-xi-bi-ji.html"><i class="fa fa-folder-open fa-lg"></i>学习笔记</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Categories -->
+
+<!-- Sidebar/Tag Cloud -->
+<li class="list-group-item">
+  <a href="/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
+  <ul class="list-group " id="tags">
+    <li class="list-group-item tag-1">
+      <a href="/tag/ios.html">iOS</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/xing-neng.html">性能</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/git.html">git</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/yin-shi-pin.html">音视频</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/jian-kong.html">监控</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Tag Cloud -->
+
+<!-- Sidebar/Links -->
+<li class="list-group-item">
+  <h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+  <ul class="list-group" id="links">
+    <li class="list-group-item">
+      <a href="http://hutaow.com/" target="_blank">胡桃夹子</a>
+    </li>
+    <li class="list-group-item">
+      <a href="http://wenzhong.me/" target="_blank">Wenzhong's Playground</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Links -->
+  </ul>
+</section>
+<!-- End Sidebar -->            </aside>
+        </div>
+    </div>
+</div>
+<!-- End Content Container -->
+
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2021 荆超
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="/theme/js/respond.min.js"></script>
+
+
+    <!-- Disqus -->
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <!-- End Disqus Code -->
+
+
+</body>
+</html>

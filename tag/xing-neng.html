@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
 <head>
-    <title>git - 荆超的小站</title>
+    <title>性能 - 荆超的小站</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -11,7 +11,7 @@
 
 
     <meta name="author" content="荆超" />
-    <meta name="keywords" content="git" />
+    <meta name="keywords" content="性能" />
 
     <!-- Open Graph tags -->
         <meta property="og:site_name" content="荆超的小站" />
@@ -59,27 +59,9 @@
     <div class="row">
         <div class="col-sm-9">
             <article>
-                <h2><a href="/xue-xi-bi-ji-gitge-ming-ling-de-ben-zhi-zhen-shi-tong-su-yi-dong-a.html">【学习笔记】Git各命令的本质，真是通俗易懂啊</a></h2>
-                <div class="summary"><blockquote>
-<p>本文为学习笔记，并非原创。<a href="https://juejin.cn/post/6895246702614806542">原文链接</a></p>
-</blockquote>
-<p>本篇文章写得真的不错，建议全文阅读。这里只记我不熟悉的地方。</p>
-<h1>commit节点、HEAD和分支</h1>
-<p>每次commit都会生成一个节点，节点内容是本次及本次之前所有提交的内容。</p>
-<p>不管HEAD还是分支，都是对一个commit节点的引用。因为只是引用，所以它们非常轻量。引用+节点是git构成分布式的关键。</p>
-<p>HEAD是一个引用，它可以指向任意一个节点。其指向的节点始终为当前工作目录，换句话说就是当前工作目录（也就是你看到的代码）就是HEAD指向的节点</p>
-<p>分支也可以视为一个引用，分支指向一个节点时，该节点的内容就是分支的内容。</p>
-<p>分支可以存在多个，而HEAD只有一个。</p>
-<h1>合并</h1>
-<h2>merge</h2>
-<div class="highlight"><pre><span></span><code>git merge 分支名/节点哈希值   //将指定分支或节点的内容合并至HEAD
-</code></pre></div>
-
-
-<p>如果要合并的内容完全领先于当前分支，如下图中在<code>ft-2</code>上执行<code>git merge ft-1</code>，则会触发fast-foward（快速合并），此时两个分支指向统一节点。</p>
-<p><img alt="git merge fast-forward" src="/images/2021/git-merg-fastforward.png"></p>
-<p>但实际情况中，往往遇到的是下图中的情况。这种就不能直接合并了，在<code>ft-2</code>上执行 …</p>
-                    <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-gitge-ming-ling-de-ben-zhi-zhen-shi-tong-su-yi-dong-a.html">more ...</a>
+                <h2><a href="/fan-yi-shi-yong-metrickitjian-kong-iosru-men.html">【翻译】使用MetricKit监控iOS：入门</a></h2>
+                <div class="summary"><p>学习如何在你的iOS应用中使用MetricKit来监控电量、性能，并进行诊断</p>
+                    <a class="btn btn-default btn-xs" href="/fan-yi-shi-yong-metrickitjian-kong-iosru-men.html">more ...</a>
                 </div>
             </article>
             <hr/>
@@ -104,7 +86,7 @@
 <li class="list-group-item">
   <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
   <ul class="list-group" id="recentposts">
-    <li class="list-group-item"><a href="/xue-xi-bi-ji-gitge-ming-ling-de-ben-zhi-zhen-shi-tong-su-yi-dong-a.html">【学习笔记】Git各命令的本质，真是通俗易懂啊</a></li>
+    <li class="list-group-item"><a href="/fan-yi-shi-yong-metrickitjian-kong-iosru-men.html">【翻译】使用MetricKit监控iOS：入门</a></li>
   </ul>
 </li>
 <!-- End Sidebar/Recent Posts -->

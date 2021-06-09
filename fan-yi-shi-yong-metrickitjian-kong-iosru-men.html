@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>【翻译】使用MetricKit监控iOS：入门 - 荆超的小站</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="/fan-yi-shi-yong-metrickitjian-kong-iosru-men.html">
+
+        <meta name="author" content="荆超" />
+        <meta name="keywords" content="iOS,性能,监控" />
+        <meta name="description" content="学习如何在你的iOS应用中使用MetricKit来监控电量、性能，并进行诊断" />
+
+        <meta property="og:site_name" content="荆超的小站" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="【翻译】使用MetricKit监控iOS：入门"/>
+        <meta property="og:url" content="/fan-yi-shi-yong-metrickitjian-kong-iosru-men.html"/>
+        <meta property="og:description" content="学习如何在你的iOS应用中使用MetricKit来监控电量、性能，并进行诊断"/>
+        <meta property="article:published_time" content="2021-05-18" />
+            <meta property="article:section" content="翻译" />
+            <meta property="article:tag" content="iOS" />
+            <meta property="article:tag" content="性能" />
+            <meta property="article:tag" content="监控" />
+            <meta property="article:author" content="荆超" />
+
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css"/>
+    <link href="/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
+
+
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="/" class="navbar-brand">
+荆超的小站            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+
+<!-- Banner -->
+<!-- End Banner -->
+
+<!-- Content Container -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="/fan-yi-shi-yong-metrickitjian-kong-iosru-men.html"
+                       rel="bookmark"
+                       title="Permalink to 【翻译】使用MetricKit监控iOS：入门">
+                        【翻译】使用MetricKit监控iOS：入门
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2021-05-18T00:00:00+08:00"> 二 18 五月 2021</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="/tag/ios.html">iOS</a>
+        /
+	<a href="/tag/xing-neng.html">性能</a>
+        /
+	<a href="/tag/jian-kong.html">监控</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <blockquote>
+<p>本文翻译自外文文章。<a href="https://www.raywenderlich.com/20952676-monitoring-for-ios-with-metrickit-getting-started/">原文链接</a></p>
+</blockquote>
+<h1>前言</h1>
+<p>很长一段时间内，相比web应用，iOS应用被认为非常轻量，不用考虑性能问题。然而事到如今，iOS应用原来越大、越来越复杂、表面下的工作越来越多。远程监控你的应用如何在不同的设备上运行，显得尤为重要。</p>
+<p>一些iOS监控工具已经存在好久了。例如，你可以获知当前设备运行正在使用WiFi还是蜂窝网。还有很多的第三方工具，如Firebase、New Relic，可以帮助你知晓用户真正的体验是什么样的。</p>
+<p>有很多信息可以用来帮助iOS开发者。苹果在iOS 13推出了MetricKit，使得从设备获取诊断信息以及远程监控更加容易。在这份指导中，你可以使用Xcode来接收诊断信息，从而探索MetricKit APIs.</p>
+<h1>了解MetircKit</h1>
+<p>有了MetricKit，你可以从操作系统获取物理硬件的诊断信息。MetricKit每24小时发送一份JSON格式的运维数据。你可以将数据传送给你的服务器。之后你可以对数据进行可视化和分享，从而改进你的iOS应用。</p>
+<h2>iOS 14新增API</h2>
+<p>MetricKit在iOS 14有了很多重大改进。</p>
+<p>首先，退出了一个全新payload类型<code>MXDiagnosticPayload</code>，而在此之前只有<code>MXMetricPayload</code>一种类型。<code>MXDiagnosticPayload</code>提供更多信息，如crashes和exceptions。</p>
+<p>另外，苹果退出了一种新的metric，叫<code>MXAppExitMetric</code>，代表了iOS应用进程退出类型，帮你知晓用户为啥退出应用以及应用在退出时的状态。</p>
+<h1>开始</h1>
+<p>可以在原文链接中下载本文所用材料。</p>
+<p>材料是一个名为<strong>Shopping Trolley</strong>的应用，展示一个水果购物列表。</p>
+<blockquote>
+<p>注意：MetricKit只能运行在真机上，不支持模拟器。所以需要一个真实设备才能运行材料里的工程。</p>
+</blockquote>
+<p><img alt="Shopping Trolley" src="/images/2021/Shopping-Trolley.png"></p>
+<p>打开<strong>ShoppingListTableViewController.swift</strong>，加上如下一行：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">import</span> <span class="nc">MetricKit</span>
+</code></pre></div>
+
+
+<p>现在，你就可以访问MetricKit framework了。</p>
+<p>将下面的代码添加到viewDidLoad()中：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">let</span> <span class="nv">metricManager</span> <span class="p">=</span> <span class="n">MXMetricManager</span><span class="p">.</span><span class="n">shared</span>
+<span class="n">metricManager</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="kc">self</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>这会访问framework提供的<code>MetricManager</code>。之后添加<code>self</code>，也就是将<code>ShoppingListTableViewController</code>作为metricManager的订阅者，从而收听到系统的metrics payload。</p>
+<p>接下来，你需要在<strong>ShoppingListTableViewController.swift</strong>末尾加上如下代码：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">extension</span> <span class="nc">ShoppingListTableViewController</span><span class="p">:</span> <span class="n">MXMetricManagerSubscriber</span> <span class="p">{</span>
+  <span class="kd">func</span> <span class="nf">didReceive</span><span class="p">(</span><span class="kc">_</span> <span class="n">payloads</span><span class="p">:</span> <span class="p">[</span><span class="n">MXMetricPayload</span><span class="p">])</span> <span class="p">{</span>
+    <span class="k">guard</span> <span class="kd">let</span> <span class="nv">firstPayload</span> <span class="p">=</span> <span class="n">payloads</span><span class="p">.</span><span class="bp">first</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+    <span class="bp">print</span><span class="p">(</span><span class="n">firstPayload</span><span class="p">.</span><span class="n">dictionaryRepresentation</span><span class="p">())</span>
+  <span class="p">}</span>
+
+  <span class="kd">func</span> <span class="nf">didReceive</span><span class="p">(</span><span class="kc">_</span> <span class="n">payloads</span><span class="p">:</span> <span class="p">[</span><span class="n">MXDiagnosticPayload</span><span class="p">])</span> <span class="p">{</span>
+    <span class="k">guard</span> <span class="kd">let</span> <span class="nv">firstPayload</span> <span class="p">=</span> <span class="n">payloads</span><span class="p">.</span><span class="bp">first</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+    <span class="bp">print</span><span class="p">(</span><span class="n">firstPayload</span><span class="p">.</span><span class="n">dictionaryRepresentation</span><span class="p">())</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>为ShoppingListTableViewController添加一个extention以遵循<code>MXMetricManagerSubscriber</code>，这个协议有两个方法从MetricKit接收payload。在本例中，收到payload之后仅仅做了打印。在实际使用中，可以将它们上传到到你的服务器。</p>
+<h1>理解 MetricKit API</h1>
+<p>Framework接口都非常简单直接，包括：
+- 一个manager类和订阅协议
+- 每个metric和诊断都有一个类
+- payload类
+- 度量单位的类，如cellular bar
+- 展示数据的类，如直方图</p>
+<h1>理解MXMetricManager</h1>
+<p>MXMetricManager是MetricKit的核心。这是一个共享对象，用来管理订阅以接收来自硬件的metric日报。</p>
+<p>访问MXMetricManager单例后，MetricKit开始为你的应用收集报告。你需要调用<code>add:</code>方法，并传入实现了<code>MXMetricManagerSubscriber</code>协议的类来启动接收metric报告。</p>
+<p>系统每天至多发送一份报告。每份报告包含了过去24小时内的metric。如果之前报告周期内有发送失败的数据，也会一并包含在本次报告里。</p>
+<p>Manager还提供<code>remove:</code>方法，通过此方法可以随时移除订阅。</p>
+<h1>实现MXSignpostMetric</h1>
+<p>使用MetricKit的一大好处是，你可以将自己的metric放进那些苹果提供了“out of box”的应用。这点非常强大，你可以在报告中添加自定义的metric，能让你对性能有更深的探索。</p>
+<p>当用户加载<code>ShoppingListTableViewController</code>时我们添加一个自定义metric：</p>
+<div class="highlight"><pre><span></span><code><span class="kd">let</span> <span class="nv">fruitsLogHandle</span> <span class="p">=</span> <span class="n">MXMetricManager</span><span class="p">.</span><span class="n">makeLogHandle</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="s">&quot;Fruits&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>上面的代码会生成一个handle，类似一个桶，用于装载你的metric。</p>
+<p>在viewDidLoad()方法中添加下面的代码：</p>
+<div class="highlight"><pre><span></span><code><span class="n">mxSignpost</span><span class="p">(</span>
+  <span class="p">.</span><span class="n">event</span><span class="p">,</span>
+  <span class="n">log</span><span class="p">:</span> <span class="n">fruitsLogHandle</span><span class="p">,</span>
+  <span class="n">name</span><span class="p">:</span> <span class="s">&quot;Loading Fruits TableViewController&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>当ViewController加载完成时，<code>mxSignpost</code>向fruitsLogHandle内记录了一个自定义metric。这是一个很简单的实例，你自己去扩展。例如，你的应用有一个视频播放器，在流开始和结束时做记录。</p>
+<h1>实现MXMetricPayload</h1>
+<p>你可以从Metric中获取两个不同的payload。<code>MXMetricPayload</code>封装了每日的metric报告。注：必须在真机上才能收到报告。如果你没有真机，我们为你提供了一个示例JSON。</p>
+<p>在真机上将工程运行起来之后，在<strong>Xcode</strong>中点击 <strong>Debug</strong> ▸ <strong>Simulate MetricKit Payloads</strong>：</p>
+<p><img alt="Simulate MetricKit Payloads" src="/images/2021/Simulate-MetricKit-Payloads.png"></p>
+<p>上图中的点击会触发一个示例日报。你可以在控制台中看到打印出的两个payload。</p>
+<div class="highlight"><pre><span></span><code> <span class="n">AnyHashable</span><span class="p">(</span><span class="s">&quot;cellularConditionMetrics&quot;</span><span class="p">):</span> <span class="p">{</span>
+    <span class="n">cellConditionTime</span> <span class="p">=</span>     <span class="p">{</span>
+        <span class="n">histogramNumBuckets</span> <span class="p">=</span> <span class="mi">3</span><span class="p">;</span>
+        <span class="n">histogramValue</span> <span class="p">=</span>         <span class="p">{</span>
+            <span class="mi">0</span> <span class="p">=</span>             <span class="p">{</span>
+                <span class="n">bucketCount</span> <span class="p">=</span> <span class="mi">20</span><span class="p">;</span>
+                <span class="n">bucketEnd</span> <span class="p">=</span> <span class="s">&quot;1 bars&quot;</span><span class="p">;</span>
+                <span class="n">bucketStart</span> <span class="p">=</span> <span class="s">&quot;1 bars&quot;</span><span class="p">;</span>
+            <span class="p">};</span>
+            <span class="mi">1</span> <span class="p">=</span>             <span class="p">{</span>
+                <span class="n">bucketCount</span> <span class="p">=</span> <span class="mi">30</span><span class="p">;</span>
+                <span class="n">bucketEnd</span> <span class="p">=</span> <span class="s">&quot;2 bars&quot;</span><span class="p">;</span>
+                <span class="n">bucketStart</span> <span class="p">=</span> <span class="s">&quot;2 bars&quot;</span><span class="p">;</span>
+            <span class="p">};</span>
+            <span class="mi">2</span> <span class="p">=</span>             <span class="p">{</span>
+                <span class="n">bucketCount</span> <span class="p">=</span> <span class="mi">50</span><span class="p">;</span>
+                <span class="n">bucketEnd</span> <span class="p">=</span> <span class="s">&quot;3 bars&quot;</span><span class="p">;</span>
+                <span class="n">bucketStart</span> <span class="p">=</span> <span class="s">&quot;3 bars&quot;</span><span class="p">;</span>
+            <span class="p">};</span>
+        <span class="p">};</span>
+    <span class="p">};</span>
+</code></pre></div>
+
+
+<p>上面的输出来自<code>cellularConditionMetrics</code> payload。payload的这个部分提供了用户过去24小时内使用你App时的蜂窝网环境数据。代码还告诉你处于一个bar、两个bar、三个bar服务的次数。你可以使用<code>bucketCount</code>来绘制直方图。这对于知晓用户在特定信号bar上持续的平均时间将非常有用。</p>
+<h1>理解MXDiagnosticPayload</h1>
+<p>MXDiagnosticPayload封装了如下设备诊断信息：</p>
+<ul>
+<li>性能：crash和exception报告</li>
+<li>响应：应用挂起率</li>
+<li>磁盘访问：磁盘读写</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="p">[</span><span class="n">AnyHashable</span><span class="p">(</span><span class="s">&quot;crashDiagnostics&quot;</span><span class="p">):</span> <span class="p">&lt;</span><span class="n">__NSArrayM</span> <span class="mh">0x283764390</span><span class="p">&gt;(</span>
+<span class="p">{</span>
+    <span class="n">callStackTree</span> <span class="p">=</span>     <span class="p">{</span>
+        <span class="n">callStackPerThread</span> <span class="p">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">callStacks</span> <span class="p">=</span>         <span class="p">(</span>
+                        <span class="p">{</span>
+                <span class="n">callStackRootFrames</span> <span class="p">=</span>                 <span class="p">(</span>
+                                        <span class="p">{</span>
+                        <span class="n">address</span> <span class="p">=</span> <span class="mi">74565</span><span class="p">;</span>
+                        <span class="n">binaryName</span> <span class="p">=</span> <span class="n">testBinaryName</span><span class="p">;</span>
+                        <span class="n">binaryUUID</span> <span class="p">=</span> <span class="s">&quot;BE6FD323-B011-4E67-925B-A60362A1ADFA&quot;</span><span class="p">;</span>
+                        <span class="n">offsetIntoBinaryTextSegment</span> <span class="p">=</span> <span class="mi">123</span><span class="p">;</span>
+                        <span class="n">sampleCount</span> <span class="p">=</span> <span class="mi">20</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">);</span>
+                <span class="n">threadAttributed</span> <span class="p">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">);</span>
+    <span class="p">};</span>
+    <span class="n">diagnosticMetaData</span> <span class="p">=</span>     <span class="p">{</span>
+        <span class="n">appBuildVersion</span> <span class="p">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">appVersion</span> <span class="p">=</span> <span class="s">&quot;1.0&quot;</span><span class="p">;</span>
+        <span class="n">deviceType</span> <span class="p">=</span> <span class="s">&quot;iPhone13,3&quot;</span><span class="p">;</span>
+        <span class="n">exceptionCode</span> <span class="p">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">exceptionType</span> <span class="p">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">osVersion</span> <span class="p">=</span> <span class="s">&quot;iPhone OS 14.4 (18D52)&quot;</span><span class="p">;</span>
+        <span class="n">platformArchitecture</span> <span class="p">=</span> <span class="n">arm64e</span><span class="p">;</span>
+        <span class="n">regionFormat</span> <span class="p">=</span> <span class="n">GB</span><span class="p">;</span>
+        <span class="n">signal</span> <span class="p">=</span> <span class="mi">11</span><span class="p">;</span>
+        <span class="n">terminationReason</span> <span class="p">=</span> <span class="s">&quot;Namespace SIGNAL, Code 0xb&quot;</span><span class="p">;</span>
+        <span class="n">virtualMemoryRegionInfo</span> <span class="p">=</span> <span class="s">&quot;0 is not in any region.  Bytes before following region: 4000000000 REGION TYPE                      START - END             [ VSIZE] PRT/MAX SHRMOD  REGION DETAIL UNUSED SPACE AT START ---&gt; __TEXT                 0000000000000000-0000000000000000 [   32K] r-x/r-x SM=COW  ...pp/Test&quot;</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="n">version</span> <span class="p">=</span> <span class="s">&quot;1.0.0&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>上面的输出来自<code>crashDiagnostics</code>，捕捉到一个用户遇到的crash。其中<code>diagnosticMetaData</code>包含了系统版本号等有用信息。因为捕捉到的是个crash，所以数据还包含了<code>callStackTree</code>，下一节将对此做更进一步的说明。</p>
+<p>理解MXCallStackTree</p>
+<p>对MetricKit探索得越多，你越会发现它对于苹果自带工具有很大的增强，如Xcode Organizer。即使用户离开你的App，在Organizer页面仍旧可以看到MetricKit报告，即使你的App没有引入MetricKit。</p>
+<p><img alt="MetricKit Xcode Organizer.png" src="/images/2021/MetricKit-Xcode-Organizer.png"></p>
+<p>如你所见（上图），这个App处于活跃状态并且在Xcode右侧能看到真实数据。因为苹果免费提供了很多数据。不过，要是再能引入MetricKit的话，你就能更充分的利用这些数据并且将它们与你自己的metric关联、更灵活的展示数据。</p>
+<p><code>MXCallStackTree</code>是使用MetricKit的一大好处，不仅可以知晓crash和exception，还能获得JSON格式的StackTree。对于解决bug非常有帮助。</p>
+<h1>理解MXAppExitMetric</h1>
+<p>MXAppExitMetric是iOS14引入的，App退出类型包括：</p>
+<ul>
+<li>前台退出</li>
+<li>后台退出</li>
+</ul>
+<p>用户退出App的原因有很多。有时是用户有意关闭App，有时是操作系统关闭了App，或是低内存和exception导致App退出。</p>
+<p>在Organizer里查阅</p>
+<p>苹果在Organizer里提供免费的可视化数据，数据来自于App Store Connect。</p>
+<p>尽管你在Organizer里无法获取到使用MetricKit时那么全的数据，但还是能获取到这些：
+Crash</p>
+<ul>
+<li>写磁盘</li>
+<li>电量使用</li>
+<li>电池使用</li>
+<li>挂起率</li>
+<li>加载时间</li>
+<li>内存</li>
+<li>滚动</li>
+</ul>
+<h1>创建表格和报告</h1>
+<p>上面章节中的内容都可以表现为表格。通常，数据以直方图表示。</p>
+<p><img alt="Organizer Scrolling" src="/images/2021/Organizer-Scrolling.png"></p>
+<p>上图是一个Scrolling metric的直方图，展示了用户开始滚动的时间。上图中，可以看到在持续下降后，数据突然飙升。也许你应当研究下这个现象的原因，以及为何版本间有如此差异。</p>
+<p>上图是一个在App Store上线的App的真实数据。数据有很多细节。你可以看到不同因素对于用电量的影响：Networking、Display等。上图示例中，该App耗电量占每天总量的8.29% 虽然数据不能给出准确的基准值，但是可以给你很多性能改进的依据。</p>
+            </div>
+            <!-- /.entry-content -->
+    <hr/>
+    <section class="comments" id="comments">
+        <h2>Comments</h2>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
+
+            var disqus_config = function () {
+                this.language = "zh";
+
+                        this.page.identifier = '2021-05-18-fan-yi-shi-yong-metrickitjian-kong-iosru-men';
+            };
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+            Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </section>
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+<!-- Sidebar -->
+<section class="well well-sm">
+  <ul class="list-group list-group-flush">
+
+<!-- Sidebar/Social -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+  <ul class="list-group" id="social">
+    <li class="list-group-item"><a href="https://www.linkedin.com/in/chao-jing-8470a895/"><i class="fa fa-linkedin-square fa-lg"></i> LinkedIn</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Social -->
+
+<!-- Sidebar/Recent Posts -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
+  <ul class="list-group" id="recentposts">
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-ji-zhi-shou-zheng-bo-fang-fang-an-ling-shou-zheng-jie-jue-fang-an.html">【学习笔记】极致首帧播放方案 - 零首帧解决方案</a></li>
+    <li class="list-group-item"><a href="/fan-yi-shi-yong-metrickitjian-kong-iosru-men.html">【翻译】使用MetricKit监控iOS：入门</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-gitge-ming-ling-de-ben-zhi-zhen-shi-tong-su-yi-dong-a.html">【学习笔记】Git各命令的本质，真是通俗易懂啊</a></li>
+    <li class="list-group-item"><a href="/iphoneping-mu-fen-bian-lu.html">iPhone屏幕分辨率</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Recent Posts -->
+
+<!-- Sidebar/Categories -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Categories</span></h4>
+  <ul class="list-group" id="categories">
+    <li class="list-group-item">
+      <a href="/category/blog.html"><i class="fa fa-folder-open fa-lg"></i>Blog</a>
+    </li>
+    <li class="list-group-item">
+      <a href="/category/fan-yi.html"><i class="fa fa-folder-open fa-lg"></i>翻译</a>
+    </li>
+    <li class="list-group-item">
+      <a href="/category/xue-xi-bi-ji.html"><i class="fa fa-folder-open fa-lg"></i>学习笔记</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Categories -->
+
+<!-- Sidebar/Tag Cloud -->
+<li class="list-group-item">
+  <a href="/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
+  <ul class="list-group " id="tags">
+    <li class="list-group-item tag-1">
+      <a href="/tag/ios.html">iOS</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/xing-neng.html">性能</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/git.html">git</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/yin-shi-pin.html">音视频</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/jian-kong.html">监控</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Tag Cloud -->
+
+<!-- Sidebar/Links -->
+<li class="list-group-item">
+  <h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+  <ul class="list-group" id="links">
+    <li class="list-group-item">
+      <a href="http://hutaow.com/" target="_blank">胡桃夹子</a>
+    </li>
+    <li class="list-group-item">
+      <a href="http://wenzhong.me/" target="_blank">Wenzhong's Playground</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Links -->
+  </ul>
+</section>
+<!-- End Sidebar -->            </aside>
+        </div>
+    </div>
+</div>
+<!-- End Content Container -->
+
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2021 荆超
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="/theme/js/respond.min.js"></script>
+
+
+    <!-- Disqus -->
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <!-- End Disqus Code -->
+
+
+</body>
+</html>
