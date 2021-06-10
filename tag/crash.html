@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
 <head>
-    <title>学习笔记 - 荆超的小站</title>
+    <title>Crash - 荆超的小站</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -11,7 +11,7 @@
 
 
     <meta name="author" content="荆超" />
-    <meta name="keywords" content="学习笔记" />
+    <meta name="keywords" content="Crash" />
 
     <!-- Open Graph tags -->
         <meta property="og:site_name" content="荆超的小站" />
@@ -65,77 +65,6 @@
                 </div>
             </article>
             <hr/>
-            <article>
-                <h2><a href="/xue-xi-bi-ji-harmonyosdao-di-shi-bu-shi-androidtao-pi.html">【学习笔记】HarmonyOS到底是不是Android套皮？</a></h2>
-                <div class="summary"><blockquote>
-<p>本文为学习笔记，并非原创。<a href="https://mp.weixin.qq.com/s/RkJ_2WLf7MTL-f-kAOGxAw">原文链接</a></p>
-</blockquote>
-<h1>HarmonyOS分析</h1>
-<p>原作者通过分析HarmonyOS应用的构建产物，得出如下结论：</p>
-<p>1.构建产物中，包含一个标准Android的apk文件。该apk内AndroidManifest.xml文件中做了两件事：</p>
-<p>1）定义Application为ShellApplication</p>
-<p>2）定义MainActivity为MainAbilityShellActivity</p>
-<p>2.ShellApplication最终继承自Android的Application。</p>
-<p>3.MainAbilityShellActivity继承自Android的Activity。</p>
-<p>原作者认为鸿蒙的<code>分布式软总线</code>是一个私有RPC协议。通过<a href="https://gitee.com/openharmony">OpenHarmony</a>源码分析，<code>分布式软总线</code>主要有以下几个模块：</p>
-<ol>
-<li>设备发现：采用了CoAP协议作为设备发现协议，通过在一个局域网内发送广播来实现。</li>
-<li>数据传输：基于Session提供统一的数据传输功能。</li>
-<li>设备认证与管理：主要是安全。</li>
-<li><a href="https://gitee.com/openharmony/ace_engine_lite">AceEngineLite</a>：应该就是JS开发的Ability页面如何编译以及 在嵌入式设备上如何渲染的相关实现，这也许就是为什么HarmonyOS可以采用多种开发语言开发界面的关键所在。各种小程序、Flutter相关设计都是这样的，设计思想都是：自创UI框架以屏蔽系统差异。</li>
-</ol>
-<p>原作者认为，<strong>HarmonyOS = Android - GMS + HMS + 分布式软总线 + 以Ability为核心的应用开发框架</strong>，用图表示 …</p>
-                    <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-harmonyosdao-di-shi-bu-shi-androidtao-pi.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/xue-xi-bi-ji-ji-zhi-shou-zheng-bo-fang-fang-an-ling-shou-zheng-jie-jue-fang-an.html">【学习笔记】极致首帧播放方案 - 零首帧解决方案</a></h2>
-                <div class="summary"><blockquote>
-<p>本文为学习笔记，并非原创。<a href="https://mp.weixin.qq.com/s/IGA3caeXMB-upTFiV8MuYg">原文链接</a></p>
-</blockquote>
-<h1>背景介绍</h1>
-<p>「零首帧」并不是真的0毫秒启播，而是用户几乎感知不到有首帧时间的存在，在我们的播放质量埋点中对应小于100ms以内的首帧时间。</p>
-<p>在现实业务中，有些场景是无法使用所有的优化条件的，比如在随机播放的场景不能进行预加载、某些场景不适合使用播放器复用技术等。</p>
-<h1>首帧的构成</h1>
-<p><img alt="firset frame" src="/images/2021/first-frame.png"></p>
-<p>从上图可以看出首帧时间主要包含这么几个部分: 获取视频播放链接，网络建连，下载视频头部数据，音视频解码和渲染。</p>
-<h1>通用的首帧优化方法</h1>
-<h2>获取播放地址</h2>
-<p>优化方案：播放地址随feed下发。</p>
-<p>通常而言，视频资源会有唯一标识 video id , 在点播的服务端会有一个根据 video id 信息获取播放链接的服务，如果 app server 端能够调用 vod 服务生成播放地址，然后将播放地址随 feed 流一起下发，则省去了客户端的一次网络请求耗时。</p>
-<h2>网络建连</h2>
-<p>优化方案：预解析。预连接&amp;连接复用。避免TLS握手。</p>
-<p>拿到播放地址，播放器与DNS建连，首先会做DNS解析。为了防止DNS劫持 …</p>
-                    <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-ji-zhi-shou-zheng-bo-fang-fang-an-ling-shou-zheng-jie-jue-fang-an.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/xue-xi-bi-ji-gitge-ming-ling-de-ben-zhi-zhen-shi-tong-su-yi-dong-a.html">【学习笔记】Git各命令的本质，真是通俗易懂啊</a></h2>
-                <div class="summary"><blockquote>
-<p>本文为学习笔记，并非原创。<a href="https://juejin.cn/post/6895246702614806542">原文链接</a></p>
-</blockquote>
-<p>本篇文章写得真的不错，建议全文阅读。这里只记我不熟悉的地方。</p>
-<h1>commit节点、HEAD和分支</h1>
-<p>每次commit都会生成一个节点，节点内容是本次及本次之前所有提交的内容。</p>
-<p>不管HEAD还是分支，都是对一个commit节点的引用。因为只是引用，所以它们非常轻量。引用+节点是git构成分布式的关键。</p>
-<p>HEAD是一个引用，它可以指向任意一个节点。其指向的节点始终为当前工作目录，换句话说就是当前工作目录（也就是你看到的代码）就是HEAD指向的节点</p>
-<p>分支也可以视为一个引用，分支指向一个节点时，该节点的内容就是分支的内容。</p>
-<p>分支可以存在多个，而HEAD只有一个。</p>
-<h1>合并</h1>
-<h2>merge</h2>
-<div class="highlight"><pre><span></span><code>git merge 分支名/节点哈希值   //将指定分支或节点的内容合并至HEAD
-</code></pre></div>
-
-
-<p>如果要合并的内容完全领先于当前分支，如下图中在<code>ft-2</code>上执行<code>git merge ft-1</code>，则会触发fast-foward（快速合并），此时两个分支指向统一节点。</p>
-<p><img alt="git merge fast-forward" src="/images/2021/git-merg-fastforward.png"></p>
-<p>但实际情况中，往往遇到的是下图中的情况。这种就不能直接合并了，在<code>ft-2</code>上执行 …</p>
-                    <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-gitge-ming-ling-de-ben-zhi-zhen-shi-tong-su-yi-dong-a.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
 
         </div>
         <div class="col-sm-3" id="sidebar">
@@ -158,9 +87,6 @@
   <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
   <ul class="list-group" id="recentposts">
     <li class="list-group-item"><a href="/xue-xi-bi-ji-shou-ba-shou-jiao-ni-debug-ios-14-imageio-crash-fen-xi.html">【学习笔记】手把手教你 Debug — iOS 14 ImageIO Crash 分析</a></li>
-    <li class="list-group-item"><a href="/xue-xi-bi-ji-harmonyosdao-di-shi-bu-shi-androidtao-pi.html">【学习笔记】HarmonyOS到底是不是Android套皮？</a></li>
-    <li class="list-group-item"><a href="/xue-xi-bi-ji-ji-zhi-shou-zheng-bo-fang-fang-an-ling-shou-zheng-jie-jue-fang-an.html">【学习笔记】极致首帧播放方案 - 零首帧解决方案</a></li>
-    <li class="list-group-item"><a href="/xue-xi-bi-ji-gitge-ming-ling-de-ben-zhi-zhen-shi-tong-su-yi-dong-a.html">【学习笔记】Git各命令的本质，真是通俗易懂啊</a></li>
   </ul>
 </li>
 <!-- End Sidebar/Recent Posts -->

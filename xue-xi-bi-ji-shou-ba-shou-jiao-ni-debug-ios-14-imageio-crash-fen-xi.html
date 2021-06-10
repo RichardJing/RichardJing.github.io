@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>【学习笔记】手把手教你 Debug — iOS 14 ImageIO Crash 分析 - 荆超的小站</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="/xue-xi-bi-ji-shou-ba-shou-jiao-ni-debug-ios-14-imageio-crash-fen-xi.html">
+
+        <meta name="author" content="荆超" />
+        <meta name="keywords" content="iOS,性能,Crash" />
+        <meta name="description" content="通过分析一个 ImageIO相关Crash，向你展示如何通过反编译追查问题原因" />
+
+        <meta property="og:site_name" content="荆超的小站" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="【学习笔记】手把手教你 Debug — iOS 14 ImageIO Crash 分析"/>
+        <meta property="og:url" content="/xue-xi-bi-ji-shou-ba-shou-jiao-ni-debug-ios-14-imageio-crash-fen-xi.html"/>
+        <meta property="og:description" content="通过分析一个 ImageIO相关Crash，向你展示如何通过反编译追查问题原因"/>
+        <meta property="article:published_time" content="2021-06-10" />
+            <meta property="article:section" content="学习笔记" />
+            <meta property="article:tag" content="iOS" />
+            <meta property="article:tag" content="性能" />
+            <meta property="article:tag" content="Crash" />
+            <meta property="article:author" content="荆超" />
+
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css"/>
+    <link href="/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
+
+
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="/" class="navbar-brand">
+荆超的小站            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+
+<!-- Banner -->
+<!-- End Banner -->
+
+<!-- Content Container -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="/xue-xi-bi-ji-shou-ba-shou-jiao-ni-debug-ios-14-imageio-crash-fen-xi.html"
+                       rel="bookmark"
+                       title="Permalink to 【学习笔记】手把手教你 Debug — iOS 14 ImageIO Crash 分析">
+                        【学习笔记】手把手教你 Debug — iOS 14 ImageIO Crash 分析
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2021-06-10T00:00:00+08:00"> 四 10 六月 2021</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="/tag/ios.html">iOS</a>
+        /
+	<a href="/tag/xing-neng.html">性能</a>
+        /
+	<a href="/tag/crash.html">Crash</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <blockquote>
+<p>本文为学习笔记，并非原创。<a href="https://mp.weixin.qq.com/s?__biz=MzI1MzYzMjE0MQ==&amp;mid=2247488918&amp;idx=1&amp;sn=9d3f19288191569d4cdf4a6dcef80270">原文链接</a></p>
+<p>学习通过反编译，定位系统API Crash的思路</p>
+</blockquote>
+<h1>问题定位</h1>
+<h2>堆栈分析</h2>
+<p>从堆栈信息看，是在 ImageIO 解析图片信息的时候 Crash ，并且最后调用的方法都是看起来都是和 <code>INameSpacePrefixMap</code> 相关，推测 Crash 应该是和这个方法 <code>CGImageSourceCopyPropertiesAtIndex</code> 的实现有关。</p>
+<p><img alt="INameSpacePrefixMap-stacktree-1" src="/images/2021/INameSpacePrefixMap-stacktree-1.png"></p>
+<p><img alt="INameSpacePrefixMap-stacktree-2" src="/images/2021/INameSpacePrefixMap-stacktree-2.png"></p>
+<p><img alt="INameSpacePrefixMap-stacktree-3" src="/images/2021/INameSpacePrefixMap-stacktree-3.png"></p>
+<h2>问题聚合特点</h2>
+<p>机型集中在iOS14以上的版本，主要在后台出现。</p>
+<h2>分析</h2>
+<p>从CrashLog做一个初步分析</p>
+<p><img alt="CGImageSourceCopyPropertiesAtIndex-CrashLog" src="/images/2021/CGImageSourceCopyPropertiesAtIndex-CrashLog.png"></p>
+<ul>
+<li>从堆栈信息看，这段代码是图片库在子线程通过 <code>CGImageSourceCopyPropertiesAtIndex</code> 解析 <code>imageSource</code> 中的图片相关信息，然后发生了野指针的 Crash。</li>
+<li><code>CGImageSourceCopyPropertiesAtIndex</code> 的输入只有一个<code>imageSource</code>。调用栈并没有多线程操作，可以排除是多线程操作 <code>imageSource</code>、data 导致的 Crash。</li>
+<li>看堆栈是在解析 PNG 图片，通过将下发的图片格式换成 JPG 格式，发现量级并没有降低。推测 Crash 不是某种特定图片格式引起的。</li>
+</ul>
+<h2>反汇编分析</h2>
+<h3>反汇编准备</h3>
+<ul>
+<li>iOS 14.3 的 iPhone 8</li>
+<li>ImageIO 系统库：~/Library/Developer/Xcode/iOS DeviceSupport目录下找到对应 iOS 14.3 的 ImageIO</li>
+<li>一份 iOS 14.3、iPhone 8 上发生的  CrashLog</li>
+<li>Hopper</li>
+</ul>
+<h3>反汇编</h3>
+<p>1、从 CrashLog 上找到 Crash 对应的指令偏移地址 <strong>2555072</strong></p>
+<p><img alt="CGImageSourceCopyPropertiesAtIndex-CrashOffset" src="/images/2021/CGImageSourceCopyPropertiesAtIndex-CrashOffset.png"></p>
+<p>2、通过 Hopper 打开 ImageIO，跳转到指令偏移地址 <strong>2555072</strong></p>
+<p><strong>Navigate</strong> =&gt; <strong>Go To</strong> <strong>File Offset</strong> <strong>2555072</strong></p>
+<p>3、偏移地址对应的指令应该是<code>0000000181b09cc0 ldr x8, [x8, #0x10]</code>，可以看到应该是访问 <code>[x8, #0x10]</code>指向的内存出错</p>
+<p><img alt="Crash-Instruction" src="/images/2021/Crash-Instruction.png"></p>
+<p>4、查看 Crashlog 中对应寄存器(x8)的值，错误地址 <code>far: 0x000021a1ee2fa271</code>，而且 x8 寄存器已经是一个错误的值 <code>0x000021a1ee2fa261</code></p>
+<p><img alt="Crash-Register" src="/images/2021/Crash-Register.png"></p>
+<p>5、向上回溯查看 x8 的来源</p>
+<ul>
+<li><code>0000000181b09cbc ldr x8, [x20]</code> x8 是存在 x20 指向的内存中（即 <code>x8 = *x20</code>）</li>
+<li><code>0000000181b09c98 ldr x20, [x21, #0x8]</code> x20 又存在<code>[x21, #0x8]</code> 指向的内存中</li>
+<li><code>0000000181b09c8c adrp x21, #0x1da0ed000</code>，<code>0000000181b09c90 add x21, x21, #0xe10</code> x21 指向的是一个 data 段，推测 x21 应该是一个全局变量，所以，可能是这个全局变量野了，或者是这个全局变量引用的某些内存（x20）野了</li>
+</ul>
+<p>6、运行时 debug 查看 x8、x20、x21 对应寄存器的值是什么</p>
+<ul>
+<li>x21 从内存地址的名字看，应该是一个全局的 Map</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">ImageIO</span><span class="err">`</span><span class="n">AdobeXMPCore_Int</span><span class="o">::</span><span class="n">ManageDefaultNameSpacePrefixMap</span><span class="p">(</span><span class="kt">bool</span><span class="p">)</span><span class="o">::</span><span class="n">sDefaultNameSpacePrefixMap</span>
+</code></pre></div>
+
+
+<p><img alt="ImageIO-Debug" src="/images/2021/ImageIO-Debug.png"></p>
+<p><img alt="ImageIO-Debug-Register" src="/images/2021/ImageIO-Debug-Register.png"></p>
+<p>7、从 Hopper 上看，这个<code>sDefaultNameSpacePrefixMap</code>只在</p>
+<p><code>AdobeXMPCore_Int::ManageDefaultNameSpacePrefixMap(bool)</code> 这个函数中调用。可能会在多线程下调用这个函数，而导致这个全局变量的出现 data race 导致了野指针。</p>
+<div class="highlight"><pre><span></span><code><span class="nl">__ZZN16AdobeXMPCore_IntL31ManageDefaultNameSpacePrefixMapEbE26sDefaultNameSpacePrefixMap</span><span class="p">:</span>    <span class="c1">// AdobeXMPCore_Int::ManageDefaultNameSpacePrefixMap(bool)::sDefaultNameSpacePrefixMap</span>
+
+<span class="mo">00000001</span><span class="n">da0ede10</span>     <span class="n">dq</span>     <span class="mh">0x0000000000000000</span>             <span class="p">;</span> <span class="n">DATA</span> <span class="n">XREF</span><span class="o">=</span><span class="n">__ZN16AdobeXMPCore_IntL31ManageDefaultNameSpacePrefixMapEb</span><span class="o">+</span><span class="mi">44</span><span class="p">,</span> <span class="n">__ZN16AdobeXMPCore_IntL31ManageDefaultNameSpacePrefixMapEb</span><span class="o">+</span><span class="mi">120</span><span class="p">,</span> <span class="n">__ZN16AdobeXMPCore_IntL31ManageDefaultNameSpacePrefixMapEb</span><span class="o">+</span><span class="mi">392</span>
+</code></pre></div>
+
+
+<p>8、经过在运行时反复调试，这个</p>
+<p><code>AdobeXMPCore_Int::ManageDefaultNameSpacePrefixMap(bool)</code> 会在多个方法中调用（并且调用时都加了锁，不太可能会出现 data race）：</p>
+<ul>
+<li><code>AdobeXMPCore_Int::INameSpacePrefixMap_I::CreateDefaultNameSpacePrefixMap()</code></li>
+<li><code>AdobeXMPCore_Int::INameSpacePrefixMap_I::InsertInDefaultNameSpacePrefixMap(char const*, unsigned long long, char const*, unsigned long long)</code></li>
+<li><code>AdobeXMPCore_Int::INameSpacePrefixMap_I::DestroyDefaultNameSapcePrefixMap()</code></li>
+</ul>
+<p><img alt="ManageDefaultNameSpacePrefixMap-1" src="/images/2021/ManageDefaultNameSpacePrefixMap-1.png"></p>
+<p><img alt="ManageDefaultNameSpacePrefixMap-2" src="/images/2021/ManageDefaultNameSpacePrefixMap-2.png"></p>
+<p><img alt="ManageDefaultNameSpacePrefixMap-3" src="/images/2021/ManageDefaultNameSpacePrefixMap-3.png"></p>
+<p>9、在后台线程访问访问全局变量 <code>sDefaultNameSpacePrefixMap</code> 时 Crash，推测可能是用户手动杀进程后，全局变量在主线程已经被析构，后台线程还会继续访问这个全局变量，从而出现野指针访问异常。发现 Crash 日志的主线程堆栈也出现 _exit 的调用，可以确定是全局变量析构导致。</p>
+<p><img alt="sDefaultNameSpacePrefixMap" src="/images/2021/sDefaultNameSpacePrefixMap-MainThread-Exit.png"></p>
+<h2>Crash 发生的原因：</h2>
+<p>在用户手动杀进程后，主线程将这个全局变量析构了，这时候子线程再访问这个全局变量就出现了野指针。</p>
+<p><img alt="Global-Cras" src="/images/2021/Global-Crash.png"></p>
+<h1>复现问题</h1>
+<p>尝试在子线程不断调用 <code>CFDictionaryRef CGImageSourceCopyPropertiesAtIndex(CGImageSourceRef isrc, size_t index, CFDictionaryRef options);</code>，并且手动杀掉进程触发这个 crash</p>
+<div class="highlight"><pre><span></span><code><span class="bp">NSString</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="s">@&quot;https://xxx.com/xxx.png&quot;</span><span class="p">;</span>
+<span class="bp">NSData</span> <span class="o">*</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSData</span> <span class="nl">dataWithContentsOfURL</span><span class="p">:[</span><span class="bp">NSURL</span> <span class="nl">URLWithString</span><span class="p">:</span><span class="n">url</span><span class="p">]];</span>
+<span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_global_queue</span><span class="p">(</span><span class="n">DISPATCH_QUEUE_PRIORITY_DEFAULT</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">^</span><span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">NSInteger</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1000000</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">CGImageSourceRef</span> <span class="n">imageSource</span> <span class="o">=</span> <span class="n">CGImageSourceCreateWithData</span><span class="p">((</span><span class="k">__bridge</span>  <span class="n">CFDataRef</span><span class="p">)</span><span class="n">data</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+        <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">imageProperties</span> <span class="o">=</span> <span class="p">(</span><span class="k">__bridge_transfer</span> <span class="bp">NSDictionary</span><span class="o">*</span><span class="p">)</span><span class="n">CGImageSourceCopyPropertiesAtIndex</span><span class="p">(</span><span class="n">imageSource</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;imageProperties = %@&quot;</span><span class="p">,</span> <span class="n">imageProperties</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+<h2>成功复现</h2>
+<p><img alt="CGImageSourceCopyPropertiesAtIndex-Crash-Reproduct" src="/images/2021/CGImageSourceCopyPropertiesAtIndex-Crash-Reproduct.png"></p>
+<p>可以证明上述的推理是正确的。</p>
+<h1>总结</h1>
+<ul>
+<li>
+<p><code>CFDictionaryRef CGImageSourceCopyPropertiesAtIndex(CGImageSourceRef isrc, size_t index, CFDictionaryRef options);</code> 这个方法在解析部分图片的时候最终会访问全局变量</p>
+</li>
+<li>
+<p>在用户手动杀进程后，这个<code>sDefaultNameSpacePrefixMap</code>被析构，如果这时候在子线程再被访问就可能出现野指针的问题</p>
+</li>
+</ul>
+<h1>修复 ImageIO Crash 方案</h1>
+<p>因为<code>sDefaultNameSpacePrefixMap</code> 是在系统库内部的全局变量，没办法对其进行修改，只能避免在子线程调用 <code>CGImageSourceCopyPropertiesAtIndex</code> 方法</p>
+<ul>
+<li>方法一：<code>CGImageSourceCopyPropertiesAtIndex</code> 是用来获取图片的宽高、<code>imageOrientation</code>、动图帧等信息，选择用其他方法来替换，e.g. 宽高用 <code>CGImageRef</code> 来获取</li>
+<li>方法二：将 <code>CGImageSourceCopyPropertiesAtIndex</code> 被调用的线程收敛起来，调用atexit函数来注册一个进程结束回调函数，进程结束的时候将终止线程</li>
+</ul>
+            </div>
+            <!-- /.entry-content -->
+    <hr/>
+    <section class="comments" id="comments">
+        <h2>Comments</h2>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
+
+            var disqus_config = function () {
+                this.language = "zh";
+
+                        this.page.identifier = '2021-06-10-xue-xi-bi-ji-shou-ba-shou-jiao-ni-debug-ios-14-imageio-crash-fen-xi';
+            };
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+            Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </section>
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+<!-- Sidebar -->
+<section class="well well-sm">
+  <ul class="list-group list-group-flush">
+
+<!-- Sidebar/Social -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+  <ul class="list-group" id="social">
+    <li class="list-group-item"><a href="https://www.linkedin.com/in/chao-jing-8470a895/"><i class="fa fa-linkedin-square fa-lg"></i> LinkedIn</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Social -->
+
+<!-- Sidebar/Recent Posts -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
+  <ul class="list-group" id="recentposts">
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-shou-ba-shou-jiao-ni-debug-ios-14-imageio-crash-fen-xi.html">【学习笔记】手把手教你 Debug — iOS 14 ImageIO Crash 分析</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-harmonyosdao-di-shi-bu-shi-androidtao-pi.html">【学习笔记】HarmonyOS到底是不是Android套皮？</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-ji-zhi-shou-zheng-bo-fang-fang-an-ling-shou-zheng-jie-jue-fang-an.html">【学习笔记】极致首帧播放方案 - 零首帧解决方案</a></li>
+    <li class="list-group-item"><a href="/fan-yi-shi-yong-metrickitjian-kong-iosru-men.html">【翻译】使用MetricKit监控iOS：入门</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-gitge-ming-ling-de-ben-zhi-zhen-shi-tong-su-yi-dong-a.html">【学习笔记】Git各命令的本质，真是通俗易懂啊</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Recent Posts -->
+
+<!-- Sidebar/Categories -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Categories</span></h4>
+  <ul class="list-group" id="categories">
+    <li class="list-group-item">
+      <a href="/category/blog.html"><i class="fa fa-folder-open fa-lg"></i>Blog</a>
+    </li>
+    <li class="list-group-item">
+      <a href="/category/fan-yi.html"><i class="fa fa-folder-open fa-lg"></i>翻译</a>
+    </li>
+    <li class="list-group-item">
+      <a href="/category/xue-xi-bi-ji.html"><i class="fa fa-folder-open fa-lg"></i>学习笔记</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Categories -->
+
+<!-- Sidebar/Tag Cloud -->
+<li class="list-group-item">
+  <a href="/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
+  <ul class="list-group " id="tags">
+    <li class="list-group-item tag-1">
+      <a href="/tag/ios.html">iOS</a>
+    </li>
+    <li class="list-group-item tag-2">
+      <a href="/tag/xing-neng.html">性能</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/harmonyos.html">HarmonyOS</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/yin-shi-pin.html">音视频</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/jian-kong.html">监控</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/git.html">git</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/crash.html">Crash</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Tag Cloud -->
+
+<!-- Sidebar/Links -->
+<li class="list-group-item">
+  <h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+  <ul class="list-group" id="links">
+    <li class="list-group-item">
+      <a href="http://hutaow.com/" target="_blank">胡桃夹子</a>
+    </li>
+    <li class="list-group-item">
+      <a href="http://wenzhong.me/" target="_blank">Wenzhong's Playground</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Links -->
+  </ul>
+</section>
+<!-- End Sidebar -->            </aside>
+        </div>
+    </div>
+</div>
+<!-- End Content Container -->
+
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2021 荆超
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="/theme/js/respond.min.js"></script>
+
+
+    <!-- Disqus -->
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <!-- End Disqus Code -->
+
+
+</body>
+</html>
