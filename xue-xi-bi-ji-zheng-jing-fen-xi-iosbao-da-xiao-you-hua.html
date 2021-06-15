@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>【学习笔记】正经分析iOS包大小优化 - 荆超的小站</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="/xue-xi-bi-ji-zheng-jing-fen-xi-iosbao-da-xiao-you-hua.html">
+
+        <meta name="author" content="荆超" />
+        <meta name="keywords" content="iOS,性能,包体积" />
+        <meta name="description" content="从编译设置和资源文件两大方面探讨包体积优化方法" />
+
+        <meta property="og:site_name" content="荆超的小站" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="【学习笔记】正经分析iOS包大小优化"/>
+        <meta property="og:url" content="/xue-xi-bi-ji-zheng-jing-fen-xi-iosbao-da-xiao-you-hua.html"/>
+        <meta property="og:description" content="从编译设置和资源文件两大方面探讨包体积优化方法"/>
+        <meta property="article:published_time" content="2021-06-15" />
+            <meta property="article:section" content="学习笔记" />
+            <meta property="article:tag" content="iOS" />
+            <meta property="article:tag" content="性能" />
+            <meta property="article:tag" content="包体积" />
+            <meta property="article:author" content="荆超" />
+
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css"/>
+    <link href="/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
+
+
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="/" class="navbar-brand">
+荆超的小站            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+
+<!-- Banner -->
+<!-- End Banner -->
+
+<!-- Content Container -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="/xue-xi-bi-ji-zheng-jing-fen-xi-iosbao-da-xiao-you-hua.html"
+                       rel="bookmark"
+                       title="Permalink to 【学习笔记】正经分析iOS包大小优化">
+                        【学习笔记】正经分析iOS包大小优化
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2021-06-15T00:00:00+08:00"> 二 15 六月 2021</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="/tag/ios.html">iOS</a>
+        /
+	<a href="/tag/xing-neng.html">性能</a>
+        /
+	<a href="/tag/bao-ti-ji.html">包体积</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <blockquote>
+<p>本文为学习笔记，并非原创。<a href="https://mp.weixin.qq.com/s?__biz=MzU3NTY3MTQzMg==&amp;mid=2247505253&amp;idx=1&amp;sn=7123c2548a3d8412a6e0ec6e72634664">原文链接</a></p>
+</blockquote>
+<h1>分析</h1>
+<h2>影响安装包大小的因素</h2>
+<ol>
+<li>
+<p>Xcode的设置</p>
+</li>
+<li>
+<p>资源</p>
+</li>
+<li>
+<p>代码</p>
+</li>
+</ol>
+<h2>优化方法</h2>
+<ol>
+<li>Xcode的编译设置优化。比如：不包含断点调试、去除异常支持。</li>
+<li>资源优化。通过分析安装包构成，看里面哪些部分比较大、不合理。</li>
+<li>代码优化。通过Link Map生成Link Map File， 分析Link Map File各文件占用，结合Mach-O进一步进行分析。</li>
+</ol>
+<h1>安装包的构成</h1>
+<p>将ipa文件后缀改为zip，解压后会得到一个Payload文件夹，里面有一个app文件，就是所有文件的包了。包内容大概如下：</p>
+<ul>
+<li>_CodeSignature: ipa包签名文件</li>
+<li>.lproj: 语言文件</li>
+<li>Framworks: 三方库，Swift Support库</li>
+<li>Plugins: App扩展，比如Widget</li>
+<li>Access.car: Assets.xcassets生成的图片</li>
+<li>embeded.mobileprovision: 证书配置文件</li>
+<li>Info.plist: 配置项目</li>
+<li>exec文件: 可执行包</li>
+<li>其它资源文件</li>
+<li>mp3</li>
+<li>html</li>
+<li>json</li>
+<li>png</li>
+</ul>
+<h1>Xcode编译设置</h1>
+<h2>Build Settings去掉异常支持</h2>
+<p>Enable C++ Exceptions和Enable Objective-C Exceptions设置为NO，Other C Flags添加-fno-exceptions</p>
+<p><img alt="Disable_Exception" src="/images/2021/Disable_Exception.png"></p>
+<p><img alt="fno-exceptions" src="/images/2021/fno-exceptions.png"></p>
+<p>如果项目中有使用try...catch的，这个关闭了之后会报错（Cannot use '@try' with Objective-C exceptions disabled）。包括宏定义中使用的有try{}、@finally{}之类的，比如@strongify等，如果关闭了最后打包的时候也会报错。</p>
+<p>-fno-exceptions的意思是禁用异常机制，参考gcc，同样，当项目中有try thorw的时候，就不要设置这个选项为NO</p>
+<h2>Build Settings - Architectures</h2>
+<blockquote>
+<p>博主注：App Store会将提交的ipa文件拆分，用户只会下载到自己设备架构的可执行文件。作者所说这个方法并不会对最终用户从App Store下载的包体积产生优化效果</p>
+</blockquote>
+<p>CPU架构对应设备：</p>
+<table>
+<thead>
+<tr>
+<th>CPU架构</th>
+<th>设备</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>armv7</td>
+<td>iPhone 3GS, iPhone 4, iPhone 4S</td>
+</tr>
+<tr>
+<td>armv7s</td>
+<td>iPhone 5, iPhone 5c</td>
+</tr>
+<tr>
+<td>arm64</td>
+<td>iPhone X，iPhone 8(Plus)，iPhone 7(Plus)，iPhone 6(Plus)，iPhone 6s(Plus), iPhone 5s</td>
+</tr>
+<tr>
+<td>arm64e</td>
+<td>iPhone XS及更新机型</td>
+</tr>
+</tbody>
+</table>
+<h2>Build Settings -&gt; Generate Debug Symbols</h2>
+<p>设置为NO。当这个选项为YES时，每个源文件在编译成.o文件时，编译参数多了-g和-gmodule，产生的.o文件会大，从而最终生成的可执行文件也就会变大。</p>
+<p>注意Generate Debug Symbols设置为NO时，在Xcode中设置的断点不会中断，即不能断点调试。且最后不能生成DSYM文件，即使Debug Information Format设置了，也不能生成，因为首先要有调试信息然后才能生成DSYM文件，而设置为NO，意味着不产生调试信息，所以也就没办法生成DSYM文件。所以建议不要设置。</p>
+<h2>Build Settings -&gt; Deployment Postprocessing</h2>
+<p>Deployment Postprocessing是Strip配置的总开关。只有这个设置为YES之后，下面的Strip Linked Product、Strip Debug Symbols During Copy的设置才会生效。</p>
+<p><img alt="Deployment-Postprocessing" src="/images/2021/Deployment-Postprocessing.png"></p>
+<h3>Build Settings -&gt; Strip Linked Product</h3>
+<p>对最后生成的二进制文件进行strip，去除不必要的符号信息，Release下可以为YES。官方解释：</p>
+<blockquote>
+<p>Strip Linked Product (STRIP_INSTALLED_PRODUCT), If enabled, the linked product of the build will be stripped of symbols when performing deployment postprocessing.</p>
+</blockquote>
+<p>关闭之后，无法产生符号文件。</p>
+<h3>Build Settings -&gt; Strip Debug Symbols During Copy</h3>
+<p>文件拷贝编译阶段是否进行strip，设置为YES之后，会把拷贝进项目包的三方库、资源或者Extension的Debug Symbol去除。</p>
+<h3>Build Settings -&gt; Symbols Hidden by Default</h3>
+<p>会把所有符号都定义成"private extern"，移除符号信息。官方解释：</p>
+<blockquote>
+<p>Symbols Hidden by Default (GCC_SYMBOLS_PRIVATE_EXTERN), When enabled, all symbols are declared private extern unless explicitly marked to be exported using <strong>attribute</strong>((visibility("default"))) in code. If not enabled, all symbols are exported unless explicitly marked as private extern. See Controlling Symbol Visibility in C++ Runtime Environment Programming Guide.</p>
+</blockquote>
+<h3>Build Settings -&gt; Make Strings Read-Only</h3>
+<p>复用字符串字面量</p>
+<h3>Build Settings -&gt; Dead Code Stripping</h3>
+<p>消除无效代码，C/C++/Swift 等静态语言编译器会在 link 的时候移除未使用的代码，对于OC等动态语言是无效的</p>
+<h2>Pod优化</h2>
+<p>如果项目是OC的，但CocoaPod中有使用了Swift库，打开了use_frameworks!，可以优化为针对单个Swift库使用use_frameworks!而不是全部第三方库都使用。代码如下：</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Podfile*</span>
+*# 下面的这行代码还是打开，不需要注释掉*
+ use_frameworks!
+*# 之前的其它代码*
+*# 然后添加下面的代码，xxx是要打包成framework的库*
+<span class="nv">dynamic_frameworks</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;xxx&#39;</span><span class="o">]</span>
+pre_install <span class="k">do</span> <span class="p">|</span>installer<span class="p">|</span>
+  installer.pod_targets.each <span class="k">do</span> <span class="p">|</span>pod<span class="p">|</span>
+    <span class="k">if</span> !dynamic_frameworks.include?<span class="o">(</span>pod.name<span class="o">)</span>
+      def pod.static_framework?<span class="p">;</span>
+       <span class="nb">true</span>
+      end
+      def pod.build_type<span class="p">;</span>
+        Pod::BuildType.static_library
+      end
+    end
+  end
+end
+</code></pre></div>
+
+
+<p>在OC的项目中，Podfile如果引用了Swift的第三方库，一般都会直接打开use_frameworks!，对应的Pod中所有的库都会打包成动态库，以及Swift和OC库的依赖问题会导致依赖库增加，会造成包体积增大。</p>
+<p>注意：Podfile按照上面的修改了之后，需要重新使用Pod install命令更新，然后编译时可能会有报错。</p>
+<h2>Asset Catalog Compiler编译设置优化</h2>
+<p>Build Settings -&gt; Asset Catalog Compiler - Options 中Optimization改为space</p>
+<p>这个选项可以改变actool在构建Assets.car时选取的编码压缩算法，减少包大小。可以使用下面的命令检查Assets.car中图片的编码压缩算法:</p>
+<div class="highlight"><pre><span></span><code>// 可以把对应信息生成.json文件，用于对比不同
+ xcrun --sdk iphoneos assetutil --info Assets.car &gt; Assets.json
+</code></pre></div>
+
+
+<p>对比查看信息如下，可发现压缩的算法不同，占用空间的大小也不同:</p>
+<p><img alt="Asset-Catalog-Compiler" src="/images/2021/Asset-Catalog-Compiler.png"></p>
+<h2>Build Settins -&gt; Optimization Level改为-Oz</h2>
+<p>Optimization Level默认为-Os，-Oz是Xcode 11之后才出现的编译优化选项，核心原理是对重复的连续机器指令外联成函数进行复用，因此开启Oz，能减少二进制的大小，但同时会带来执行效率的额外消耗。可参考What's New in Clang and LLVM</p>
+<p>苹果给出了Optimization Level各参数优化的选择对比，如下图，对于性能要求高的，建议选择-O2和-O3，对于包大小敏感的，可选择-Os和-Oz，默认-Os是性能和大小平衡比较好的。最终选择什么，需要读者根据自己实际项目而定。</p>
+<p><img alt="Code-Generate-Options" src="/images/2021/Code-Generate-Options.png"></p>
+<h1>资源文件优化</h1>
+<p>资源文件的优化分为两部分，即：无用资源的删除、已用资源的压缩。</p>
+<p>无用资源的删除：</p>
+<ul>
+<li>
+<p>已定义未使用的代码文件</p>
+</li>
+<li>
+<p>已废弃业务，代码还在</p>
+</li>
+<li>
+<p>已引用的图片但未使用</p>
+</li>
+<li>
+<p>某些重复资源导入</p>
+</li>
+</ul>
+<p>已用资源的压缩：</p>
+<ul>
+<li>项目中引入图片、网页、json、音频等文件的压缩</li>
+</ul>
+<h2>无用资源的删除</h2>
+<p>一是预防，一是治理。笔者个人感觉预防比治理更重要。</p>
+<h3>预防</h3>
+<p>产品和开发之间的信息不对等，会导致业务相关的冗余，产品知道具体业务的数据，而开发不清楚，所以可以通过定期同步给开发，让开发也能了解到对应业务是否活跃，从而及时对项目进行优化。</p>
+<p>开发之间的信息不对等，会导致各自开发自己的，重复造轮子，所以可以通过建立公共文档，开发的流程规范、项目使用第三方库的规范、设计规范、代码规范都列举出来，每个人都能根据对应的文档了解到对应项目的信息，每个人开发都应该有一套统一的标准。这样就可以避免一人一套代码的问题。</p>
+<h3>治理</h3>
+<h4>针对无用资源的删除</h4>
+<ul>
+<li>已定义未使用的代码</li>
+</ul>
+<p>可使用AppCode进行分析，打开AppCode，待索引完成后，选择顶部菜单中的Code-&gt;Inspect Code，然后选择范围，whole Project点击OK，等待AppCode静态分析即可。静态分析完以后，可以在Unused code里看到所有的无用代码。</p>
+<p>AppCode静态分析结果出来之后，删除前要经过确认，因为静态分析的结果可能会有误差，比如针对performSelector调用的方法就会被检测为没有调用。</p>
+<ul>
+<li>已废弃业务，代码还在</li>
+<li>已引入未使用图片</li>
+</ul>
+<p>推荐使用工具LSUnusedResources，原理大致是遍历资源目录下后缀 ["imageset", "jpg", "png"...] 的文件，然后在源文件 ["m", "swift", "xib", "storyboard"...] 中字符串匹配，无匹配则是无用的资源文件。</p>
+<ul>
+<li>
+<p>某些重复资源的导入</p>
+</li>
+<li>
+<p>针对第三方SDK</p>
+<p>项目中功能类似的SDK建议保留一个，比如埋点统计的友盟、TalkingData等，线上日志分析的听云、Bugly等，又或者网络请求、UI布局的类库，建议分析相同功能的类库，结合实际情况，保留一个即可；另外，有些第三方类库导入时，可只导入实际使用的部分，不需全量导入，也是可以优化的地方。</p>
+</li>
+<li>
+<p>针对项目文件</p>
+<p>使用 fdupes 工具进行重复文件扫描，原理是：通过校验所有资源的 MD5，筛选出项目中的重复资源，文件比较顺序是大小对比 &gt; 部分 MD5 签名对比 &gt; 完整 MD5 签名对比 &gt; 逐字节对比。</p>
+</li>
+</ul>
+<h4>已用资源的压缩</h4>
+<ul>
+<li>项目中引入图片、网页、json、音频等文件的压缩</li>
+</ul>
+<p>网页的压缩指的是，放入APP资源中的js文件，最好是经过H5端压缩后的。</p>
+<p>json文件的压缩，如果不是打开APP时马上要用到的数据，可采取把对应资源放到服务端，下载后使用。</p>
+<p>音频文件的压缩，则是在可接受的范围之内，选择系统可支持的压缩比率高的格式。</p>
+<p>而最需要注意的是图片的压缩，图片的压缩，分为几个部分：</p>
+<ul>
+<li>
+<p>Compress PNG Files
+  打包的时候自动对图片进行无损压缩</p>
+</li>
+<li>
+<p>Remove Text Medadata From PNG Files
+  移除 PNG 资源的文本字符</p>
+</li>
+<li>
+<p>resource_bundles：允许定义当前 Pod 库的资源包的名称和文件。用 hash 的形式来声明，key 是 bundle 的名称，value 是需要包括的文件的通配 patterns。CocoaPods 官方强烈推荐使用 resource_bundles，因为用 key-value 可以避免相同名称资源的名称冲突。同时建议 bundle 的名称至少应该包括 Pod 库的名称，可以尽量减少同名冲突。使用resource_bundles会为指定的资源打一个.bundle，所以获取图片时要注意指定bundle的位置：</p>
+</li>
+<li>
+<p>resources：使用 resources 来指定资源，被指定的资源只会简单的被 copy 到目标工程中（主工程）。官方认为用 resources 是无法避免同名资源文件的冲突的，同时，Xcode 也不会对这些资源做优化。</p>
+</li>
+<li>
+<p>单色图标、简单的功能图标，建议使用IconFont，矢量图标库的格式，既能统一规范格式，又能减少资源文件大小。圆角和阴影图片尽量代码实现。</p>
+</li>
+<li>
+<p>针对普通图片，可以调用tinyPNG API进行压缩，这里可以使用笔者之前修改的脚本BatchProcessImage，调用的是tinyPNG的API可以一次性压缩500张图片，而且只需要指定项目目录，会自动压缩后替换原来的图片，不需要手动导入导出图片。使用可参考链接BatchProcessImage，需要注意的是注意python版本，python3和python，以及pip3和pip的选择，安装依赖库的时候使用的哪个python版本，最后调用的脚本命令的时候就要用对应的python版本。</p>
+</li>
+<li>放入xcassets里的2x和3x图片，在上传时，会根据具体设备分开对应分辨率的图片，不会同时包含。而放入Bundle中的都会包含。所以要尽量把图片放入xcassets中。但是，根据抖音品质建设 - iOS 安装包大小优化实践篇中介绍的，Assets.car编译过程中有时会选择一些图片，拼凑成一张大图来提高图片的加载效率。被放进这张大图的小图会变为通过偏移量的引用，建议使用频率高且小的图片放到Asset.car中，Asset.car能保证加载和渲染速度最优。但是大的图片（大于100K）就不要放入Asset.car中了。大的图片可以考虑将图片转成WebP。WebP是Google公司的一个开源项目，能够把图片压缩到很小，但是肉眼看不出来差别，目前iOS常用的图片显示类库都用支持该格式解析的拓展。可使用iSparta进行批量转换。</li>
+<li>私有Pod库中的资源文件，建议在Pod库里面的Resource目录下新建Asset Catalog文件，命名为Images.xcassets，私有库使用的图片放入这里，然后手动修改该SDK的podspec，指定resource_bundles使用Images.xcassets</li>
+</ul>
+<div class="highlight"><pre><span></span><code>s.resource_bundles <span class="o">=</span> <span class="o">{</span>
+        <span class="s1">&#39;xxsdk&#39;</span> <span class="o">=</span>&gt; <span class="o">[</span><span class="s1">&#39;xxx/Assets/.../*.xcassets&#39;</span><span class="o">]</span>
+    <span class="o">}</span>
+</code></pre></div>
+
+
+<p>最后，是Xcode中关于图片压缩的设置，有时候压缩了图片之后，发现包大小并没有改变太多，可能是因为Xcode的Compress PNG Files选项的原因。建议如果自己对图片进行了压缩，就可以把Xcode的Compress PNG Files设置为NO。</p>
+<ol>
+<li>最后，是Xcode中关于图片压缩的设置，有时候压缩了图片之后，发现包大小并没有改变太多，可能是因为Xcode的Compress PNG Files选项的原因。建议如果自己对图片进行了压缩，就可以把Xcode的Compress PNG Files设置为NO。</li>
+</ol>
+<p><img alt="Resource-File" src="/images/2021/Resource-File.png"></p>
+            </div>
+            <!-- /.entry-content -->
+    <hr/>
+    <section class="comments" id="comments">
+        <h2>Comments</h2>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
+
+            var disqus_config = function () {
+                this.language = "zh";
+
+                        this.page.identifier = '2021-06-15-xue-xi-bi-ji-zheng-jing-fen-xi-iosbao-da-xiao-you-hua';
+            };
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+            Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </section>
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+<!-- Sidebar -->
+<section class="well well-sm">
+  <ul class="list-group list-group-flush">
+
+<!-- Sidebar/Social -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+  <ul class="list-group" id="social">
+    <li class="list-group-item"><a href="https://www.linkedin.com/in/chao-jing-8470a895/"><i class="fa fa-linkedin-square fa-lg"></i> LinkedIn</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Social -->
+
+<!-- Sidebar/Recent Posts -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
+  <ul class="list-group" id="recentposts">
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-zheng-jing-fen-xi-iosbao-da-xiao-you-hua.html">【学习笔记】正经分析iOS包大小优化</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-shou-ba-shou-jiao-ni-debug-ios-14-imageio-crash-fen-xi.html">【学习笔记】手把手教你 Debug — iOS 14 ImageIO Crash 分析</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-harmonyosdao-di-shi-bu-shi-androidtao-pi.html">【学习笔记】HarmonyOS到底是不是Android套皮？</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-ji-zhi-shou-zheng-bo-fang-fang-an-ling-shou-zheng-jie-jue-fang-an.html">【学习笔记】极致首帧播放方案 - 零首帧解决方案</a></li>
+    <li class="list-group-item"><a href="/fan-yi-shi-yong-metrickitjian-kong-iosru-men.html">【翻译】使用MetricKit监控iOS：入门</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Recent Posts -->
+
+<!-- Sidebar/Categories -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Categories</span></h4>
+  <ul class="list-group" id="categories">
+    <li class="list-group-item">
+      <a href="/category/blog.html"><i class="fa fa-folder-open fa-lg"></i>Blog</a>
+    </li>
+    <li class="list-group-item">
+      <a href="/category/fan-yi.html"><i class="fa fa-folder-open fa-lg"></i>翻译</a>
+    </li>
+    <li class="list-group-item">
+      <a href="/category/xue-xi-bi-ji.html"><i class="fa fa-folder-open fa-lg"></i>学习笔记</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Categories -->
+
+<!-- Sidebar/Tag Cloud -->
+<li class="list-group-item">
+  <a href="/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
+  <ul class="list-group " id="tags">
+    <li class="list-group-item tag-1">
+      <a href="/tag/xing-neng.html">性能</a>
+    </li>
+    <li class="list-group-item tag-1">
+      <a href="/tag/ios.html">iOS</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/crash.html">Crash</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/harmonyos.html">HarmonyOS</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/jian-kong.html">监控</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/yin-shi-pin.html">音视频</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/git.html">git</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/bao-ti-ji.html">包体积</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Tag Cloud -->
+
+<!-- Sidebar/Links -->
+<li class="list-group-item">
+  <h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+  <ul class="list-group" id="links">
+    <li class="list-group-item">
+      <a href="http://hutaow.com/" target="_blank">胡桃夹子</a>
+    </li>
+    <li class="list-group-item">
+      <a href="http://wenzhong.me/" target="_blank">Wenzhong's Playground</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Links -->
+  </ul>
+</section>
+<!-- End Sidebar -->            </aside>
+        </div>
+    </div>
+</div>
+<!-- End Content Container -->
+
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2021 荆超
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="/theme/js/respond.min.js"></script>
+
+
+    <!-- Disqus -->
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <!-- End Disqus Code -->
+
+
+</body>
+</html>
