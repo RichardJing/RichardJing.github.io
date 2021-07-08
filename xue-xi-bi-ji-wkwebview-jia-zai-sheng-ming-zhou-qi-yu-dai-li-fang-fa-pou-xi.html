@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>【学习笔记】WKWebView 加载生命周期与代理方法剖析 - 荆超的小站</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="/xue-xi-bi-ji-wkwebview-jia-zai-sheng-ming-zhou-qi-yu-dai-li-fang-fa-pou-xi.html">
+
+        <meta name="author" content="荆超" />
+        <meta name="keywords" content="浏览器,iOS" />
+        <meta name="description" content="结合WKNavigationDelegate分析WebKit源码" />
+
+        <meta property="og:site_name" content="荆超的小站" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="【学习笔记】WKWebView 加载生命周期与代理方法剖析"/>
+        <meta property="og:url" content="/xue-xi-bi-ji-wkwebview-jia-zai-sheng-ming-zhou-qi-yu-dai-li-fang-fa-pou-xi.html"/>
+        <meta property="og:description" content="结合WKNavigationDelegate分析WebKit源码"/>
+        <meta property="article:published_time" content="2021-07-08" />
+            <meta property="article:section" content="学习笔记" />
+            <meta property="article:tag" content="浏览器" />
+            <meta property="article:tag" content="iOS" />
+            <meta property="article:author" content="荆超" />
+
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css"/>
+    <link href="/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
+
+
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="/" class="navbar-brand">
+荆超的小站            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+
+<!-- Banner -->
+<!-- End Banner -->
+
+<!-- Content Container -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="/xue-xi-bi-ji-wkwebview-jia-zai-sheng-ming-zhou-qi-yu-dai-li-fang-fa-pou-xi.html"
+                       rel="bookmark"
+                       title="Permalink to 【学习笔记】WKWebView 加载生命周期与代理方法剖析">
+                        【学习笔记】WKWebView 加载生命周期与代理方法剖析
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2021-07-08T00:00:00+08:00"> 四 08 七月 2021</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="/tag/liu-lan-qi.html">浏览器</a>
+        /
+	<a href="/tag/ios.html">iOS</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <blockquote>
+<p>本文为学习笔记，并非原创。<a href="https://mp.weixin.qq.com/s/ZFui9IiMTWyLXGKZlbnzwQ">原文链接</a></p>
+</blockquote>
+<h1>iOS端WebKit加载框架</h1>
+<p><img alt="firset frame" src="/images/2021/iOS-WebKit-Processes.png"></p>
+<ul>
+<li><strong>NetProcess进程：</strong>主要负责<strong>网络请求加载</strong>，所有的网页共享这一进程。通过<code>NSURLSession</code>发起并管理网络请求。与原生开发不同的是，这一过程中有较多的网络进度的回调工作以及各类网络协议管理，比如资源缓存协议、HSTS 协议、cookie 管理协议等。</li>
+<li><strong>WebContent进程：</strong>主要负责页面资源的管理，包括前进后退历史、pageCache、页面资源的解析和渲染。并把该进程中的各类事件通过代理方式通知给<code>UIProcess</code>。</li>
+<li><strong>UIProcess进程：</strong>主要负责与<strong>WebContent进行交互</strong>，与APP在同一进程中，可以进行WebView的功能配置，并接收来自 <code>WebContent</code> 进程的各类消息，配合业务代码执行任务的决策，例如是否发起请求，是否接受响应等。</li>
+</ul>
+<h1>iOS端WebKit加载流程</h1>
+<p>使用如下方法，从 <code>UIProcess</code> 层通过<code>loadReqeust</code> 方法发起页面加载请求（此处 request 只能是 get 请求，如果配置为 post 请求，WebKit 内核基于性能考虑，在跨进程传输时，会将 body 数据丢弃，导致异常）。</p>
+<div class="highlight"><pre><span></span><code><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">webView</span> <span class="nl">loadRequest</span><span class="p">:</span><span class="n">request</span><span class="p">];</span>
+</code></pre></div>
+
+
+<p>通过跟踪 <code>WebKit</code> 源码，我们提取核心步骤如下：</p>
+<ol>
+<li><code>UIProcess</code> 中的<code>loadRequest</code> 首先会触发 <code>NetworkProcess</code>进程创建，然后通过进程间通信的方式将 <code>request</code> 发送给 <code>NetworkProcess</code> 进程进行<code>preconnect</code> 预链接操作，通过网络三次握手建立 TCP 链接，以便加快后续网络资源请求速度。</li>
+<li><code>UIProcess</code> 通过进程间通信的方式将 <code>request</code> 发送给 <code>WebContent</code> 进程，<code>WebContent</code> 进程创建 <code>DocumentLoader</code> 加载器加载网络请求，并取消上个页面的所有还在加载的请求，然后通过字典绑定当前页面ID与创建好的<code>NetworkProcss</code> 进程（便于服务端数据返回时，查找数据回填所对应的页面），最终将请求交付给 <code>NetworkProcess</code> 中的 <code>NSURLSession</code> 进行处理。</li>
+<li><code>NetworkProcess</code> 通过 <code>NSURLSession</code> 复用之前 <code>preconnect</code> 预链接，继续进行网络加载，此时等待网络请求返回，网络层会继续将数据通过进程间通信方式传输给 <code>WebContent</code> 进程进行处理，开始流式进行数据解析，一边接收一边处理，进行词法分析、语法分析，并在这一过程中加载解析出来的 JS、CSS、图片、字体等子资源，最终动态的生成（DOM 树与 CSSOM 树合成）渲染树，在这一过程中，每次接受到新数据导致渲染树有变更后，就会触发一次 <code>checkAndDispatchDidReachVisuallyNonEmptyState</code> 方法，检查当前页面是否达到上屏状态，若达到上屏状态就进行上屏渲染。</li>
+</ol>
+<p>达到上屏状态的条件如下：</p>
+<ol>
+<li>返回的数据中包含普通文本文字，那只需要达到非空200字节即可以触发上屏渲染；</li>
+<li>如果返回的 数据是<strong>图片资源类</strong>，则判断像素大小 &gt; 32*32，即可触发上屏渲染；</li>
+<li>如果返回的 data 是<strong>图片资源类</strong>，则判断像素大小 &gt; 32*32，即可触发上屏渲染。</li>
+</ol>
+<p><img alt="firset frame" src="/images/2021/浏览器渲染过程.png"></p>
+<h1>加载生命周期代理方法</h1>
+<h2>WKNavigationDelegate 方法简介</h2>
+<div class="highlight"><pre><span></span><code><span class="k">@protocol</span> <span class="bp">WKNavigationDelegate</span> <span class="o">&lt;</span><span class="bp">NSObject</span><span class="o">&gt;</span>
+
+<span class="k">@optional</span>
+<span class="c1">// 请求之前，决定是否要跳转:用户点击网页上的链接，需要打开新页面时，将先调用这个方法。</span>
+<span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">webView</span><span class="p">:(</span><span class="bp">WKWebView</span> <span class="o">*</span><span class="p">)</span><span class="n">webView</span> <span class="nl">decidePolicyForNavigationAction</span><span class="p">:(</span><span class="bp">WKNavigationAction</span> <span class="o">*</span><span class="p">)</span><span class="n">navigationAction</span> <span class="nl">decisionHandler</span><span class="p">:(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">WKNavigationActionPolicy</span><span class="p">))</span><span class="n">decisionHandler</span><span class="p">;</span> 
+
+<span class="c1">// 页面开始加载时调用</span>
+<span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">webView:</span><span class="p">(</span><span class="bp">WKWebView</span> <span class="o">*</span><span class="p">)</span><span class="nv">webView</span> <span class="nf">didStartProvisionalNavigation:</span><span class="p">(</span><span class="n">null_unspecified</span> <span class="bp">WKNavigation</span> <span class="o">*</span><span class="p">)</span><span class="nv">navigation</span><span class="p">;</span> 
+
+<span class="c1">// 接收到响应数据后，决定是否跳转</span>
+<span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">webView:</span><span class="p">(</span><span class="bp">WKWebView</span> <span class="o">*</span><span class="p">)</span><span class="nv">webView</span> <span class="nf">decidePolicyForNavigationResponse:</span><span class="p">(</span><span class="bp">WKNavigationResponse</span> <span class="o">*</span><span class="p">)</span><span class="nv">navigationResponse</span> <span class="nf">decisionHandler:</span><span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">WKNavigationResponsePolicy</span><span class="p">))</span><span class="nv">decisionHandler</span><span class="p">;</span> 
+
+<span class="c1">// 主机地址被重定向时调用</span>
+<span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">webView:</span><span class="p">(</span><span class="bp">WKWebView</span> <span class="o">*</span><span class="p">)</span><span class="nv">webView</span> <span class="nf">didReceiveServerRedirectForProvisionalNavigation:</span><span class="p">(</span><span class="n">null_unspecified</span> <span class="bp">WKNavigation</span> <span class="o">*</span><span class="p">)</span><span class="nv">navigation</span><span class="p">;</span> 
+
+<span class="c1">// 当开始加载主文档数据失败时调用</span>
+<span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">webView:</span><span class="p">(</span><span class="bp">WKWebView</span> <span class="o">*</span><span class="p">)</span><span class="nv">webView</span> <span class="nf">didFailProvisionalNavigation:</span><span class="p">(</span><span class="n">null_unspecified</span> <span class="bp">WKNavigation</span> <span class="o">*</span><span class="p">)</span><span class="nv">navigation</span> <span class="nf">withError:</span><span class="p">(</span><span class="bp">NSError</span> <span class="o">*</span><span class="p">)</span><span class="nv">error</span><span class="p">;</span> 
+
+<span class="c1">// 当内容开始返回时调用</span>
+<span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">webView:</span><span class="p">(</span><span class="bp">WKWebView</span> <span class="o">*</span><span class="p">)</span><span class="nv">webView</span> <span class="nf">didCommitNavigation:</span><span class="p">(</span><span class="n">null_unspecified</span> <span class="bp">WKNavigation</span> <span class="o">*</span><span class="p">)</span><span class="nv">navigation</span><span class="p">;</span> 
+
+<span class="c1">// 页面加载完毕时调用</span>
+<span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">webView:</span><span class="p">(</span><span class="bp">WKWebView</span> <span class="o">*</span><span class="p">)</span><span class="nv">webView</span> <span class="nf">didFinishNavigation:</span><span class="p">(</span><span class="n">null_unspecified</span> <span class="bp">WKNavigation</span> <span class="o">*</span><span class="p">)</span><span class="nv">navigation</span><span class="p">;</span> 
+
+<span class="c1">// 当主文档已committed时，如果发生错误将进行调用</span>
+<span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">webView:</span><span class="p">(</span><span class="bp">WKWebView</span> <span class="o">*</span><span class="p">)</span><span class="nv">webView</span> <span class="nf">didFailNavigation:</span><span class="p">(</span><span class="n">null_unspecified</span> <span class="bp">WKNavigation</span> <span class="o">*</span><span class="p">)</span><span class="nv">navigation</span> <span class="nf">withError:</span><span class="p">(</span><span class="bp">NSError</span> <span class="o">*</span><span class="p">)</span><span class="nv">error</span><span class="p">;</span> 
+
+<span class="c1">// 如果需要证书验证，进行验证，一般使用默认证书策略即可 </span>
+<span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">webView:</span><span class="p">(</span><span class="bp">WKWebView</span> <span class="o">*</span><span class="p">)</span><span class="nv">webView</span> <span class="nf">didReceiveAuthenticationChallenge:</span><span class="p">(</span><span class="bp">NSURLAuthenticationChallenge</span> <span class="o">*</span><span class="p">)</span><span class="nv">challenge</span> <span class="nf">completionHandler:</span><span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">NSURLSessionAuthChallengeDisposition</span> <span class="n">disposition</span><span class="p">,</span> <span class="bp">NSURLCredential</span> <span class="o">*</span><span class="n">__nullable</span> <span class="n">credential</span><span class="p">))</span><span class="nv">completionHandler</span><span class="p">;</span> 
+
+<span class="c1">// 9.0才能使用，web内容处理中断时会触发，可针对该情况进行reload操作，可解决部分白屏问题 </span>
+<span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">webViewWebContentProcessDidTerminate:</span><span class="p">(</span><span class="bp">WKWebView</span> <span class="o">*</span><span class="p">)</span><span class="nv">webView</span> <span class="n">NS_AVAILABLE</span><span class="p">(</span><span class="mi">10</span><span class="n">_11</span><span class="p">,</span> <span class="mi">9</span><span class="n">_0</span><span class="p">);</span> 
+
+<span class="k">@end</span>
+</code></pre></div>
+
+
+<p><img alt="firset frame" src="/images/2021/WKNavigationDelegate代理方法调用流程.png"></p>
+<h3>decidePolicyForNavigationAction 剖析</h3>
+<p>当 <code>WebContent</code> 即将创建<code>DocumentLoader</code> 加载器时，会首先触发 <code>decidePolicyForNavigationAction</code> 代理方法。如果我们选择 <code>cancel</code> ,那么浏览内核会完全忽略这一操作，后续也不再继续执行其他操作，我们可以放心的使用 <code>cancel</code> 取消掉我们不想加载的主文档请求，而无需担忧任何异常。但当我们选择 <code>alllow</code> 后，我们会进入一个稍微复杂的逻辑判断，内核代码首先判断该该链接是否是 <code>universalLink</code> 类型的链接，如果判断是 <code>universalLink</code> 类型的链接，会尝试去调起三方 app，如果能调起，则会 <code>cancel</code> 当前请求，否则才会走到正常的网络加载逻辑（如果需要统计 <code>universalLink</code> 调起情况与或建设屏蔽能力，可以再仔细阅读该处源码）。</p>
+<h3>didStartProvisionalNavigation 理解</h3>
+<p><code>decidePolicyForNavigationAction</code> 方法中选择 <code>allow</code> 并且判断为非 <code>universalLink</code> 链接后，会立即触发 <code>didStartProvisionalNavigation</code> 方法，表示即将开始加载主文档。这个方法看似只是对 decidePolicyForNavigationAction 方法的确认，但是值得思考的问题是方法名中的 Provisional 究竟是什么意思。其实，页面开始页面加载后为了更好的区分加载的各阶段，会将网络加载的初始阶段命名为临时状态，此时的页面是不会记入历史的，直到接收到<strong>首个数据包</strong>，才会对当前页面进行 <code>committed</code> 提交，并触发<code>didCommitNavigation</code> 方法通知 <code>UIProcess</code> 进程该事件，同时将网络 data 提交给 <code>WebContent</code> 进行渲染树生成。我们可由此引申出下一个问题，即 <code>didFailProvisionalNavigation</code> 与 <code>didFailNavigation</code> 的关系。</p>
+<h3>didFailProvisionalNavigation 与 didFailNavigation 的分别在什么时候执行？他们之间有什么关系？</h3>
+<p>当 <code>NetworkProcess</code> 进程发生网络错误时，错误首先由<code>NSURLSession</code> 回调到 <code>WebContent</code> 层。<code>WebContent</code> 会判断当前主文档加载状态，如果处于临时态，则错误会回调给 <code>didFailProvisionalNavigation</code> 方法；如果处于提交态，则错误会回调给 <code>didFailNavigation</code> 方法。</p>
+<p><img alt="firset frame" src="/images/2021/主文档加载状态图.png"></p>
+<h3>didFinishNavigation 究竟什么时候执行？与页面上屏是否有关？</h3>
+<p>在上面的描述中，我们已经理解了 <code>NetworkProcess</code> 层也是使用 <code>NSURLSession</code> 加载主文档的。当<code>NSURLSession</code> 接收到 <code>finish</code> 事件时，会将该消息通过进程通信方式传递给 <code>WebContent</code> 进程，<code>WebContent</code> 进程再传递给 <code>UIProcess</code> 进程，直到被我们的代理方法响应。因此<code>didFinishNavigation</code> 在 <code>NSURLSession</code> 的网络加载结束时就会触发，但因为跨了两次进程通信，因此对比网络层，实际上是有一定的延迟的。与子资源加载和页面上屏无时间先后关系。</p>
+            </div>
+            <!-- /.entry-content -->
+    <hr/>
+    <section class="comments" id="comments">
+        <h2>Comments</h2>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
+
+            var disqus_config = function () {
+                this.language = "zh";
+
+                        this.page.identifier = '2021-07-08-xue-xi-bi-ji-wkwebview-jia-zai-sheng-ming-zhou-qi-yu-dai-li-fang-fa-pou-xi';
+            };
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+            Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </section>
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+<!-- Sidebar -->
+<section class="well well-sm">
+  <ul class="list-group list-group-flush">
+
+<!-- Sidebar/Social -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+  <ul class="list-group" id="social">
+    <li class="list-group-item"><a href="https://www.linkedin.com/in/chao-jing-8470a895/"><i class="fa fa-linkedin-square fa-lg"></i> LinkedIn</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Social -->
+
+<!-- Sidebar/Recent Posts -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
+  <ul class="list-group" id="recentposts">
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-wkwebview-jia-zai-sheng-ming-zhou-qi-yu-dai-li-fang-fa-pou-xi.html">【学习笔记】WKWebView 加载生命周期与代理方法剖析</a></li>
+    <li class="list-group-item"><a href="/iosji-zhu-wen-zhang-lie-biao.html">iOS技术文章列表</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-zheng-jing-fen-xi-iosbao-da-xiao-you-hua.html">【学习笔记】正经分析iOS包大小优化</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-shou-ba-shou-jiao-ni-debug-ios-14-imageio-crash-fen-xi.html">【学习笔记】手把手教你 Debug — iOS 14 ImageIO Crash 分析</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-harmonyosdao-di-shi-bu-shi-androidtao-pi.html">【学习笔记】HarmonyOS到底是不是Android套皮？</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Recent Posts -->
+
+<!-- Sidebar/Categories -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Categories</span></h4>
+  <ul class="list-group" id="categories">
+    <li class="list-group-item">
+      <a href="/category/blog.html"><i class="fa fa-folder-open fa-lg"></i>Blog</a>
+    </li>
+    <li class="list-group-item">
+      <a href="/category/fan-yi.html"><i class="fa fa-folder-open fa-lg"></i>翻译</a>
+    </li>
+    <li class="list-group-item">
+      <a href="/category/wen-zhang-lie-biao.html"><i class="fa fa-folder-open fa-lg"></i>文章列表</a>
+    </li>
+    <li class="list-group-item">
+      <a href="/category/xue-xi-bi-ji.html"><i class="fa fa-folder-open fa-lg"></i>学习笔记</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Categories -->
+
+<!-- Sidebar/Tag Cloud -->
+<li class="list-group-item">
+  <a href="/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
+  <ul class="list-group " id="tags">
+    <li class="list-group-item tag-1">
+      <a href="/tag/ios.html">iOS</a>
+    </li>
+    <li class="list-group-item tag-2">
+      <a href="/tag/xing-neng.html">性能</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/harmonyos.html">HarmonyOS</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/bao-ti-ji.html">包体积</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/git.html">git</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/yin-shi-pin.html">音视频</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/crash.html">Crash</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/liu-lan-qi.html">浏览器</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/jian-kong.html">监控</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Tag Cloud -->
+
+<!-- Sidebar/Links -->
+<li class="list-group-item">
+  <h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+  <ul class="list-group" id="links">
+    <li class="list-group-item">
+      <a href="http://hutaow.com/" target="_blank">胡桃夹子</a>
+    </li>
+    <li class="list-group-item">
+      <a href="http://wenzhong.me/" target="_blank">Wenzhong's Playground</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Links -->
+  </ul>
+</section>
+<!-- End Sidebar -->            </aside>
+        </div>
+    </div>
+</div>
+<!-- End Content Container -->
+
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2021 荆超
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="/theme/js/respond.min.js"></script>
+
+
+    <!-- Disqus -->
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <!-- End Disqus Code -->
+
+
+</body>
+</html>
