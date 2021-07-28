@@ -13,13 +13,13 @@
 
         <meta name="author" content="荆超" />
         <meta name="keywords" content="HarmonyOS" />
-        <meta name="description" content="本文为学习笔记，并非原创。原文链接 HarmonyOS分析 原作者通过分析HarmonyOS应用的构建产物，得出如下结论： 1.构建产物中，包含一个标准Android的apk文件。该apk内AndroidManifest.xml文件中做了两件事： 1）定义Application为ShellApplication 2）定义MainActivity为MainAbilityShellActivity 2.ShellApplication最终继承自Android的Application。 3.MainAbilityShellActivity继承自Android的Activity。 原作者认为鸿蒙的分布式软总线是一个私有RPC协议。通过OpenHarmony源码分析，分布式软总线主要有以下几个模块： 设备发现：采用了CoAP协议作为设备发现协议，通过在一个局域网内发送广播来实现。 数据传输：基于Session提供统一的数据传输功能。 设备认证与管理：主要是安全。 AceEngineLite：应该就是JS开发的Ability页面如何编译以及 在嵌入式设备上如何渲染的相关实现，这也许就是为什么HarmonyOS可以采用多种开发语言开发界面的关键所在。各种小程序、Flutter相关设计都是这样的，设计思想都是：自创UI框架以屏蔽系统差异。 原作者认为，HarmonyOS = Android - GMS + HMS + 分布式软总线 + 以Ability为核心的应用开发框架，用图表示 …" />
+        <meta name="description" content="本文为学习笔记，并非原创。原文链接，原文发表于2021-06-09 HarmonyOS分析 原作者通过分析HarmonyOS应用的构建产物，得出如下结论： 1.构建产物中，包含一个标准Android的apk文件。该apk内AndroidManifest.xml文件中做了两件事： 1）定义Application为ShellApplication 2）定义MainActivity为MainAbilityShellActivity 2.ShellApplication最终继承自Android的Application。 3.MainAbilityShellActivity继承自Android的Activity。 原作者认为鸿蒙的分布式软总线是一个私有RPC协议。通过OpenHarmony源码分析，分布式软总线主要有以下几个模块： 设备发现：采用了CoAP协议作为设备发现协议，通过在一个局域网内发送广播来实现。 数据传输：基于Session提供统一的数据传输功能。 设备认证与管理：主要是安全。 AceEngineLite：应该就是JS开发的Ability页面如何编译以及 在嵌入式设备上如何渲染的相关实现，这也许就是为什么HarmonyOS可以采用多种开发语言开发界面的关键所在。各种小程序、Flutter相关设计都是这样的，设计思想都是：自创UI框架以屏蔽系统差异。 原作者认为，HarmonyOS = Android - GMS + HMS + 分布式软总线 + 以Ability为核心的应用开发框架 …" />
 
         <meta property="og:site_name" content="荆超的小站" />
         <meta property="og:type" content="article"/>
         <meta property="og:title" content="【学习笔记】HarmonyOS到底是不是Android套皮？"/>
         <meta property="og:url" content="/xue-xi-bi-ji-harmonyosdao-di-shi-bu-shi-androidtao-pi.html"/>
-        <meta property="og:description" content="本文为学习笔记，并非原创。原文链接 HarmonyOS分析 原作者通过分析HarmonyOS应用的构建产物，得出如下结论： 1.构建产物中，包含一个标准Android的apk文件。该apk内AndroidManifest.xml文件中做了两件事： 1）定义Application为ShellApplication 2）定义MainActivity为MainAbilityShellActivity 2.ShellApplication最终继承自Android的Application。 3.MainAbilityShellActivity继承自Android的Activity。 原作者认为鸿蒙的分布式软总线是一个私有RPC协议。通过OpenHarmony源码分析，分布式软总线主要有以下几个模块： 设备发现：采用了CoAP协议作为设备发现协议，通过在一个局域网内发送广播来实现。 数据传输：基于Session提供统一的数据传输功能。 设备认证与管理：主要是安全。 AceEngineLite：应该就是JS开发的Ability页面如何编译以及 在嵌入式设备上如何渲染的相关实现，这也许就是为什么HarmonyOS可以采用多种开发语言开发界面的关键所在。各种小程序、Flutter相关设计都是这样的，设计思想都是：自创UI框架以屏蔽系统差异。 原作者认为，HarmonyOS = Android - GMS + HMS + 分布式软总线 + 以Ability为核心的应用开发框架，用图表示 …"/>
+        <meta property="og:description" content="本文为学习笔记，并非原创。原文链接，原文发表于2021-06-09 HarmonyOS分析 原作者通过分析HarmonyOS应用的构建产物，得出如下结论： 1.构建产物中，包含一个标准Android的apk文件。该apk内AndroidManifest.xml文件中做了两件事： 1）定义Application为ShellApplication 2）定义MainActivity为MainAbilityShellActivity 2.ShellApplication最终继承自Android的Application。 3.MainAbilityShellActivity继承自Android的Activity。 原作者认为鸿蒙的分布式软总线是一个私有RPC协议。通过OpenHarmony源码分析，分布式软总线主要有以下几个模块： 设备发现：采用了CoAP协议作为设备发现协议，通过在一个局域网内发送广播来实现。 数据传输：基于Session提供统一的数据传输功能。 设备认证与管理：主要是安全。 AceEngineLite：应该就是JS开发的Ability页面如何编译以及 在嵌入式设备上如何渲染的相关实现，这也许就是为什么HarmonyOS可以采用多种开发语言开发界面的关键所在。各种小程序、Flutter相关设计都是这样的，设计思想都是：自创UI框架以屏蔽系统差异。 原作者认为，HarmonyOS = Android - GMS + HMS + 分布式软总线 + 以Ability为核心的应用开发框架 …"/>
         <meta property="article:published_time" content="2021-06-09" />
             <meta property="article:section" content="学习笔记" />
             <meta property="article:tag" content="HarmonyOS" />
@@ -93,7 +93,7 @@
 </footer><!-- /.post-info -->                    </div>
                 </div>
                 <blockquote>
-<p>本文为学习笔记，并非原创。<a href="https://mp.weixin.qq.com/s/RkJ_2WLf7MTL-f-kAOGxAw">原文链接</a></p>
+<p>本文为学习笔记，并非原创。<a href="https://mp.weixin.qq.com/s/RkJ_2WLf7MTL-f-kAOGxAw">原文链接</a>，原文发表于2021-06-09</p>
 </blockquote>
 <h1>HarmonyOS分析</h1>
 <p>原作者通过分析HarmonyOS应用的构建产物，得出如下结论：</p>
@@ -255,28 +255,10 @@
       <a href="/tag/ios.html">iOS</a>
     </li>
     <li class="list-group-item tag-2">
-      <a href="/tag/xing-neng.html">性能</a>
-    </li>
-    <li class="list-group-item tag-2">
       <a href="/tag/wang-luo.html">网络</a>
     </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/xcode.html">Xcode</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/cocoa.html">Cocoa</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/jian-kong.html">监控</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/crash.html">Crash</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/git.html">git</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/yin-shi-pin.html">音视频</a>
+    <li class="list-group-item tag-2">
+      <a href="/tag/xing-neng.html">性能</a>
     </li>
     <li class="list-group-item tag-4">
       <a href="/tag/gong-ju.html">工具</a>
@@ -288,7 +270,25 @@
       <a href="/tag/bao-ti-ji.html">包体积</a>
     </li>
     <li class="list-group-item tag-4">
+      <a href="/tag/xcode.html">Xcode</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/jian-kong.html">监控</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/cocoa.html">Cocoa</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/yin-shi-pin.html">音视频</a>
+    </li>
+    <li class="list-group-item tag-4">
       <a href="/tag/liu-lan-qi.html">浏览器</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/git.html">git</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/crash.html">Crash</a>
     </li>
   </ul>
 </li>

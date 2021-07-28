@@ -96,7 +96,7 @@
 </footer><!-- /.post-info -->                    </div>
                 </div>
                 <blockquote>
-<p>本文为学习笔记，并非原创。<a href="https://mp.weixin.qq.com/s/ZFui9IiMTWyLXGKZlbnzwQ">原文链接</a></p>
+<p>本文为学习笔记，并非原创。<a href="https://mp.weixin.qq.com/s/ZFui9IiMTWyLXGKZlbnzwQ">原文链接</a>，原文发表于2021-07-06</p>
 </blockquote>
 <h1>iOS端WebKit加载框架</h1>
 <p><img alt="firset frame" src="/images/2021/iOS-WebKit-Processes.png"></p>
@@ -121,7 +121,7 @@
 <ol>
 <li>返回的数据中包含普通文本文字，那只需要达到非空200字节即可以触发上屏渲染；</li>
 <li>如果返回的 数据是<strong>图片资源类</strong>，则判断像素大小 &gt; 32*32，即可触发上屏渲染；</li>
-<li>如果不满足以上条件，对于主文档，判断后面是否继续接收数据，如果不继续，则触发上屏渲染；如后续还有数据，则循环上述流程直至触发上屏。渲染完成，整个加载过程结束。</li>
+<li>如果返回的 data 是<strong>图片资源类</strong>，则判断像素大小 &gt; 32*32，即可触发上屏渲染。</li>
 </ol>
 <p><img alt="firset frame" src="/images/2021/浏览器渲染过程.png"></p>
 <h1>加载生命周期代理方法</h1>
@@ -261,28 +261,10 @@
       <a href="/tag/ios.html">iOS</a>
     </li>
     <li class="list-group-item tag-2">
-      <a href="/tag/xing-neng.html">性能</a>
-    </li>
-    <li class="list-group-item tag-2">
       <a href="/tag/wang-luo.html">网络</a>
     </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/xcode.html">Xcode</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/cocoa.html">Cocoa</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/jian-kong.html">监控</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/crash.html">Crash</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/git.html">git</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/yin-shi-pin.html">音视频</a>
+    <li class="list-group-item tag-2">
+      <a href="/tag/xing-neng.html">性能</a>
     </li>
     <li class="list-group-item tag-4">
       <a href="/tag/gong-ju.html">工具</a>
@@ -294,7 +276,25 @@
       <a href="/tag/bao-ti-ji.html">包体积</a>
     </li>
     <li class="list-group-item tag-4">
+      <a href="/tag/xcode.html">Xcode</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/jian-kong.html">监控</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/cocoa.html">Cocoa</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/yin-shi-pin.html">音视频</a>
+    </li>
+    <li class="list-group-item tag-4">
       <a href="/tag/liu-lan-qi.html">浏览器</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/git.html">git</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/crash.html">Crash</a>
     </li>
   </ul>
 </li>

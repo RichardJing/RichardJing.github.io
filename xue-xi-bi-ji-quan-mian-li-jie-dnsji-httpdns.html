@@ -13,13 +13,13 @@
 
         <meta name="author" content="荆超" />
         <meta name="keywords" content="网络" />
-        <meta name="description" content="本文为学习笔记，并非原创。原文链接 背景 移动场景下DNS解析开销是整个网络请求中不可忽略的一部分。在弱网环境下，基于UDP的LocalDNS解析非常容易出现解析超时的问题，并且即使解析成功会消耗数百毫秒乃至更甚。 DNS iOS 10之后，apple提供的原生HTTP请求方法能返回HTTP请求各个阶段的时间指标，其中就包含DNS解析时间。 DNS相关概念 DNS是一种分层结构，在整个互联网中组成一个树状系统，顶层是系统的根域名，下层为TLD以及二级域名，叶子就构成了所谓的FQDN（Fully Qualified Domain Names），根域名通常使用&#34;.&#34;来表示，其实际上也是由域名组成，全世界目前有13组域名根节点，由少数几个国家进行管理，而国内仅有几台根节点镜像。 权威DNS：权威DNS是经过上一级授权对域名进行解析的服务器，同时它可以把解析授权转授给其他人，如COM顶级服务器可以授权xxorg.com这个域名的的权威服务器为NS.ABC.COM，同时NS.ABC.COM还可以把授权转授给NS.DDD.COM，这样NS.DDD.COM就成了ABC.COM实际上的权威服务器了。平时我们解析域名的结果都源自权威DNS。 递归DNS：又称为Local DNS，它没有域名解析结果的决定权 …" />
+        <meta name="description" content="本文为学习笔记，并非原创。原文链接，原文发表于2019-11-05 背景 移动场景下DNS解析开销是整个网络请求中不可忽略的一部分。在弱网环境下，基于UDP的LocalDNS解析非常容易出现解析超时的问题，并且即使解析成功会消耗数百毫秒乃至更甚。 DNS iOS 10之后，apple提供的原生HTTP请求方法能返回HTTP请求各个阶段的时间指标，其中就包含DNS解析时间。 DNS相关概念 DNS是一种分层结构，在整个互联网中组成一个树状系统，顶层是系统的根域名，下层为TLD以及二级域名，叶子就构成了所谓的FQDN（Fully Qualified Domain Names），根域名通常使用&#34;.&#34;来表示，其实际上也是由域名组成，全世界目前有13组域名根节点，由少数几个国家进行管理，而国内仅有几台根节点镜像。 权威DNS：权威DNS是经过上一级授权对域名进行解析的服务器，同时它可以把解析授权转授给其他人，如COM顶级服务器可以授权xxorg.com这个域名的的权威服务器为NS.ABC.COM，同时NS.ABC.COM还可以把授权转授给NS.DDD.COM，这样NS.DDD.COM就成了ABC.COM实际上的权威服务器了。平时我们解析域名的结果都源自权威DNS。 递归DNS：又称为Local DNS …" />
 
         <meta property="og:site_name" content="荆超的小站" />
         <meta property="og:type" content="article"/>
         <meta property="og:title" content="【学习笔记】全面理解DNS及HTTPDNS"/>
         <meta property="og:url" content="/xue-xi-bi-ji-quan-mian-li-jie-dnsji-httpdns.html"/>
-        <meta property="og:description" content="本文为学习笔记，并非原创。原文链接 背景 移动场景下DNS解析开销是整个网络请求中不可忽略的一部分。在弱网环境下，基于UDP的LocalDNS解析非常容易出现解析超时的问题，并且即使解析成功会消耗数百毫秒乃至更甚。 DNS iOS 10之后，apple提供的原生HTTP请求方法能返回HTTP请求各个阶段的时间指标，其中就包含DNS解析时间。 DNS相关概念 DNS是一种分层结构，在整个互联网中组成一个树状系统，顶层是系统的根域名，下层为TLD以及二级域名，叶子就构成了所谓的FQDN（Fully Qualified Domain Names），根域名通常使用&#34;.&#34;来表示，其实际上也是由域名组成，全世界目前有13组域名根节点，由少数几个国家进行管理，而国内仅有几台根节点镜像。 权威DNS：权威DNS是经过上一级授权对域名进行解析的服务器，同时它可以把解析授权转授给其他人，如COM顶级服务器可以授权xxorg.com这个域名的的权威服务器为NS.ABC.COM，同时NS.ABC.COM还可以把授权转授给NS.DDD.COM，这样NS.DDD.COM就成了ABC.COM实际上的权威服务器了。平时我们解析域名的结果都源自权威DNS。 递归DNS：又称为Local DNS，它没有域名解析结果的决定权 …"/>
+        <meta property="og:description" content="本文为学习笔记，并非原创。原文链接，原文发表于2019-11-05 背景 移动场景下DNS解析开销是整个网络请求中不可忽略的一部分。在弱网环境下，基于UDP的LocalDNS解析非常容易出现解析超时的问题，并且即使解析成功会消耗数百毫秒乃至更甚。 DNS iOS 10之后，apple提供的原生HTTP请求方法能返回HTTP请求各个阶段的时间指标，其中就包含DNS解析时间。 DNS相关概念 DNS是一种分层结构，在整个互联网中组成一个树状系统，顶层是系统的根域名，下层为TLD以及二级域名，叶子就构成了所谓的FQDN（Fully Qualified Domain Names），根域名通常使用&#34;.&#34;来表示，其实际上也是由域名组成，全世界目前有13组域名根节点，由少数几个国家进行管理，而国内仅有几台根节点镜像。 权威DNS：权威DNS是经过上一级授权对域名进行解析的服务器，同时它可以把解析授权转授给其他人，如COM顶级服务器可以授权xxorg.com这个域名的的权威服务器为NS.ABC.COM，同时NS.ABC.COM还可以把授权转授给NS.DDD.COM，这样NS.DDD.COM就成了ABC.COM实际上的权威服务器了。平时我们解析域名的结果都源自权威DNS。 递归DNS：又称为Local DNS …"/>
         <meta property="article:published_time" content="2021-07-19" />
             <meta property="article:section" content="学习笔记" />
             <meta property="article:tag" content="网络" />
@@ -93,7 +93,7 @@
 </footer><!-- /.post-info -->                    </div>
                 </div>
                 <blockquote>
-<p>本文为学习笔记，并非原创。<a href="https://juejin.cn/post/6844903987796246542">原文链接</a></p>
+<p>本文为学习笔记，并非原创。<a href="https://juejin.cn/post/6844903987796246542">原文链接</a>，原文发表于2019-11-05</p>
 </blockquote>
 <h1>背景</h1>
 <p>移动场景下DNS解析开销是整个网络请求中不可忽略的一部分。在弱网环境下，基于UDP的LocalDNS解析非常容易出现解析超时的问题，并且即使解析成功会消耗数百毫秒乃至更甚。</p>
@@ -269,28 +269,10 @@
       <a href="/tag/ios.html">iOS</a>
     </li>
     <li class="list-group-item tag-2">
-      <a href="/tag/xing-neng.html">性能</a>
-    </li>
-    <li class="list-group-item tag-2">
       <a href="/tag/wang-luo.html">网络</a>
     </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/xcode.html">Xcode</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/cocoa.html">Cocoa</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/jian-kong.html">监控</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/crash.html">Crash</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/git.html">git</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/yin-shi-pin.html">音视频</a>
+    <li class="list-group-item tag-2">
+      <a href="/tag/xing-neng.html">性能</a>
     </li>
     <li class="list-group-item tag-4">
       <a href="/tag/gong-ju.html">工具</a>
@@ -302,7 +284,25 @@
       <a href="/tag/bao-ti-ji.html">包体积</a>
     </li>
     <li class="list-group-item tag-4">
+      <a href="/tag/xcode.html">Xcode</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/jian-kong.html">监控</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/cocoa.html">Cocoa</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/yin-shi-pin.html">音视频</a>
+    </li>
+    <li class="list-group-item tag-4">
       <a href="/tag/liu-lan-qi.html">浏览器</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/git.html">git</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/crash.html">Crash</a>
     </li>
   </ul>
 </li>

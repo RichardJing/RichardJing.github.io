@@ -61,7 +61,7 @@
             <article>
                 <h2><a href="/xue-xi-bi-ji-ios-ip-zhi-lian-yuan-li-pou-xi.html">【学习笔记】iOS IP 直连原理剖析</a></h2>
                 <div class="summary"><blockquote>
-<p>本文为学习笔记，并非原创。<a href="https://juejin.cn/post/6844903564960088071">原文链接</a></p>
+<p>本文为学习笔记，并非原创。<a href="https://juejin.cn/post/6844903564960088071">原文链接</a>，原文发表于2018-02-13</p>
 </blockquote>
 <p>移动互联网的网络状况是十分复杂的，三大运营商、3G、4G、Wi-Fi、地点等任何一个状态的改变都会导致网络状况的变化，并且运营商、代理商们还可能在其中搞一些小破坏，比如经常会有用户反馈说某个页面访问不了或者返回结果不正确等问题，这种状况一般都是发生了域名劫持，通用的解决方案就是使用 IP 直连，跨过运营商 LocalDNS 服务器解析过程，从而达到降低延迟、避免劫持的效果。</p>
 <h1>为什么直接用IP</h1>
@@ -73,9 +73,7 @@
 <p>如何获取IP:</p>
 <ol>
 <li>直接接入腾讯或者阿里的 HTTPDNS 服务。</li>
-<li>内置 Server IP，可以在启动等阶段由服务端下发域名和 IP 的对应列表，客户端来进行缓存。</li>
-</ol>
-<p>HTTPS其实是不能防DNS劫持的 …</p>
+<li>内置 Server IP，可以在启动等阶段由服务端下发域名和 IP 的对应列表，客户端来进行缓存 …</li></ol>
                     <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-ios-ip-zhi-lian-yuan-li-pou-xi.html">more ...</a>
                 </div>
             </article>
@@ -83,7 +81,7 @@
             <article>
                 <h2><a href="/xue-xi-bi-ji-ioswang-luo-huan-cun-sao-mang-pian-shi-yong-liang-xing-dai-ma-jiu-neng-wan-cheng-80de-huan-cun-xu-qiu.html">【学习笔记】iOS网络缓存扫盲篇--使用两行代码就能完成80%的缓存需求</a></h2>
                 <div class="summary"><blockquote>
-<p>本文为学习笔记，并非原创。<a href="https://www.jianshu.com/p/fb5aaeac06ef">原文链接</a></p>
+<p>本文为学习笔记，并非原创。<a href="https://www.jianshu.com/p/fb5aaeac06ef">原文链接</a>，原文发表于2016-01-21</p>
 </blockquote>
 <h1>GET网络请求缓存</h1>
 <p>POST请求不能被缓存，只有 GET 请求能被缓存。因为从数学的角度来讲，GET 的结果是<code>幂等</code> 的，而 POST 不<code>幂等</code> 。缓存的思路就是将查询的参数组成的值作为 key ，对应结果作为value。</p>
@@ -95,7 +93,7 @@
 <h1>控制缓存的有效性</h1>
 <p>服务器的文件存贮，大多采用资源变动后就重新生成一个链接的做法。而且如果你的文件存储采用的是第三方的服务，比如七牛、青云等服务，则一定是如此。</p>
 <p>链接不变的情况下，要求资源改了，缓存就要更新，该如何做？</p>
-<h2>文件缓存：借助ETag或Last-Modified判断文件缓存是否有效 …</h2>
+<h2>文件缓存 …</h2>
                     <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-ioswang-luo-huan-cun-sao-mang-pian-shi-yong-liang-xing-dai-ma-jiu-neng-wan-cheng-80de-huan-cun-xu-qiu.html">more ...</a>
                 </div>
             </article>
@@ -111,6 +109,8 @@
                 <h2><a href="/xue-xi-bi-ji-iosji-zhu-wen-zhang-lie-biao-cocoa.html">【学习笔记】iOS技术文章列表——Cocoa</a></h2>
                 <div class="summary"><h2><a href="https://mp.weixin.qq.com/s?__biz=MzU4NTI0NDI4MQ==&amp;mid=2247485909&amp;idx=1&amp;sn=fb836d07589ed105ebc54150d89aef6c">去掉 iOS 导航栏返回按钮文本三种方案</a></h2>
 <p>给出的三种方案，要么继承UINavigationController，要么改变UINavigationController。</p>
+<h2><a href="https://mp.weixin.qq.com/s?__biz=MzU4NTI0NDI4MQ==&amp;mid=2247484303&amp;idx=1&amp;sn=fb44415a34bd26bf7d4028933be816a8&amp;scene=21">码一个高颜值统计图</a></h2>
+<p>用CA画折线图</p>
                     <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-iosji-zhu-wen-zhang-lie-biao-cocoa.html">more ...</a>
                 </div>
             </article>
@@ -119,14 +119,19 @@
                 <h2><a href="/xue-xi-bi-ji-iosji-zhu-wen-zhang-lie-biao-wang-luo.html">【学习笔记】iOS技术文章列表——网络</a></h2>
                 <div class="summary"><h2><a href="http://www.52im.net/thread-1588-1-1.html">移动端IM开发者必读(二)：史上最全移动弱网络优化方法总结</a></h2>
 <p>文章前言列出了很多网络优化文章。</p>
+<h2><a href="https://juejin.cn/post/6844904185268273159">iOS中的网络调试</a></h2>
                     <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-iosji-zhu-wen-zhang-lie-biao-wang-luo.html">more ...</a>
                 </div>
             </article>
             <hr/>
             <article>
                 <h2><a href="/xue-xi-bi-ji-iosji-zhu-wen-zhang-lie-biao-xcodeji-gong-ju.html">【学习笔记】iOS技术文章列表——Xcode及工具</a></h2>
-                <div class="summary"><h2><a href="https://mp.weixin.qq.com/s/s5BQznKjSCt84ZLUlco7Vg">Xcode 工程文件解析</a></h2>
+                <div class="summary"><h1>Xcode</h1>
+<h2><a href="https://mp.weixin.qq.com/s/s5BQznKjSCt84ZLUlco7Vg">Xcode 工程文件解析</a></h2>
 <p>介绍了Xcode工程的目录结构，pbxproj的对象模型以及用Ruby编辑工程文件的方法。</p>
+<h1>工具</h1>
+<h2><a href="https://github.com/tinymind/LSUnusedResources">LSUnusedResources</a></h2>
+<p>一个 Mac 应用程序，用于在 Xcode 项目中查找未使用的图像和资源，可以辅助我们优化包体积大小。</p>
                     <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-iosji-zhu-wen-zhang-lie-biao-xcodeji-gong-ju.html">more ...</a>
                 </div>
             </article>
@@ -156,7 +161,7 @@
             <article>
                 <h2><a href="/xue-xi-bi-ji-ji-zhi-shou-zheng-bo-fang-fang-an-ling-shou-zheng-jie-jue-fang-an.html">【学习笔记】极致首帧播放方案 - 零首帧解决方案</a></h2>
                 <div class="summary"><blockquote>
-<p>本文为学习笔记，并非原创。<a href="https://mp.weixin.qq.com/s/IGA3caeXMB-upTFiV8MuYg">原文链接</a></p>
+<p>本文为学习笔记，并非原创。<a href="https://mp.weixin.qq.com/s/IGA3caeXMB-upTFiV8MuYg">原文链接</a>，原文发表于2021-04-06</p>
 </blockquote>
 <h1>背景介绍</h1>
 <p>「零首帧」并不是真的0毫秒启播，而是用户几乎感知不到有首帧时间的存在，在我们的播放质量埋点中对应小于100ms以内的首帧时间。</p>
@@ -170,7 +175,7 @@
 <p>通常而言，视频资源会有唯一标识 video id , 在点播的服务端会有一个根据 video id 信息获取播放链接的服务，如果 app server 端能够调用 vod 服务生成播放地址，然后将播放地址随 feed 流一起下发，则省去了客户端的一次网络请求耗时。</p>
 <h2>网络建连</h2>
 <p>优化方案：预解析。预连接&amp;连接复用。避免TLS握手。</p>
-<p>拿到播放地址，播放器与DNS建连，首先会做DNS解析。为了防止DNS劫持 …</p>
+<p>拿到播放地址，播放器与DNS建连，首先会做DNS解析 …</p>
                     <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-ji-zhi-shou-zheng-bo-fang-fang-an-ling-shou-zheng-jie-jue-fang-an.html">more ...</a>
                 </div>
             </article>
@@ -239,28 +244,10 @@
       <a href="/tag/ios.html">iOS</a>
     </li>
     <li class="list-group-item tag-2">
-      <a href="/tag/xing-neng.html">性能</a>
-    </li>
-    <li class="list-group-item tag-2">
       <a href="/tag/wang-luo.html">网络</a>
     </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/xcode.html">Xcode</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/cocoa.html">Cocoa</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/jian-kong.html">监控</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/crash.html">Crash</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/git.html">git</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/yin-shi-pin.html">音视频</a>
+    <li class="list-group-item tag-2">
+      <a href="/tag/xing-neng.html">性能</a>
     </li>
     <li class="list-group-item tag-4">
       <a href="/tag/gong-ju.html">工具</a>
@@ -272,7 +259,25 @@
       <a href="/tag/bao-ti-ji.html">包体积</a>
     </li>
     <li class="list-group-item tag-4">
+      <a href="/tag/xcode.html">Xcode</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/jian-kong.html">监控</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/cocoa.html">Cocoa</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/yin-shi-pin.html">音视频</a>
+    </li>
+    <li class="list-group-item tag-4">
       <a href="/tag/liu-lan-qi.html">浏览器</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/git.html">git</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/crash.html">Crash</a>
     </li>
   </ul>
 </li>

@@ -13,13 +13,13 @@
 
         <meta name="author" content="荆超" />
         <meta name="keywords" content="iOS,音视频" />
-        <meta name="description" content="本文为学习笔记，并非原创。原文链接 背景介绍 「零首帧」并不是真的0毫秒启播，而是用户几乎感知不到有首帧时间的存在，在我们的播放质量埋点中对应小于100ms以内的首帧时间。 在现实业务中，有些场景是无法使用所有的优化条件的，比如在随机播放的场景不能进行预加载、某些场景不适合使用播放器复用技术等。 首帧的构成 从上图可以看出首帧时间主要包含这么几个部分: 获取视频播放链接，网络建连，下载视频头部数据，音视频解码和渲染。 通用的首帧优化方法 获取播放地址 优化方案：播放地址随feed下发。 通常而言，视频资源会有唯一标识 video id , 在点播的服务端会有一个根据 video id 信息获取播放链接的服务，如果 app server 端能够调用 vod 服务生成播放地址，然后将播放地址随 feed 流一起下发，则省去了客户端的一次网络请求耗时。 网络建连 优化方案：预解析。预连接&amp;连接复用。避免TLS握手。 拿到播放地址，播放器与DNS建连，首先会做DNS解析。为了防止DNS劫持 …" />
+        <meta name="description" content="本文为学习笔记，并非原创。原文链接，原文发表于2021-04-06 背景介绍 「零首帧」并不是真的0毫秒启播，而是用户几乎感知不到有首帧时间的存在，在我们的播放质量埋点中对应小于100ms以内的首帧时间。 在现实业务中，有些场景是无法使用所有的优化条件的，比如在随机播放的场景不能进行预加载、某些场景不适合使用播放器复用技术等。 首帧的构成 从上图可以看出首帧时间主要包含这么几个部分: 获取视频播放链接，网络建连，下载视频头部数据，音视频解码和渲染。 通用的首帧优化方法 获取播放地址 优化方案：播放地址随feed下发。 通常而言，视频资源会有唯一标识 video id , 在点播的服务端会有一个根据 video id 信息获取播放链接的服务，如果 app server 端能够调用 vod 服务生成播放地址，然后将播放地址随 feed 流一起下发，则省去了客户端的一次网络请求耗时。 网络建连 优化方案：预解析。预连接&amp;连接复用。避免TLS握手。 拿到播放地址，播放器与DNS建连，首先会做DNS解析 …" />
 
         <meta property="og:site_name" content="荆超的小站" />
         <meta property="og:type" content="article"/>
         <meta property="og:title" content="【学习笔记】极致首帧播放方案 - 零首帧解决方案"/>
         <meta property="og:url" content="/xue-xi-bi-ji-ji-zhi-shou-zheng-bo-fang-fang-an-ling-shou-zheng-jie-jue-fang-an.html"/>
-        <meta property="og:description" content="本文为学习笔记，并非原创。原文链接 背景介绍 「零首帧」并不是真的0毫秒启播，而是用户几乎感知不到有首帧时间的存在，在我们的播放质量埋点中对应小于100ms以内的首帧时间。 在现实业务中，有些场景是无法使用所有的优化条件的，比如在随机播放的场景不能进行预加载、某些场景不适合使用播放器复用技术等。 首帧的构成 从上图可以看出首帧时间主要包含这么几个部分: 获取视频播放链接，网络建连，下载视频头部数据，音视频解码和渲染。 通用的首帧优化方法 获取播放地址 优化方案：播放地址随feed下发。 通常而言，视频资源会有唯一标识 video id , 在点播的服务端会有一个根据 video id 信息获取播放链接的服务，如果 app server 端能够调用 vod 服务生成播放地址，然后将播放地址随 feed 流一起下发，则省去了客户端的一次网络请求耗时。 网络建连 优化方案：预解析。预连接&amp;连接复用。避免TLS握手。 拿到播放地址，播放器与DNS建连，首先会做DNS解析。为了防止DNS劫持 …"/>
+        <meta property="og:description" content="本文为学习笔记，并非原创。原文链接，原文发表于2021-04-06 背景介绍 「零首帧」并不是真的0毫秒启播，而是用户几乎感知不到有首帧时间的存在，在我们的播放质量埋点中对应小于100ms以内的首帧时间。 在现实业务中，有些场景是无法使用所有的优化条件的，比如在随机播放的场景不能进行预加载、某些场景不适合使用播放器复用技术等。 首帧的构成 从上图可以看出首帧时间主要包含这么几个部分: 获取视频播放链接，网络建连，下载视频头部数据，音视频解码和渲染。 通用的首帧优化方法 获取播放地址 优化方案：播放地址随feed下发。 通常而言，视频资源会有唯一标识 video id , 在点播的服务端会有一个根据 video id 信息获取播放链接的服务，如果 app server 端能够调用 vod 服务生成播放地址，然后将播放地址随 feed 流一起下发，则省去了客户端的一次网络请求耗时。 网络建连 优化方案：预解析。预连接&amp;连接复用。避免TLS握手。 拿到播放地址，播放器与DNS建连，首先会做DNS解析 …"/>
         <meta property="article:published_time" content="2021-05-21" />
             <meta property="article:section" content="学习笔记" />
             <meta property="article:tag" content="iOS" />
@@ -96,7 +96,7 @@
 </footer><!-- /.post-info -->                    </div>
                 </div>
                 <blockquote>
-<p>本文为学习笔记，并非原创。<a href="https://mp.weixin.qq.com/s/IGA3caeXMB-upTFiV8MuYg">原文链接</a></p>
+<p>本文为学习笔记，并非原创。<a href="https://mp.weixin.qq.com/s/IGA3caeXMB-upTFiV8MuYg">原文链接</a>，原文发表于2021-04-06</p>
 </blockquote>
 <h1>背景介绍</h1>
 <p>「零首帧」并不是真的0毫秒启播，而是用户几乎感知不到有首帧时间的存在，在我们的播放质量埋点中对应小于100ms以内的首帧时间。</p>
@@ -227,28 +227,10 @@
       <a href="/tag/ios.html">iOS</a>
     </li>
     <li class="list-group-item tag-2">
-      <a href="/tag/xing-neng.html">性能</a>
-    </li>
-    <li class="list-group-item tag-2">
       <a href="/tag/wang-luo.html">网络</a>
     </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/xcode.html">Xcode</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/cocoa.html">Cocoa</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/jian-kong.html">监控</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/crash.html">Crash</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/git.html">git</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/yin-shi-pin.html">音视频</a>
+    <li class="list-group-item tag-2">
+      <a href="/tag/xing-neng.html">性能</a>
     </li>
     <li class="list-group-item tag-4">
       <a href="/tag/gong-ju.html">工具</a>
@@ -260,7 +242,25 @@
       <a href="/tag/bao-ti-ji.html">包体积</a>
     </li>
     <li class="list-group-item tag-4">
+      <a href="/tag/xcode.html">Xcode</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/jian-kong.html">监控</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/cocoa.html">Cocoa</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/yin-shi-pin.html">音视频</a>
+    </li>
+    <li class="list-group-item tag-4">
       <a href="/tag/liu-lan-qi.html">浏览器</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/git.html">git</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/crash.html">Crash</a>
     </li>
   </ul>
 </li>
