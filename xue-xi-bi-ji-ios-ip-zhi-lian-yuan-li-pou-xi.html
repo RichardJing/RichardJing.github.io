@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>【学习笔记】iOS IP 直连原理剖析 - 荆超的小站</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="/xue-xi-bi-ji-ios-ip-zhi-lian-yuan-li-pou-xi.html">
+
+        <meta name="author" content="荆超" />
+        <meta name="keywords" content="网络,iOS" />
+        <meta name="description" content="本文为学习笔记，并非原创。原文链接 移动互联网的网络状况是十分复杂的，三大运营商、3G、4G、Wi-Fi、地点等任何一个状态的改变都会导致网络状况的变化，并且运营商、代理商们还可能在其中搞一些小破坏，比如经常会有用户反馈说某个页面访问不了或者返回结果不正确等问题，这种状况一般都是发生了域名劫持，通用的解决方案就是使用 IP 直连，跨过运营商 LocalDNS 服务器解析过程，从而达到降低延迟、避免劫持的效果。 为什么直接用IP 防劫持，可以绕过运营商 LocalDNS 解析过程，避免域名劫持，提高网络访问成功率。 降低延迟，DNS 解析是一个相对耗时的工作，跳过这个过程可以降低一定的延迟。 精准调度，运营商解析返回的节点不一定是最优的，自己获取 IP 可以基于自己的策略来获取最精准的、最优的节点。 如何获取IP: 直接接入腾讯或者阿里的 HTTPDNS 服务。 内置 Server IP，可以在启动等阶段由服务端下发域名和 IP 的对应列表，客户端来进行缓存。 HTTPS其实是不能防DNS劫持的 …" />
+
+        <meta property="og:site_name" content="荆超的小站" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="【学习笔记】iOS IP 直连原理剖析"/>
+        <meta property="og:url" content="/xue-xi-bi-ji-ios-ip-zhi-lian-yuan-li-pou-xi.html"/>
+        <meta property="og:description" content="本文为学习笔记，并非原创。原文链接 移动互联网的网络状况是十分复杂的，三大运营商、3G、4G、Wi-Fi、地点等任何一个状态的改变都会导致网络状况的变化，并且运营商、代理商们还可能在其中搞一些小破坏，比如经常会有用户反馈说某个页面访问不了或者返回结果不正确等问题，这种状况一般都是发生了域名劫持，通用的解决方案就是使用 IP 直连，跨过运营商 LocalDNS 服务器解析过程，从而达到降低延迟、避免劫持的效果。 为什么直接用IP 防劫持，可以绕过运营商 LocalDNS 解析过程，避免域名劫持，提高网络访问成功率。 降低延迟，DNS 解析是一个相对耗时的工作，跳过这个过程可以降低一定的延迟。 精准调度，运营商解析返回的节点不一定是最优的，自己获取 IP 可以基于自己的策略来获取最精准的、最优的节点。 如何获取IP: 直接接入腾讯或者阿里的 HTTPDNS 服务。 内置 Server IP，可以在启动等阶段由服务端下发域名和 IP 的对应列表，客户端来进行缓存。 HTTPS其实是不能防DNS劫持的 …"/>
+        <meta property="article:published_time" content="2021-07-19" />
+            <meta property="article:section" content="学习笔记" />
+            <meta property="article:tag" content="网络" />
+            <meta property="article:tag" content="iOS" />
+            <meta property="article:author" content="荆超" />
+
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css"/>
+    <link href="/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
+
+
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="/" class="navbar-brand">
+荆超的小站            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+
+<!-- Banner -->
+<!-- End Banner -->
+
+<!-- Content Container -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="/xue-xi-bi-ji-ios-ip-zhi-lian-yuan-li-pou-xi.html"
+                       rel="bookmark"
+                       title="Permalink to 【学习笔记】iOS IP 直连原理剖析">
+                        【学习笔记】iOS IP 直连原理剖析
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2021-07-19T00:00:00+08:00"> 一 19 七月 2021</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="/tag/wang-luo.html">网络</a>
+        /
+	<a href="/tag/ios.html">iOS</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <blockquote>
+<p>本文为学习笔记，并非原创。<a href="https://juejin.cn/post/6844903564960088071">原文链接</a></p>
+</blockquote>
+<p>移动互联网的网络状况是十分复杂的，三大运营商、3G、4G、Wi-Fi、地点等任何一个状态的改变都会导致网络状况的变化，并且运营商、代理商们还可能在其中搞一些小破坏，比如经常会有用户反馈说某个页面访问不了或者返回结果不正确等问题，这种状况一般都是发生了域名劫持，通用的解决方案就是使用 IP 直连，跨过运营商 LocalDNS 服务器解析过程，从而达到降低延迟、避免劫持的效果。</p>
+<h1>为什么直接用IP</h1>
+<ol>
+<li>防劫持，可以绕过运营商 LocalDNS 解析过程，避免域名劫持，提高网络访问成功率。</li>
+<li>降低延迟，DNS 解析是一个相对耗时的工作，跳过这个过程可以降低一定的延迟。</li>
+<li>精准调度，运营商解析返回的节点不一定是最优的，自己获取 IP 可以基于自己的策略来获取最精准的、最优的节点。</li>
+</ol>
+<p>如何获取IP:</p>
+<ol>
+<li>直接接入腾讯或者阿里的 HTTPDNS 服务。</li>
+<li>内置 Server IP，可以在启动等阶段由服务端下发域名和 IP 的对应列表，客户端来进行缓存。</li>
+</ol>
+<p>HTTPS其实是不能防DNS劫持的，因为DNS 解析是网络请求的第一个步骤。</p>
+<h1>身份认证</h1>
+<p>HTTPS 网络下我们会对服务端的身份进行认证，就拿 AFNetworking 来说，它提供了三种身份认证的可选方案：</p>
+<ul>
+<li>AFSSLPinningModeNone(Default)：客户端自己不会对服务端证书进行自主校验，而是直接默认信任，将证书交给系统来进行校验，判断返回的证书是否是官方机构颁发的，如果是则信任，这个应该也是普通开发者采用最多的方案。这种认证方案如果被劫持后返回的证书也是官方机构颁发的，那么客户端就会正常进行网络访问，但是返回的数据就不是想要的数据，比如被塞广告等现象的出现。</li>
+<li>AFSSLPinningModePublicKey：客户端会将服务器端返回的证书与本地保存的证书中的 PublicKey 部分进行自主校验</li>
+<li>AFSSLPinningModeCertificate：客户端会将服务器端返回的证书和本地保存的证书中的所有内容，包括 PublicKey 和证书部分全部进行自主校验。</li>
+</ul>
+<h1>获取IP后，如何将请求改为IP</h1>
+<h2>HTTP IP Connect</h2>
+<p>实现 HTTP 协议下 IP 连接其实是很简单的，我们只需要通过 NSURLProtocol 来拦截网络请求，然后将符号条件的网络请求 URL 中的域名修改为 IP 就可以啦。</p>
+<p>但是会存在一些小问题，域名置换为 IP 之后，服务端无法根据 URL 来判断你要访问哪个域名，所以我们需要手动的将 host 字段塞到 header 中去，方便服务器的正确识别。</p>
+<h2>HTTPS IP Connect</h2>
+<p>HTTPS会校验证书的 domain 域是否包含本次 Request 的 host。由于 IP 连接会将 URL 中的域名置换为 IP，所以就会导致返回的证书和我们的 Request 校验失败的问题。</p>
+<p>为了解决证书的校验的问题，我们需要在证书校验前，再进行一次域名的替换，这次需要把 URL 中 IP 置换为域名，这样证书校验的问题便可迎刃而解。</p>
+<h2>SNI IP Connect</h2>
+<p>通常情况下我们的证书是和域名绑定的，有时候会存在一个 IP 对应多个域名的情况，这种情况如果客户端 IP 直连的时候，没有告诉服务端他要请求的是哪个域名的证书，服务端就没办法返回正确的证书，从而导致客户端证书校验失败。</p>
+<p>SNI 的全称 Server Name Indication，为了解决一个服务器使用多个域名和证书的 SSL/TLS 扩展。在连接到服务器建立 SSL 连接时，客户端可以在第一次握手的 Client Hello 中的 SNI 扩展字段中填入要访问站点的域名（Hostname），这样服务器就可以根据域名返回一个合适的证书。</p>
+<p>面对单 IP 多域名的情况需要客户端手动配置 SNI 字段，但是上层的网络库 NSURLSession、NSURLConnection 都没有提供配置的接口，我们需要使用更加底层的 libcurl 库和 CFNetwork 来完成 SNI 字段的配置。以 CFNetwork 为例，可以使用如下代码进行 SNI 的配置：</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// HTTPS 请求处理 SNI 场景</span>
+<span class="bp">NSString</span> <span class="o">*</span><span class="n">host</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">swizzleRequest</span><span class="p">.</span><span class="n">allHTTPHeaderFields</span> <span class="nl">objectForKey</span><span class="p">:</span><span class="s">@&quot;host&quot;</span><span class="p">];</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">host</span><span class="p">)</span> <span class="p">{</span>
+<span class="n">host</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">originalRequest</span><span class="p">.</span><span class="n">URL</span><span class="p">.</span><span class="n">host</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">inputStream</span> <span class="nl">setProperty</span><span class="p">:</span><span class="n">NSStreamSocketSecurityLevelNegotiatedSSL</span> <span class="nl">forKey</span><span class="p">:</span><span class="n">NSStreamSocketSecurityLevelKey</span><span class="p">];</span>
+<span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">sslProperties</span> <span class="o">=</span> <span class="l">@{</span> <span class="p">(</span><span class="k">__bridge</span> <span class="kt">id</span><span class="p">)</span> <span class="nl">kCFStreamSSLPeerName</span> <span class="p">:</span> <span class="n">host</span> <span class="l">}</span><span class="p">;</span>
+<span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">inputStream</span> <span class="nl">setProperty</span><span class="p">:</span><span class="n">sslProperties</span> <span class="nl">forKey</span><span class="p">:(</span><span class="k">__bridge_transfer</span> <span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span> <span class="n">kCFStreamPropertySSLSettings</span><span class="p">];</span>
+</code></pre></div>
+            </div>
+            <!-- /.entry-content -->
+    <hr/>
+    <section class="comments" id="comments">
+        <h2>Comments</h2>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
+
+            var disqus_config = function () {
+                this.language = "zh";
+
+                        this.page.identifier = '2021-07-19-xue-xi-bi-ji-ios-ip-zhi-lian-yuan-li-pou-xi';
+            };
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+            Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </section>
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+<!-- Sidebar -->
+<section class="well well-sm">
+  <ul class="list-group list-group-flush">
+
+<!-- Sidebar/Social -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+  <ul class="list-group" id="social">
+    <li class="list-group-item"><a href="https://www.linkedin.com/in/chao-jing-8470a895/"><i class="fa fa-linkedin-square fa-lg"></i> LinkedIn</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Social -->
+
+<!-- Sidebar/Recent Posts -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
+  <ul class="list-group" id="recentposts">
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-ios-ip-zhi-lian-yuan-li-pou-xi.html">【学习笔记】iOS IP 直连原理剖析</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-ioswang-luo-huan-cun-sao-mang-pian-shi-yong-liang-xing-dai-ma-jiu-neng-wan-cheng-80de-huan-cun-xu-qiu.html">【学习笔记】iOS网络缓存扫盲篇--使用两行代码就能完成80%的缓存需求</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-quan-mian-li-jie-dnsji-httpdns.html">【学习笔记】全面理解DNS及HTTPDNS</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-tcpipsan-ci-wo-shou-si-ci-hui-shou.html">【学习笔记】TCP/IP三次握手四次挥手</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-wkwebview-jia-zai-sheng-ming-zhou-qi-yu-dai-li-fang-fa-pou-xi.html">【学习笔记】WKWebView 加载生命周期与代理方法剖析</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Recent Posts -->
+
+<!-- Sidebar/Categories -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Categories</span></h4>
+  <ul class="list-group" id="categories">
+    <li class="list-group-item">
+      <a href="/category/blog.html"><i class="fa fa-folder-open fa-lg"></i>Blog</a>
+    </li>
+    <li class="list-group-item">
+      <a href="/category/fan-yi.html"><i class="fa fa-folder-open fa-lg"></i>翻译</a>
+    </li>
+    <li class="list-group-item">
+      <a href="/category/xue-xi-bi-ji.html"><i class="fa fa-folder-open fa-lg"></i>学习笔记</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Categories -->
+
+<!-- Sidebar/Tag Cloud -->
+<li class="list-group-item">
+  <a href="/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
+  <ul class="list-group " id="tags">
+    <li class="list-group-item tag-1">
+      <a href="/tag/ios.html">iOS</a>
+    </li>
+    <li class="list-group-item tag-2">
+      <a href="/tag/xing-neng.html">性能</a>
+    </li>
+    <li class="list-group-item tag-2">
+      <a href="/tag/wang-luo.html">网络</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/xcode.html">Xcode</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/cocoa.html">Cocoa</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/jian-kong.html">监控</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/crash.html">Crash</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/git.html">git</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/yin-shi-pin.html">音视频</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/gong-ju.html">工具</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/harmonyos.html">HarmonyOS</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/bao-ti-ji.html">包体积</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/liu-lan-qi.html">浏览器</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Tag Cloud -->
+
+<!-- Sidebar/Links -->
+<li class="list-group-item">
+  <h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+  <ul class="list-group" id="links">
+    <li class="list-group-item">
+      <a href="http://hutaow.com/" target="_blank">胡桃夹子</a>
+    </li>
+    <li class="list-group-item">
+      <a href="http://wenzhong.me/" target="_blank">Wenzhong's Playground</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Links -->
+  </ul>
+</section>
+<!-- End Sidebar -->            </aside>
+        </div>
+    </div>
+</div>
+<!-- End Content Container -->
+
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2021 荆超
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="/theme/js/respond.min.js"></script>
+
+
+    <!-- Disqus -->
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <!-- End Disqus Code -->
+
+
+</body>
+</html>

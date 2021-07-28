@@ -121,7 +121,7 @@
 <ol>
 <li>返回的数据中包含普通文本文字，那只需要达到非空200字节即可以触发上屏渲染；</li>
 <li>如果返回的 数据是<strong>图片资源类</strong>，则判断像素大小 &gt; 32*32，即可触发上屏渲染；</li>
-<li>如果返回的 data 是<strong>图片资源类</strong>，则判断像素大小 &gt; 32*32，即可触发上屏渲染。</li>
+<li>如果不满足以上条件，对于主文档，判断后面是否继续接收数据，如果不继续，则触发上屏渲染；如后续还有数据，则循环上述流程直至触发上屏。渲染完成，整个加载过程结束。</li>
 </ol>
 <p><img alt="firset frame" src="/images/2021/浏览器渲染过程.png"></p>
 <h1>加载生命周期代理方法</h1>
@@ -227,11 +227,11 @@
 <li class="list-group-item">
   <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
   <ul class="list-group" id="recentposts">
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-ios-ip-zhi-lian-yuan-li-pou-xi.html">【学习笔记】iOS IP 直连原理剖析</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-ioswang-luo-huan-cun-sao-mang-pian-shi-yong-liang-xing-dai-ma-jiu-neng-wan-cheng-80de-huan-cun-xu-qiu.html">【学习笔记】iOS网络缓存扫盲篇--使用两行代码就能完成80%的缓存需求</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-quan-mian-li-jie-dnsji-httpdns.html">【学习笔记】全面理解DNS及HTTPDNS</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-tcpipsan-ci-wo-shou-si-ci-hui-shou.html">【学习笔记】TCP/IP三次握手四次挥手</a></li>
     <li class="list-group-item"><a href="/xue-xi-bi-ji-wkwebview-jia-zai-sheng-ming-zhou-qi-yu-dai-li-fang-fa-pou-xi.html">【学习笔记】WKWebView 加载生命周期与代理方法剖析</a></li>
-    <li class="list-group-item"><a href="/iosji-zhu-wen-zhang-lie-biao.html">iOS技术文章列表</a></li>
-    <li class="list-group-item"><a href="/xue-xi-bi-ji-zheng-jing-fen-xi-iosbao-da-xiao-you-hua.html">【学习笔记】正经分析iOS包大小优化</a></li>
-    <li class="list-group-item"><a href="/xue-xi-bi-ji-shou-ba-shou-jiao-ni-debug-ios-14-imageio-crash-fen-xi.html">【学习笔记】手把手教你 Debug — iOS 14 ImageIO Crash 分析</a></li>
-    <li class="list-group-item"><a href="/xue-xi-bi-ji-harmonyosdao-di-shi-bu-shi-androidtao-pi.html">【学习笔记】HarmonyOS到底是不是Android套皮？</a></li>
   </ul>
 </li>
 <!-- End Sidebar/Recent Posts -->
@@ -245,9 +245,6 @@
     </li>
     <li class="list-group-item">
       <a href="/category/fan-yi.html"><i class="fa fa-folder-open fa-lg"></i>翻译</a>
-    </li>
-    <li class="list-group-item">
-      <a href="/category/wen-zhang-lie-biao.html"><i class="fa fa-folder-open fa-lg"></i>文章列表</a>
     </li>
     <li class="list-group-item">
       <a href="/category/xue-xi-bi-ji.html"><i class="fa fa-folder-open fa-lg"></i>学习笔记</a>
@@ -266,11 +263,20 @@
     <li class="list-group-item tag-2">
       <a href="/tag/xing-neng.html">性能</a>
     </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/harmonyos.html">HarmonyOS</a>
+    <li class="list-group-item tag-2">
+      <a href="/tag/wang-luo.html">网络</a>
     </li>
     <li class="list-group-item tag-4">
-      <a href="/tag/bao-ti-ji.html">包体积</a>
+      <a href="/tag/xcode.html">Xcode</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/cocoa.html">Cocoa</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/jian-kong.html">监控</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/crash.html">Crash</a>
     </li>
     <li class="list-group-item tag-4">
       <a href="/tag/git.html">git</a>
@@ -279,13 +285,16 @@
       <a href="/tag/yin-shi-pin.html">音视频</a>
     </li>
     <li class="list-group-item tag-4">
-      <a href="/tag/crash.html">Crash</a>
+      <a href="/tag/gong-ju.html">工具</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/harmonyos.html">HarmonyOS</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/bao-ti-ji.html">包体积</a>
     </li>
     <li class="list-group-item tag-4">
       <a href="/tag/liu-lan-qi.html">浏览器</a>
-    </li>
-    <li class="list-group-item tag-4">
-      <a href="/tag/jian-kong.html">监控</a>
     </li>
   </ul>
 </li>

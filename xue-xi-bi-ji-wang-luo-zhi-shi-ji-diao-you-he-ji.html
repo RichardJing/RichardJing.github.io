@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>【学习笔记】网络知识及调优合集 - 荆超的小站</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="/xue-xi-bi-ji-wang-luo-zhi-shi-ji-diao-you-he-ji.html">
+
+        <meta name="author" content="荆超" />
+        <meta name="keywords" content="网络,iOS" />
+        <meta name="description" content="TCP/IP三次握手四次挥手 此篇为学习笔记，并非原创。原文链接 TCP 报文头部结构 需重点关注的字段： seq序号。用来标识从TCP源端向目的端发送的字节流。 ack确认序号。只有ACK标致为1时，ack序号才有效。 标志位，共六个： ACK：确认序号ack有效。确认方ack=发起方seq + 1 FIN：释放一个连接。 PSH：接收方应尽快将此报文交给给应用层。 RST：重置连接。 SYN：发起一个新连接。 URG：紧急指针有效。 三次握手 为什么 TCP 连接是三次握手？两次不可以吗？ 因为丢包会造成服务端空等。如果只握手两次，第二次握手时如果服务端发给客户端的确认报文段丢失，此时服务端已经准备好了收发数据（可以理解为服务端已经连接成功），而客户端一直没收到服务端的确认报文，所以客户端就不知道服务端是否已经准备好了（可以理解为客户端未连接成功），这种情况下客户端不会给服务端发数据，也会忽略服务端发过来的数据。 如果是三次握手，即便发生丢包也不会有问题。如果第三次握手客户端发的确认报文丢失，服务端在一段时间内没有收到确认报文的话就会重新进行第二次握手，也就是服务端会重发 …" />
+
+        <meta property="og:site_name" content="荆超的小站" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="【学习笔记】网络知识及调优合集"/>
+        <meta property="og:url" content="/xue-xi-bi-ji-wang-luo-zhi-shi-ji-diao-you-he-ji.html"/>
+        <meta property="og:description" content="TCP/IP三次握手四次挥手 此篇为学习笔记，并非原创。原文链接 TCP 报文头部结构 需重点关注的字段： seq序号。用来标识从TCP源端向目的端发送的字节流。 ack确认序号。只有ACK标致为1时，ack序号才有效。 标志位，共六个： ACK：确认序号ack有效。确认方ack=发起方seq + 1 FIN：释放一个连接。 PSH：接收方应尽快将此报文交给给应用层。 RST：重置连接。 SYN：发起一个新连接。 URG：紧急指针有效。 三次握手 为什么 TCP 连接是三次握手？两次不可以吗？ 因为丢包会造成服务端空等。如果只握手两次，第二次握手时如果服务端发给客户端的确认报文段丢失，此时服务端已经准备好了收发数据（可以理解为服务端已经连接成功），而客户端一直没收到服务端的确认报文，所以客户端就不知道服务端是否已经准备好了（可以理解为客户端未连接成功），这种情况下客户端不会给服务端发数据，也会忽略服务端发过来的数据。 如果是三次握手，即便发生丢包也不会有问题。如果第三次握手客户端发的确认报文丢失，服务端在一段时间内没有收到确认报文的话就会重新进行第二次握手，也就是服务端会重发 …"/>
+        <meta property="article:published_time" content="2021-07-19" />
+            <meta property="article:section" content="学习笔记" />
+            <meta property="article:tag" content="网络" />
+            <meta property="article:tag" content="iOS" />
+            <meta property="article:author" content="荆超" />
+
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css"/>
+    <link href="/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="/theme/css/style.css" type="text/css"/>
+
+
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="/" class="navbar-brand">
+荆超的小站            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+
+<!-- Banner -->
+<!-- End Banner -->
+
+<!-- Content Container -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="/xue-xi-bi-ji-wang-luo-zhi-shi-ji-diao-you-he-ji.html"
+                       rel="bookmark"
+                       title="Permalink to 【学习笔记】网络知识及调优合集">
+                        【学习笔记】网络知识及调优合集
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2021-07-19T00:00:00+08:00"> 一 19 七月 2021</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="/tag/wang-luo.html">网络</a>
+        /
+	<a href="/tag/ios.html">iOS</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h1>TCP/IP三次握手四次挥手</h1>
+<blockquote>
+<p>此篇为学习笔记，并非原创。<a href="https://blog.csdn.net/ThinkWon/article/details/104903925">原文链接</a></p>
+</blockquote>
+<h2>TCP 报文头部结构</h2>
+<p><img alt="TCP Header" src="/images/2021/tcp-header.jpeg"></p>
+<p>需重点关注的字段：</p>
+<ol>
+<li>seq序号。用来标识从TCP源端向目的端发送的字节流。</li>
+<li>ack确认序号。只有ACK标致为1时，ack序号才有效。</li>
+<li>
+<p>标志位，共六个：</p>
+<ul>
+<li>ACK：确认序号ack有效。确认方ack=发起方seq + 1</li>
+<li>FIN：释放一个连接。</li>
+<li>PSH：接收方应尽快将此报文交给给应用层。</li>
+<li>RST：重置连接。</li>
+<li>SYN：发起一个新连接。</li>
+<li>URG：紧急指针有效。</li>
+</ul>
+</li>
+</ol>
+<h2>三次握手</h2>
+<p><img alt="three-way handshake" src="/images/2021/three-way-handshake.jpeg"></p>
+<h3>为什么 TCP 连接是三次握手？两次不可以吗？</h3>
+<p>因为丢包会造成服务端空等。如果只握手两次，第二次握手时如果服务端发给客户端的确认报文段丢失，此时服务端已经准备好了收发数据（可以理解为服务端已经连接成功），而客户端一直没收到服务端的确认报文，所以客户端就不知道服务端是否已经准备好了（可以理解为客户端未连接成功），这种情况下客户端不会给服务端发数据，也会忽略服务端发过来的数据。</p>
+<p>如果是三次握手，即便发生丢包也不会有问题。如果第三次握手客户端发的确认报文丢失，服务端在一段时间内没有收到确认报文的话就会重新进行第二次握手，也就是服务端会重发 SYN 报文段，客户端收到重发的报文段后会再次给服务端发送确认报文。</p>
+<h2>四次挥手</h2>
+<p><img alt="four-way handshake" src="/images/2021/four-way-handshake.jpg"></p>
+<h3>为什么 TCP 连接是三次握手，关闭的时候却要四次挥手？</h3>
+<p>主要是建立连接时接收者的 SYN-ACK 一同发送了，而关闭时 FIN 和 ACK 却不能同时发送，因为断开连接要处理的情况比较多，比如服务器端可能还有发送出的消息没有得到 ACK，也可能服务器资源需要释放等。所以先发一个 ACK 表示已经收到了发送方的请求，等上述情况都有了确定的处理，再发 FIN 表示接收方已经完成了后续工作。</p>
+<h3>为什么客户端发出第四次挥手的确认报文后要等 2MSL 的时间才能释放 TCP 连接？</h3>
+<p>这里同样是要考虑丢包的问题。如果第四次挥手的报文丢失，服务端没收到确认报文就会重发第三次挥手的报文，这样报文一去一回最长时间就是 2MSL，所以需要等这么长时间来确认服务端确实已经收到了。</p>
+<h1>全面理解DNS及HTTPDNS</h1>
+<blockquote>
+<p>此篇为学习笔记，并非原创。<a href="https://juejin.cn/post/6844903987796246542">原文链接</a></p>
+</blockquote>
+<h2>背景</h2>
+<p>移动场景下DNS解析开销是整个网络请求中不可忽略的一部分。在弱网环境下，基于UDP的LocalDNS解析非常容易出现解析超时的问题，并且即使解析成功会消耗数百毫秒乃至更甚。</p>
+<h2>DNS</h2>
+<p>iOS 10之后，apple提供的原生HTTP请求方法能返回HTTP请求各个阶段的时间指标，其中就包含DNS解析时间。</p>
+<p><img alt="iOS-10-HTTP-phases" src="/images/2021/iOS-10-HTTP-phases.png"></p>
+<h3>DNS相关概念</h3>
+<p>DNS是一种分层结构，在整个互联网中组成一个树状系统，顶层是系统的根域名，下层为TLD以及二级域名，叶子就构成了所谓的FQDN（Fully Qualified Domain Names），根域名通常使用"."来表示，其实际上也是由域名组成，全世界目前有13组域名根节点，由少数几个国家进行管理，而国内仅有几台根节点镜像。</p>
+<p><img alt="DNS-level" src="/images/2021/DNS-level.png"></p>
+<p>权威DNS：权威DNS是经过上一级授权对域名进行解析的服务器，同时它可以把解析授权转授给其他人，如COM顶级服务器可以授权xxorg.com这个域名的的权威服务器为NS.ABC.COM，同时NS.ABC.COM还可以把授权转授给NS.DDD.COM，这样NS.DDD.COM就成了ABC.COM实际上的权威服务器了。平时我们解析域名的结果都源自权威DNS。</p>
+<p>递归DNS：又称为Local DNS，它没有域名解析结果的决定权，但代理了用户向权威DNS获取域名解析结果的过程。递归DNS上有缓存模块，当目标域名存在缓存解析结果并且TTL未过期时（每个域名都有TTL时间，即有效生存时间，若域名解析结果缓存的时间超过TTL，需要重新向权威DNS获取解析结果），递归DNS会返回缓存结果，否则，递归DNS会一级一级地查询各个层级域名的权威DNS直至获取最终完整域名的解析结果。eg: 我们自己的电脑，运营商提供的dns服务器等等。</p>
+<p>公共DNS：是递归DNS的一种特例，它是一种全网开放的递归DNS服务，而传统的递归DNS信息一般由运营商分发给用户。一些公共DNS:</p>
+<table>
+<thead>
+<tr>
+<th>运营商</th>
+<th>anycast</th>
+<th>官网</th>
+<th>DNS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>南京信风公共DNS</td>
+<td>南京、济南、芝加哥</td>
+<td>www.114dns.com</td>
+<td>114.114.114..114<br>114.114.115.115</td>
+</tr>
+<tr>
+<td>阿里云公共DNS</td>
+<td>成都、深圳、杭州</td>
+<td>http://www.alidns.com</td>
+<td>233.5.5.5 233.6.6.6</td>
+</tr>
+</tbody>
+</table>
+<p>转发DNS：可以理解为递归DNS和用户之间的一个中转站，它不提供直接解析域名的服务，它将请求转发给递归DNS，然后将递归DNS的结果转发一下，也提供缓存作用。比如，日常家用的路由器，它的DNS服务器一般都是192.168.1.1，只是转发给递归DNS。</p>
+<h3>域名解析记录方式</h3>
+<ul>
+<li>A记录：A代表Address,用来指定域名对应的IP,例如将www.hello.com指定到113.112.3.xxx, A记录可以将多个域名解析到一个IP地址，但是不能讲一个域名解析到多个IP地址。</li>
+<li>MIX记录：Mail Exchange，就是可以将某个域名下的邮件服务器直线给自己的Mail Server。</li>
+<li>CNAME记录：Canonical Name，即别名解析。所谓别名解析就是可以为一个域名设置一个或者多个别名，如将aaa.com解析到bbb.net、将ccc.com也解析到bbb.net，其中bbb.net分别是aaa.com和ccc.com的别名。</li>
+<li>NS记录：为某个域名指定DNS解析服务器，也就是这个域名由指定的IP地址的DNS服务器解析。</li>
+<li>TXT记录：为某个主机名或域名设置说明，如可以为ucloud.cn是指TXT记录为“中立安全科信赖”这样的说明。</li>
+</ul>
+<h3>域名解析过程</h3>
+<p><img alt="domain-name-resolve-process" src="/images/2021/domain-name-resolve-process.png"></p>
+<h3>全局负载均衡GSLB</h3>
+<p>GSLB是Global Server load Blance的缩写，即全局负载均衡。目的是实现互联网上不同地域的服务器间的流量调配，保证使用户的请求能被离用户最近或者服务质量更好的服务器来处理。从而确保服务质量。</p>
+<p>能通过判断服务器的负载，包括CPU占用、带宽占用等数据，决定服务器的可用性，同时能判断用户（访问者）与服务器间的链路状况，选择链路状况最好的服务器。因此GSLB是对服务器和链路进行综合判断来决定由哪个地点的服务器来提供服务，实现异地服务器群服务质量的保证</p>
+<p><img alt="GSLB" src="/images/2021/GSLB.png"></p>
+<h2>DNS解析存在的问题</h2>
+<h3>运营商劫持</h3>
+<p>DNS劫持 就是通过劫持了 DNS 服务器，通过某些手段取得某域名的解析记录控制权，进而修改此域名的解析结果，导致对该域名的访问由原 IP 地址转入到修改后的指定 IP，其结果就是对特定的网址不能访问或访问的是假网址，从而实现窃取资料或者破坏原有正常服务的目的。</p>
+<h3>DNS解析域名时缓存解析结果</h3>
+<p>LocalDNS没有及时更新，这样导致用户访问不到服务器。</p>
+<h3>转发解析</h3>
+<p>你用手机访问baidu.com时，会到当前运营商的DNS服务器查，然后运营商的DNS服务再去百度权威服务器去查，最终把权威服务器中的正确IP返回。</p>
+<p>上面是正常的情况，但是如果当前运营商(比如联通)的LocalDNS不访问百度权威DNS服务器，而是直接访问了其它运营商(比如电信)的LocalDNS服务器，有些小的运营商就是通过这样做来降低成本。如果电信的LocalDNS对非自家ip的访问限了速那么很明显会影响你的DNS解析时间。</p>
+<h2>HTTPDNS</h2>
+<p>HTTPDNS使用HTTP与DNS服务器交互，代替传统的基于UDP的DNS协议，域名解析请求直接发送到HTTPDNS服务端，从而绕过运营商的Local DNS</p>
+<h3>HTTPDNS的特性</h3>
+<h4>防止域名劫持</h4>
+<p>由于 HTTPDNS 是通过 IP 直接请求 HTTP 获取服务器 A 记录地址，不存在向本地运营商询问 domain 解析过程，所以从根本避免了劫持问题。</p>
+<h4>精准调度</h4>
+<p>HTTPDNS能够直接获取到用户的IP地址，从而实现精确定位与导流。</p>
+<h4>用户连接失败率下降</h4>
+<p>通过算法降低以往失败率过高的服务器排序，通过时间近期访问过的数据提高服务器排序，通过历史访问成功记录提高服务器排序。</p>
+<h3>HTTPS IP Content</h3>
+<p>发送HTTPS请求首先要进行SSL/TLS握手，握手过程大致如下：</p>
+<ol>
+<li>客户端发起握手请求，携带随机数、支持算法列表等参数。</li>
+<li>服务端收到请求，选择合适的算法，下发证书和随机数。</li>
+<li>客户端对服务端证书进行校验，并发送随机数信息，该信息使用公钥加密。</li>
+<li>服务端通过私钥获取随机数信息。</li>
+<li>双方根据以上交互的信息生成session ticket，用作该连接后续数据传输的加密密钥。</li>
+</ol>
+<p>上述过程中，和HTTPDNS有关的是第3步，客户端需要验证服务端下发的证书，验证过程有以下两个要点：</p>
+<ol>
+<li>客户端用本地保存的根证书解开证书链，确认服务端下发的证书是由可信任的机构颁发的。</li>
+<li>客户端需要检查证书的domain域和扩展域，看是否包含本次请求的host。</li>
+</ol>
+<h2>一些问题</h2>
+<h3>主机是如何知道DNS服务器地的IP地址的？</h3>
+<p>通过DHCP动态获得，或者手工配置的。</p>
+<h4>为什么DNS采用UDP协议 ？</h4>
+<p>TCP通信过程太复杂并且开销大，一次TCP交换需要9个包： 三个连接包，四个断开包，一个request包，一个响应包。</p>
+<h1>iOS IP 直连原理剖析</h1>
+<blockquote>
+<p>此篇为学习笔记，并非原创。<a href="https://juejin.cn/post/6844903564960088071">原文链接</a></p>
+</blockquote>
+<p>移动互联网的网络状况是十分复杂的，三大运营商、3G、4G、Wi-Fi、地点等任何一个状态的改变都会导致网络状况的变化，并且运营商、代理商们还可能在其中搞一些小破坏，比如经常会有用户反馈说某个页面访问不了或者返回结果不正确等问题，这种状况一般都是发生了域名劫持，通用的解决方案就是使用 IP 直连，跨过运营商 LocalDNS 服务器解析过程，从而达到降低延迟、避免劫持的效果。</p>
+<h2>为什么直接用IP</h2>
+<ol>
+<li>防劫持，可以绕过运营商 LocalDNS 解析过程，避免域名劫持，提高网络访问成功率。</li>
+<li>降低延迟，DNS 解析是一个相对耗时的工作，跳过这个过程可以降低一定的延迟。</li>
+<li>精准调度，运营商解析返回的节点不一定是最优的，自己获取 IP 可以基于自己的策略来获取最精准的、最优的节点。</li>
+</ol>
+<p>如何获取IP:</p>
+<ol>
+<li>直接接入腾讯或者阿里的 HTTPDNS 服务。</li>
+<li>内置 Server IP，可以在启动等阶段由服务端下发域名和 IP 的对应列表，客户端来进行缓存。</li>
+</ol>
+<p>HTTPS其实是不能防DNS劫持的，因为DNS 解析是网络请求的第一个步骤。</p>
+<h2>身份认证</h2>
+<p>HTTPS 网络下我们会对服务端的身份进行认证，就拿 AFNetworking 来说，它提供了三种身份认证的可选方案：</p>
+<ul>
+<li>AFSSLPinningModeNone(Default)：客户端自己不会对服务端证书进行自主校验，而是直接默认信任，将证书交给系统来进行校验，判断返回的证书是否是官方机构颁发的，如果是则信任，这个应该也是普通开发者采用最多的方案。这种认证方案如果被劫持后返回的证书也是官方机构颁发的，那么客户端就会正常进行网络访问，但是返回的数据就不是想要的数据，比如被塞广告等现象的出现。</li>
+<li>AFSSLPinningModePublicKey：客户端会将服务器端返回的证书与本地保存的证书中的 PublicKey 部分进行自主校验</li>
+<li>AFSSLPinningModeCertificate：客户端会将服务器端返回的证书和本地保存的证书中的所有内容，包括 PublicKey 和证书部分全部进行自主校验。</li>
+</ul>
+<h2>获取IP后，如何将请求改为IP</h2>
+<h3>HTTP IP Connect</h3>
+<p>实现 HTTP 协议下 IP 连接其实是很简单的，我们只需要通过 NSURLProtocol 来拦截网络请求，然后将符号条件的网络请求 URL 中的域名修改为 IP 就可以啦。</p>
+<p>但是会存在一些小问题，域名置换为 IP 之后，服务端无法根据 URL 来判断你要访问哪个域名，所以我们需要手动的将 host 字段塞到 header 中去，方便服务器的正确识别。</p>
+<h3>HTTPS IP Connect</h3>
+<p>HTTPS会校验证书的 domain 域是否包含本次 Request 的 host。由于 IP 连接会将 URL 中的域名置换为 IP，所以就会导致返回的证书和我们的 Request 校验失败的问题。</p>
+<p>为了解决证书的校验的问题，我们需要在证书校验前，再进行一次域名的替换，这次需要把 URL 中 IP 置换为域名，这样证书校验的问题便可迎刃而解。</p>
+<h3>SNI IP Connect</h3>
+<p>通常情况下我们的证书是和域名绑定的，有时候会存在一个 IP 对应多个域名的情况，这种情况如果客户端 IP 直连的时候，没有告诉服务端他要请求的是哪个域名的证书，服务端就没办法返回正确的证书，从而导致客户端证书校验失败。</p>
+<p>SNI 的全称 Server Name Indication，为了解决一个服务器使用多个域名和证书的 SSL/TLS 扩展。在连接到服务器建立 SSL 连接时，客户端可以在第一次握手的 Client Hello 中的 SNI 扩展字段中填入要访问站点的域名（Hostname），这样服务器就可以根据域名返回一个合适的证书。</p>
+<p>面对单 IP 多域名的情况需要客户端手动配置 SNI 字段，但是上层的网络库 NSURLSession、NSURLConnection 都没有提供配置的接口，我们需要使用更加底层的 libcurl 库和 CFNetwork 来完成 SNI 字段的配置。以 CFNetwork 为例，可以使用如下代码进行 SNI 的配置：</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// HTTPS 请求处理 SNI 场景</span>
+<span class="bp">NSString</span> <span class="o">*</span><span class="n">host</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">swizzleRequest</span><span class="p">.</span><span class="n">allHTTPHeaderFields</span> <span class="nl">objectForKey</span><span class="p">:</span><span class="s">@&quot;host&quot;</span><span class="p">];</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">host</span><span class="p">)</span> <span class="p">{</span>
+<span class="n">host</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">originalRequest</span><span class="p">.</span><span class="n">URL</span><span class="p">.</span><span class="n">host</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">inputStream</span> <span class="nl">setProperty</span><span class="p">:</span><span class="n">NSStreamSocketSecurityLevelNegotiatedSSL</span> <span class="nl">forKey</span><span class="p">:</span><span class="n">NSStreamSocketSecurityLevelKey</span><span class="p">];</span>
+<span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">sslProperties</span> <span class="o">=</span> <span class="l">@{</span> <span class="p">(</span><span class="k">__bridge</span> <span class="kt">id</span><span class="p">)</span> <span class="nl">kCFStreamSSLPeerName</span> <span class="p">:</span> <span class="n">host</span> <span class="l">}</span><span class="p">;</span>
+<span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">inputStream</span> <span class="nl">setProperty</span><span class="p">:</span><span class="n">sslProperties</span> <span class="nl">forKey</span><span class="p">:(</span><span class="k">__bridge_transfer</span> <span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span> <span class="n">kCFStreamPropertySSLSettings</span><span class="p">];</span>
+</code></pre></div>
+
+
+<h1>iOS网络缓存扫盲篇--使用两行代码就能完成80%的缓存需求</h1>
+<blockquote>
+<p>此篇为学习笔记，并非原创。<a href="https://www.jianshu.com/p/fb5aaeac06ef">原文链接</a></p>
+</blockquote>
+<h2>GET网络请求缓存</h2>
+<p>POST请求不能被缓存，只有 GET 请求能被缓存。因为从数学的角度来讲，GET 的结果是<code>幂等</code> 的，而 POST 不<code>幂等</code> 。缓存的思路就是将查询的参数组成的值作为 key ，对应结果作为value。</p>
+<div class="highlight"><pre><span></span><code><span class="bp">NSURLCache</span> <span class="o">*</span><span class="n">urlCache</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">NSURLCache</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithMemoryCapacity</span><span class="p">:</span><span class="mi">4</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="nl">diskCapacity</span><span class="p">:</span><span class="mi">20</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="nl">diskPath</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+<span class="p">[</span><span class="bp">NSURLCache</span> <span class="nl">setSharedURLCache</span><span class="p">:</span><span class="n">urlCache</span><span class="p">];</span>
+</code></pre></div>
+
+
+<h2>控制缓存的有效性</h2>
+<p>服务器的文件存贮，大多采用资源变动后就重新生成一个链接的做法。而且如果你的文件存储采用的是第三方的服务，比如七牛、青云等服务，则一定是如此。</p>
+<p>链接不变的情况下，要求资源改了，缓存就要更新，该如何做？</p>
+<h4>文件缓存：借助ETag或Last-Modified判断文件缓存是否有效</h4>
+<h5>Last-Modified</h5>
+<p><code>Last-Modified</code>顾名思义，是资源最后修改的时间戳，往往与缓存时间进行对比来判断缓存是否过期。HTTP Response Header :</p>
+<div class="highlight"><pre><span></span><code><span class="err"> Last-Modified: Fri, 12 May 2006 18:53:33 GMT</span>
+</code></pre></div>
+
+
+<p>客户端第二次请求此URL时，根据 HTTP 协议的规定，浏览器会向服务器传送 If-Modified-Since 报头，询问该时间之后文件是否有被修改过：</p>
+<div class="highlight"><pre><span></span><code><span class="c">If-Modified-Since: Fri, 12 May 2006 18:53:33 GMT</span>
+</code></pre></div>
+
+
+<p>如果服务器端的资源没有变化，则自动返回 HTTP 304 （Not Changed.）状态码，内容为空，这样就节省了传输数据量。</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/*!</span>
+<span class="cm">@brief 如果本地缓存资源为最新，则使用使用本地缓存。如果服务器已经更新或本地无缓存则从服务器请求资源。</span>
+
+<span class="cm">@details</span>
+
+<span class="cm">步骤：</span>
+<span class="cm">1. 请求是可变的，缓存策略要每次都从服务器加载</span>
+<span class="cm">2. 每次得到响应后，需要记录住 LastModified</span>
+<span class="cm">3. 下次发送请求的同时，将LastModified一起发送给服务器（由服务器比较内容是否发生变化）</span>
+
+<span class="cm">@return 图片资源</span>
+<span class="cm">*/</span>
+<span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">getData:</span><span class="p">(</span><span class="n">GetDataCompletion</span><span class="p">)</span><span class="nv">completion</span> <span class="p">{</span>
+   <span class="bp">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSURL</span> <span class="nl">URLWithString</span><span class="p">:</span><span class="n">kLastModifiedImageURL</span><span class="p">];</span>
+   <span class="bp">NSMutableURLRequest</span> <span class="o">*</span><span class="n">request</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSMutableURLRequest</span> <span class="nl">requestWithURL</span><span class="p">:</span><span class="n">url</span> <span class="nl">cachePolicy</span><span class="p">:</span><span class="n">NSURLRequestReloadIgnoringCacheData</span> <span class="nl">timeoutInterval</span><span class="p">:</span><span class="mf">15.0</span><span class="p">];</span>
+
+   <span class="c1">//    // 发送 etag</span>
+   <span class="c1">//    if (self.etag.length &gt; 0) {</span>
+   <span class="c1">//        [request setValue:self.etag forHTTPHeaderField:@&quot;If-None-Match&quot;];</span>
+   <span class="c1">//    }</span>
+   <span class="c1">// 发送 LastModified</span>
+   <span class="k">if</span> <span class="p">(</span><span class="nb">self</span><span class="p">.</span><span class="n">localLastModified</span><span class="p">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+       <span class="p">[</span><span class="n">request</span> <span class="nl">setValue</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">localLastModified</span> <span class="nl">forHTTPHeaderField</span><span class="p">:</span><span class="s">@&quot;If-Modified-Since&quot;</span><span class="p">];</span>
+   <span class="p">}</span>
+
+   <span class="p">[[[</span><span class="bp">NSURLSession</span> <span class="n">sharedSession</span><span class="p">]</span> <span class="nl">dataTaskWithRequest</span><span class="p">:</span><span class="n">request</span> <span class="nl">completionHandler</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSData</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="bp">NSURLResponse</span> <span class="o">*</span><span class="n">response</span><span class="p">,</span> <span class="bp">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+
+       <span class="c1">// NSLog(@&quot;%@ %tu&quot;, response, data.length);</span>
+       <span class="c1">// 类型转换（如果将父类设置给子类，需要强制转换）</span>
+       <span class="bp">NSHTTPURLResponse</span> <span class="o">*</span><span class="n">httpResponse</span> <span class="o">=</span> <span class="p">(</span><span class="bp">NSHTTPURLResponse</span> <span class="o">*</span><span class="p">)</span><span class="n">response</span><span class="p">;</span>
+       <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;statusCode == %@&quot;</span><span class="p">,</span> <span class="l">@(</span><span class="n">httpResponse</span><span class="p">.</span><span class="n">statusCode</span><span class="l">)</span><span class="p">);</span>
+       <span class="c1">// 判断响应的状态码是否是 304 Not Modified （更多状态码含义解释： https://github.com/ChenYilong/iOSDevelopmentTips）</span>
+       <span class="k">if</span> <span class="p">(</span><span class="n">httpResponse</span><span class="p">.</span><span class="n">statusCode</span> <span class="o">==</span> <span class="mi">304</span><span class="p">)</span> <span class="p">{</span>
+           <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;加载本地缓存图片&quot;</span><span class="p">);</span>
+           <span class="c1">// 如果是，使用本地缓存</span>
+           <span class="c1">// 根据请求获取到`被缓存的响应`！</span>
+           <span class="bp">NSCachedURLResponse</span> <span class="o">*</span><span class="n">cacheResponse</span> <span class="o">=</span>  <span class="p">[[</span><span class="bp">NSURLCache</span> <span class="n">sharedURLCache</span><span class="p">]</span> <span class="nl">cachedResponseForRequest</span><span class="p">:</span><span class="n">request</span><span class="p">];</span>
+           <span class="c1">// 拿到缓存的数据</span>
+           <span class="n">data</span> <span class="o">=</span> <span class="n">cacheResponse</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
+       <span class="p">}</span>
+
+       <span class="c1">// 获取并且纪录 etag，区分大小写</span>
+       <span class="c1">//        self.etag = httpResponse.allHeaderFields[@&quot;Etag&quot;];</span>
+       <span class="c1">// 获取并且纪录 LastModified</span>
+       <span class="nb">self</span><span class="p">.</span><span class="n">localLastModified</span> <span class="o">=</span> <span class="n">httpResponse</span><span class="p">.</span><span class="n">allHeaderFields</span><span class="p">[</span><span class="s">@&quot;Last-Modified&quot;</span><span class="p">];</span>
+       <span class="c1">//        NSLog(@&quot;%@&quot;, self.etag);</span>
+       <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">localLastModified</span><span class="p">);</span>
+       <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
+           <span class="o">!</span><span class="n">completion</span> <span class="o">?:</span> <span class="n">completion</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+       <span class="p">});</span>
+   <span class="p">}]</span> <span class="n">resume</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<h5>ETag</h5>
+<p><code>ETag</code> 是什么？HTTP 协议规格说明定义ETag为“被请求变量的实体值” 。 另一种说法是，ETag是一个可以与Web资源关联的记号（token）。它是一个 hash 值，用作 Request 缓存请求头，每一个资源文件都对应一个唯一的 ETag 值，服务器单独负责判断记号是什么及其含义，并在HTTP响应头中将其传送到客户端，以下是服务器端返回的格式：</p>
+<div class="highlight"><pre><span></span><code>    <span class="n">ETag</span><span class="p">:</span> <span class="ss">&quot;50b1c1d4f775c61:df3&quot;</span>
+
+    <span class="err">客户端的查询更新格式是这样的：</span>
+    <span class="k">If</span><span class="o">-</span><span class="k">None</span><span class="o">-</span><span class="k">Match</span><span class="p">:</span> <span class="n">W</span><span class="o">/</span><span class="ss">&quot;50b1c1d4f775c61:df3&quot;</span>
+</code></pre></div>
+
+
+<p>其中，<code>If-None-Match -</code> 与响应头的 Etag 相对应，可以判断本地缓存数据是否发生变化。如果ETag没改变，则返回状态304然后不返回，这也和Last-Modified一样。</p>
+<p><code>ETag</code> 是的功能与 <code>Last-Modified</code> 类似：服务端不会每次都会返回文件资源。客户端每次向服务端发送上次服务器返回的 ETag 值，服务器会根据客户端与服务端的 ETag 值是否相等，来决定是否返回 data，同时总是返回对应的 HTTP 状态码。客户端通过 HTTP 状态码来决定是否使用缓存。比如：服务端与客户端的 ETag 值相等，则 HTTP 状态码为 304，不返回 data。服务端文件一旦修改，服务端与客户端的 ETag 值不等，并且状态值会变为200，同时返回 data。</p>
+<p>因为修改资源文件后该值会立即变更。这也决定了 ETag 在断点下载时非常有用。
+比如 AFNetworking 在进行断点下载时，就是借助它来检验数据的。详见在 AFHTTPRequestOperation 类中的用法:</p>
+<div class="highlight"><pre><span></span><code> <span class="c1">//下载暂停时提供断点续传功能，修改请求的HTTP头，记录当前下载的文件位置，下次可以从这个位置开始下载。</span>
+<span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">pause</span> <span class="p">{</span>
+   <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+   <span class="k">if</span> <span class="p">([</span><span class="nb">self</span><span class="p">.</span><span class="n">outputStream</span> <span class="nl">propertyForKey</span><span class="p">:</span><span class="n">NSStreamFileCurrentOffsetKey</span><span class="p">])</span> <span class="p">{</span>
+       <span class="n">offset</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">self</span><span class="p">.</span><span class="n">outputStream</span> <span class="nl">propertyForKey</span><span class="p">:</span><span class="n">NSStreamFileCurrentOffsetKey</span><span class="p">]</span> <span class="n">unsignedLongLongValue</span><span class="p">];</span>
+   <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+       <span class="n">offset</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">self</span><span class="p">.</span><span class="n">outputStream</span> <span class="nl">propertyForKey</span><span class="p">:</span><span class="n">NSStreamDataWrittenToMemoryStreamKey</span><span class="p">]</span> <span class="n">length</span><span class="p">];</span>
+   <span class="p">}</span>
+
+   <span class="bp">NSMutableURLRequest</span> <span class="o">*</span><span class="n">mutableURLRequest</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">request</span> <span class="n">mutableCopy</span><span class="p">];</span>
+   <span class="k">if</span> <span class="p">([</span><span class="nb">self</span><span class="p">.</span><span class="n">response</span> <span class="nl">respondsToSelector</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="n">allHeaderFields</span><span class="p">)]</span> <span class="o">&amp;&amp;</span> <span class="p">[[</span><span class="nb">self</span><span class="p">.</span><span class="n">response</span> <span class="n">allHeaderFields</span><span class="p">]</span> <span class="nl">valueForKey</span><span class="p">:</span><span class="s">@&quot;ETag&quot;</span><span class="p">])</span> <span class="p">{</span>
+   <span class="c1">//若请求返回的头部有ETag，则续传时要带上这个ETag，</span>
+   <span class="c1">//ETag用于放置文件的唯一标识，比如文件MD5值</span>
+   <span class="c1">//续传时带上ETag服务端可以校验相对上次请求，文件有没有变化，</span>
+   <span class="c1">//若有变化则返回200，回应新文件的全数据，若无变化则返回206续传。</span>
+       <span class="p">[</span><span class="n">mutableURLRequest</span> <span class="nl">setValue</span><span class="p">:[[</span><span class="nb">self</span><span class="p">.</span><span class="n">response</span> <span class="n">allHeaderFields</span><span class="p">]</span> <span class="nl">valueForKey</span><span class="p">:</span><span class="s">@&quot;ETag&quot;</span><span class="p">]</span> <span class="nl">forHTTPHeaderField</span><span class="p">:</span><span class="s">@&quot;If-Range&quot;</span><span class="p">];</span>
+   <span class="p">}</span>
+   <span class="c1">//给当前request加Range头部，下次请求带上头部，可以从offset位置继续下载</span>
+   <span class="p">[</span><span class="n">mutableURLRequest</span> <span class="nl">setValue</span><span class="p">:[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span><span class="s">@&quot;bytes=%llu-&quot;</span><span class="p">,</span> <span class="n">offset</span><span class="p">]</span> <span class="nl">forHTTPHeaderField</span><span class="p">:</span><span class="s">@&quot;Range&quot;</span><span class="p">];</span>
+   <span class="nb">self</span><span class="p">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">mutableURLRequest</span><span class="p">;</span>
+
+   <span class="p">[</span><span class="nb">super</span> <span class="n">pause</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p>下面使用一个 Demo 来进行演示用法，以 <code>NSURLConnection</code> 搭配 <code>ETag</code> 为例，步骤如下：</p>
+<ul>
+<li>请求的缓存策略使用 <code>NSURLRequestReloadIgnoringCacheData</code>，忽略本地缓存</li>
+<li>服务器响应结束后，要记录 <code>Etag</code>，服务器内容和本地缓存对比是否变化的重要依据</li>
+<li>在发送请求时，设置<code>If-None-Match</code>，并且传入<code>Etag</code></li>
+<li>连接结束后，要判断响应头的状态码，如果是 <code>304</code>，说明本地缓存内容没有发生变化</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="cm">/*!</span>
+<span class="cm">@brief 如果本地缓存资源为最新，则使用使用本地缓存。如果服务器已经更新或本地无缓存则从服务器请求资源。</span>
+
+<span class="cm">@details</span>
+
+<span class="cm">步骤：</span>
+<span class="cm">1. 请求是可变的，缓存策略要每次都从服务器加载</span>
+<span class="cm">2. 每次得到响应后，需要记录住 etag</span>
+<span class="cm">3. 下次发送请求的同时，将etag一起发送给服务器（由服务器比较内容是否发生变化）</span>
+
+<span class="cm">@return 图片资源</span>
+<span class="cm">*/</span>
+<span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">getData:</span><span class="p">(</span><span class="n">GetDataCompletion</span><span class="p">)</span><span class="nv">completion</span> <span class="p">{</span>
+   <span class="bp">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSURL</span> <span class="nl">URLWithString</span><span class="p">:</span><span class="n">kETagImageURL</span><span class="p">];</span>
+   <span class="bp">NSMutableURLRequest</span> <span class="o">*</span><span class="n">request</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSMutableURLRequest</span> <span class="nl">requestWithURL</span><span class="p">:</span><span class="n">url</span> <span class="nl">cachePolicy</span><span class="p">:</span><span class="n">NSURLRequestReloadIgnoringCacheData</span> <span class="nl">timeoutInterval</span><span class="p">:</span><span class="mf">15.0</span><span class="p">];</span>
+
+   <span class="c1">// 发送 etag</span>
+   <span class="k">if</span> <span class="p">(</span><span class="nb">self</span><span class="p">.</span><span class="n">etag</span><span class="p">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+       <span class="p">[</span><span class="n">request</span> <span class="nl">setValue</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">etag</span> <span class="nl">forHTTPHeaderField</span><span class="p">:</span><span class="s">@&quot;If-None-Match&quot;</span><span class="p">];</span>
+   <span class="p">}</span>
+
+   <span class="p">[[[</span><span class="bp">NSURLSession</span> <span class="n">sharedSession</span><span class="p">]</span> <span class="nl">dataTaskWithRequest</span><span class="p">:</span><span class="n">request</span> <span class="nl">completionHandler</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="bp">NSData</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="bp">NSURLResponse</span> <span class="o">*</span><span class="n">response</span><span class="p">,</span> <span class="bp">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+
+       <span class="c1">// NSLog(@&quot;%@ %tu&quot;, response, data.length);</span>
+       <span class="c1">// 类型转换（如果将父类设置给子类，需要强制转换）</span>
+       <span class="bp">NSHTTPURLResponse</span> <span class="o">*</span><span class="n">httpResponse</span> <span class="o">=</span> <span class="p">(</span><span class="bp">NSHTTPURLResponse</span> <span class="o">*</span><span class="p">)</span><span class="n">response</span><span class="p">;</span>
+       <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;statusCode == %@&quot;</span><span class="p">,</span> <span class="l">@(</span><span class="n">httpResponse</span><span class="p">.</span><span class="n">statusCode</span><span class="l">)</span><span class="p">);</span>
+       <span class="c1">// 判断响应的状态码是否是 304 Not Modified （更多状态码含义解释： https://github.com/ChenYilong/iOSDevelopmentTips）</span>
+       <span class="k">if</span> <span class="p">(</span><span class="n">httpResponse</span><span class="p">.</span><span class="n">statusCode</span> <span class="o">==</span> <span class="mi">304</span><span class="p">)</span> <span class="p">{</span>
+           <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;加载本地缓存图片&quot;</span><span class="p">);</span>
+           <span class="c1">// 如果是，使用本地缓存</span>
+           <span class="c1">// 根据请求获取到`被缓存的响应`！</span>
+           <span class="bp">NSCachedURLResponse</span> <span class="o">*</span><span class="n">cacheResponse</span> <span class="o">=</span>  <span class="p">[[</span><span class="bp">NSURLCache</span> <span class="n">sharedURLCache</span><span class="p">]</span> <span class="nl">cachedResponseForRequest</span><span class="p">:</span><span class="n">request</span><span class="p">];</span>
+           <span class="c1">// 拿到缓存的数据</span>
+           <span class="n">data</span> <span class="o">=</span> <span class="n">cacheResponse</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
+       <span class="p">}</span>
+
+       <span class="c1">// 获取并且纪录 etag，区分大小写</span>
+       <span class="nb">self</span><span class="p">.</span><span class="n">etag</span> <span class="o">=</span> <span class="n">httpResponse</span><span class="p">.</span><span class="n">allHeaderFields</span><span class="p">[</span><span class="s">@&quot;Etag&quot;</span><span class="p">];</span>
+
+       <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">etag</span><span class="p">);</span>
+       <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
+           <span class="o">!</span><span class="n">completion</span> <span class="o">?:</span> <span class="n">completion</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+       <span class="p">});</span>
+   <span class="p">}]</span> <span class="n">resume</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<h2>总结</h2>
+<p>在官方给出的文档中提出<code>ETag</code>是首选的方式，优于<code>Last-Modified</code>方式。因为<code>ETag</code>是基于 hash ，hash 的规则可以自己设置，而且是基于一致性，是“强校验”。 <code>Last-Modified</code>是基于时间，是弱校验，弱在哪里？比如说：如果服务端的资源回滚客户端的<code>Last-Modified</code>反而会比服务端还要新。</p>
+<p>作为通用型的网络请求工具 AFNetworking 对该现状的处理方式是，判断服务端是否包含 ETag ，然后再进行相应处理。可见 AFHTTPRequestOperation 类中的用法，也就是上文中已经给出的断点下载的代码。</p>
+<p>在回顾下思路：为资源分派 hash 值，然后对比服务端与本地缓存是否一致来决定是否需要更新缓存。</p>
+<p>这种思路，在开发中经常使用，比如：处于安全考虑，登陆操作一般不会传输账号密码，而是传输对应的 hash 值-- token ，这里的 token 就可以看做一个 file 资源，如果想让一个用户登陆超时时间是三天，只需要在服务端每隔三天更改下 token 值，客户端与服务端值不一致，然后服务端返回 token 过期的提示。</p>
+<p>值得注意的一点是：如果借助了 <code>Last-Modified</code> 和 <code>ETag</code>，那么缓存策略则必须使用 <code>NSURLRequestReloadIgnoringCacheData</code> 策略，忽略缓存，每次都要向服务端进行校验。</p>
+<p>如果 GET 中包含有版本号信息，众多的应用都会在 GET 请求后加上版本号：</p>
+<div class="highlight"><pre><span></span><code><span class="c">http://abc.com?my_current_version=v1.0.0</span>
+</code></pre></div>
+
+
+<p>这种情况下， <code>?v1.0</code>  和 <code>?v2.0</code> 两个不同版本，请求到的 <code>Last-Modified</code>  和  <code>ETag</code> 会如预期吗？</p>
+<p>这完全取决于公司服务端同事的实现， <code>Last-Modified</code>  和   <code>ETag</code> 仅仅是一个协议，并没有统一的实现方法，而服务端的处理逻辑完全取决于需求。</p>
+<p>你完全可以要求服务端同事，仅仅判断资源的异同，而忽略掉 <code>?v1.0</code>  和 <code>?v2.0</code> 两个版本的区别。</p>
+            </div>
+            <!-- /.entry-content -->
+    <hr/>
+    <section class="comments" id="comments">
+        <h2>Comments</h2>
+
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
+
+            var disqus_config = function () {
+                this.language = "zh";
+
+                        this.page.identifier = '2021-07-19-xue-xi-bi-ji-wang-luo-zhi-shi-ji-diao-you-he-ji';
+            };
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function () {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+            Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </section>
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+<!-- Sidebar -->
+<section class="well well-sm">
+  <ul class="list-group list-group-flush">
+
+<!-- Sidebar/Social -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+  <ul class="list-group" id="social">
+    <li class="list-group-item"><a href="https://www.linkedin.com/in/chao-jing-8470a895/"><i class="fa fa-linkedin-square fa-lg"></i> LinkedIn</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Social -->
+
+<!-- Sidebar/Recent Posts -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Recent Posts</span></h4>
+  <ul class="list-group" id="recentposts">
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-quan-mian-li-jie-dnsji-httpdns.html">【学习笔记】全面理解DNS及HTTPDNS</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-tcpipsan-ci-wo-shou-si-ci-hui-shou.html">【学习笔记】TCP/IP三次握手四次挥手</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-wang-luo-zhi-shi-ji-diao-you-he-ji.html">【学习笔记】网络知识及调优合集</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-wkwebview-jia-zai-sheng-ming-zhou-qi-yu-dai-li-fang-fa-pou-xi.html">【学习笔记】WKWebView 加载生命周期与代理方法剖析</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-iosji-zhu-wen-zhang-lie-biao.html">【学习笔记】iOS技术文章列表</a></li>
+  </ul>
+</li>
+<!-- End Sidebar/Recent Posts -->
+
+<!-- Sidebar/Categories -->
+<li class="list-group-item">
+  <h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Categories</span></h4>
+  <ul class="list-group" id="categories">
+    <li class="list-group-item">
+      <a href="/category/blog.html"><i class="fa fa-folder-open fa-lg"></i>Blog</a>
+    </li>
+    <li class="list-group-item">
+      <a href="/category/fan-yi.html"><i class="fa fa-folder-open fa-lg"></i>翻译</a>
+    </li>
+    <li class="list-group-item">
+      <a href="/category/xue-xi-bi-ji.html"><i class="fa fa-folder-open fa-lg"></i>学习笔记</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Categories -->
+
+<!-- Sidebar/Tag Cloud -->
+<li class="list-group-item">
+  <a href="/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
+  <ul class="list-group " id="tags">
+    <li class="list-group-item tag-1">
+      <a href="/tag/ios.html">iOS</a>
+    </li>
+    <li class="list-group-item tag-2">
+      <a href="/tag/wang-luo.html">网络</a>
+    </li>
+    <li class="list-group-item tag-2">
+      <a href="/tag/xing-neng.html">性能</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/crash.html">Crash</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/wen-zhang-lie-biao.html">文章列表</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/jian-kong.html">监控</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/yin-shi-pin.html">音视频</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/harmonyos.html">HarmonyOS</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/git.html">git</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/liu-lan-qi.html">浏览器</a>
+    </li>
+    <li class="list-group-item tag-4">
+      <a href="/tag/bao-ti-ji.html">包体积</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Tag Cloud -->
+
+<!-- Sidebar/Links -->
+<li class="list-group-item">
+  <h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+  <ul class="list-group" id="links">
+    <li class="list-group-item">
+      <a href="http://hutaow.com/" target="_blank">胡桃夹子</a>
+    </li>
+    <li class="list-group-item">
+      <a href="http://wenzhong.me/" target="_blank">Wenzhong's Playground</a>
+    </li>
+  </ul>
+</li>
+<!-- End Sidebar/Links -->
+  </ul>
+</section>
+<!-- End Sidebar -->            </aside>
+        </div>
+    </div>
+</div>
+<!-- End Content Container -->
+
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2021 荆超
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="/theme/js/respond.min.js"></script>
+
+
+    <!-- Disqus -->
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'jingchao'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <!-- End Disqus Code -->
+
+
+</body>
+</html>

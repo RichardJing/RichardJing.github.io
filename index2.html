@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
 <head>
-    <title>iOS - 荆超的小站</title>
+    <title>荆超的小站</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -9,9 +9,8 @@
 
 
 
-
-    <meta name="author" content="荆超" />
-    <meta name="keywords" content="iOS" />
+<link rel="canonical" href="">
+        <meta name="author" content="荆超" />
 
     <!-- Open Graph tags -->
         <meta property="og:site_name" content="荆超的小站" />
@@ -59,97 +58,33 @@
     <div class="row">
         <div class="col-sm-9">
             <article>
-                <h2><a href="/xue-xi-bi-ji-ios-ip-zhi-lian-yuan-li-pou-xi.html">【学习笔记】iOS IP 直连原理剖析</a></h2>
-                <div class="summary"><blockquote>
-<p>本文为学习笔记，并非原创。<a href="https://juejin.cn/post/6844903564960088071">原文链接</a></p>
-</blockquote>
-<p>移动互联网的网络状况是十分复杂的，三大运营商、3G、4G、Wi-Fi、地点等任何一个状态的改变都会导致网络状况的变化，并且运营商、代理商们还可能在其中搞一些小破坏，比如经常会有用户反馈说某个页面访问不了或者返回结果不正确等问题，这种状况一般都是发生了域名劫持，通用的解决方案就是使用 IP 直连，跨过运营商 LocalDNS 服务器解析过程，从而达到降低延迟、避免劫持的效果。</p>
-<h1>为什么直接用IP</h1>
-<ol>
-<li>防劫持，可以绕过运营商 LocalDNS 解析过程，避免域名劫持，提高网络访问成功率。</li>
-<li>降低延迟，DNS 解析是一个相对耗时的工作，跳过这个过程可以降低一定的延迟。</li>
-<li>精准调度，运营商解析返回的节点不一定是最优的，自己获取 IP 可以基于自己的策略来获取最精准的、最优的节点。</li>
-</ol>
-<p>如何获取IP:</p>
-<ol>
-<li>直接接入腾讯或者阿里的 HTTPDNS 服务。</li>
-<li>内置 Server IP，可以在启动等阶段由服务端下发域名和 IP 的对应列表，客户端来进行缓存。</li>
-</ol>
-<p>HTTPS其实是不能防DNS劫持的 …</p>
-                    <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-ios-ip-zhi-lian-yuan-li-pou-xi.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/xue-xi-bi-ji-ioswang-luo-huan-cun-sao-mang-pian-shi-yong-liang-xing-dai-ma-jiu-neng-wan-cheng-80de-huan-cun-xu-qiu.html">【学习笔记】iOS网络缓存扫盲篇--使用两行代码就能完成80%的缓存需求</a></h2>
-                <div class="summary"><blockquote>
-<p>本文为学习笔记，并非原创。<a href="https://www.jianshu.com/p/fb5aaeac06ef">原文链接</a></p>
-</blockquote>
-<h1>GET网络请求缓存</h1>
-<p>POST请求不能被缓存，只有 GET 请求能被缓存。因为从数学的角度来讲，GET 的结果是<code>幂等</code> 的，而 POST 不<code>幂等</code> 。缓存的思路就是将查询的参数组成的值作为 key ，对应结果作为value。</p>
-<div class="highlight"><pre><span></span><code><span class="bp">NSURLCache</span> <span class="o">*</span><span class="n">urlCache</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">NSURLCache</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithMemoryCapacity</span><span class="p">:</span><span class="mi">4</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="nl">diskCapacity</span><span class="p">:</span><span class="mi">20</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="nl">diskPath</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
-<span class="p">[</span><span class="bp">NSURLCache</span> <span class="nl">setSharedURLCache</span><span class="p">:</span><span class="n">urlCache</span><span class="p">];</span>
-</code></pre></div>
-
-
-<h1>控制缓存的有效性</h1>
-<p>服务器的文件存贮，大多采用资源变动后就重新生成一个链接的做法。而且如果你的文件存储采用的是第三方的服务，比如七牛、青云等服务，则一定是如此。</p>
-<p>链接不变的情况下，要求资源改了，缓存就要更新，该如何做？</p>
-<h2>文件缓存：借助ETag或Last-Modified判断文件缓存是否有效 …</h2>
-                    <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-ioswang-luo-huan-cun-sao-mang-pian-shi-yong-liang-xing-dai-ma-jiu-neng-wan-cheng-80de-huan-cun-xu-qiu.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/xue-xi-bi-ji-wkwebview-jia-zai-sheng-ming-zhou-qi-yu-dai-li-fang-fa-pou-xi.html">【学习笔记】WKWebView 加载生命周期与代理方法剖析</a></h2>
-                <div class="summary"><p>结合WKNavigationDelegate分析WebKit源码</p>
-                    <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-wkwebview-jia-zai-sheng-ming-zhou-qi-yu-dai-li-fang-fa-pou-xi.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/xue-xi-bi-ji-iosji-zhu-wen-zhang-lie-biao-cocoa.html">【学习笔记】iOS技术文章列表——Cocoa</a></h2>
-                <div class="summary"><h2><a href="https://mp.weixin.qq.com/s?__biz=MzU4NTI0NDI4MQ==&amp;mid=2247485909&amp;idx=1&amp;sn=fb836d07589ed105ebc54150d89aef6c">去掉 iOS 导航栏返回按钮文本三种方案</a></h2>
-<p>给出的三种方案，要么继承UINavigationController，要么改变UINavigationController。</p>
-                    <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-iosji-zhu-wen-zhang-lie-biao-cocoa.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/xue-xi-bi-ji-iosji-zhu-wen-zhang-lie-biao-wang-luo.html">【学习笔记】iOS技术文章列表——网络</a></h2>
-                <div class="summary"><h2><a href="http://www.52im.net/thread-1588-1-1.html">移动端IM开发者必读(二)：史上最全移动弱网络优化方法总结</a></h2>
-<p>文章前言列出了很多网络优化文章。</p>
-                    <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-iosji-zhu-wen-zhang-lie-biao-wang-luo.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/xue-xi-bi-ji-iosji-zhu-wen-zhang-lie-biao-xcodeji-gong-ju.html">【学习笔记】iOS技术文章列表——Xcode及工具</a></h2>
-                <div class="summary"><h2><a href="https://mp.weixin.qq.com/s/s5BQznKjSCt84ZLUlco7Vg">Xcode 工程文件解析</a></h2>
-<p>介绍了Xcode工程的目录结构，pbxproj的对象模型以及用Ruby编辑工程文件的方法。</p>
-                    <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-iosji-zhu-wen-zhang-lie-biao-xcodeji-gong-ju.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/xue-xi-bi-ji-iosji-zhu-wen-zhang-lie-biao-xing-neng.html">【学习笔记】iOS技术文章列表——性能</a></h2>
-                <div class="summary"><h2><a href="https://mp.weixin.qq.com/s/g5FKnOcW6KonqBSW8XO9Jw">从探索到实践，iOS动态库懒加载实录</a></h2>
-<p>将SDK改为动态库，并懒加载，以减少下载量。</p>
-                    <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-iosji-zhu-wen-zhang-lie-biao-xing-neng.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
-                <h2><a href="/xue-xi-bi-ji-zheng-jing-fen-xi-iosbao-da-xiao-you-hua.html">【学习笔记】正经分析iOS包大小优化</a></h2>
-                <div class="summary"><p>从编译设置和资源文件两大方面探讨包体积优化方法</p>
-                    <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-zheng-jing-fen-xi-iosbao-da-xiao-you-hua.html">more ...</a>
-                </div>
-            </article>
-            <hr/>
-            <article>
                 <h2><a href="/xue-xi-bi-ji-shou-ba-shou-jiao-ni-debug-ios-14-imageio-crash-fen-xi.html">【学习笔记】手把手教你 Debug — iOS 14 ImageIO Crash 分析</a></h2>
                 <div class="summary"><p>通过分析一个 ImageIO相关Crash，向你展示如何通过反编译追查问题原因</p>
                     <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-shou-ba-shou-jiao-ni-debug-ios-14-imageio-crash-fen-xi.html">more ...</a>
+                </div>
+            </article>
+            <hr/>
+            <article>
+                <h2><a href="/xue-xi-bi-ji-harmonyosdao-di-shi-bu-shi-androidtao-pi.html">【学习笔记】HarmonyOS到底是不是Android套皮？</a></h2>
+                <div class="summary"><blockquote>
+<p>本文为学习笔记，并非原创。<a href="https://mp.weixin.qq.com/s/RkJ_2WLf7MTL-f-kAOGxAw">原文链接</a></p>
+</blockquote>
+<h1>HarmonyOS分析</h1>
+<p>原作者通过分析HarmonyOS应用的构建产物，得出如下结论：</p>
+<p>1.构建产物中，包含一个标准Android的apk文件。该apk内AndroidManifest.xml文件中做了两件事：</p>
+<p>1）定义Application为ShellApplication</p>
+<p>2）定义MainActivity为MainAbilityShellActivity</p>
+<p>2.ShellApplication最终继承自Android的Application。</p>
+<p>3.MainAbilityShellActivity继承自Android的Activity。</p>
+<p>原作者认为鸿蒙的<code>分布式软总线</code>是一个私有RPC协议。通过<a href="https://gitee.com/openharmony">OpenHarmony</a>源码分析，<code>分布式软总线</code>主要有以下几个模块：</p>
+<ol>
+<li>设备发现：采用了CoAP协议作为设备发现协议，通过在一个局域网内发送广播来实现。</li>
+<li>数据传输：基于Session提供统一的数据传输功能。</li>
+<li>设备认证与管理：主要是安全。</li>
+<li><a href="https://gitee.com/openharmony/ace_engine_lite">AceEngineLite</a>：应该就是JS开发的Ability页面如何编译以及 在嵌入式设备上如何渲染的相关实现，这也许就是为什么HarmonyOS可以采用多种开发语言开发界面的关键所在。各种小程序、Flutter相关设计都是这样的，设计思想都是：自创UI框架以屏蔽系统差异。</li>
+</ol>
+<p>原作者认为，<strong>HarmonyOS = Android - GMS + HMS + 分布式软总线 + 以Ability为核心的应用开发框架</strong>，用图表示 …</p>
+                    <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-harmonyosdao-di-shi-bu-shi-androidtao-pi.html">more ...</a>
                 </div>
             </article>
             <hr/>
@@ -175,15 +110,87 @@
                 </div>
             </article>
             <hr/>
+            <article>
+                <h2><a href="/fan-yi-shi-yong-metrickitjian-kong-iosru-men.html">【翻译】使用MetricKit监控iOS：入门</a></h2>
+                <div class="summary"><p>学习如何在你的iOS应用中使用MetricKit来监控电量、性能，并进行诊断</p>
+                    <a class="btn btn-default btn-xs" href="/fan-yi-shi-yong-metrickitjian-kong-iosru-men.html">more ...</a>
+                </div>
+            </article>
+            <hr/>
+            <article>
+                <h2><a href="/xue-xi-bi-ji-gitge-ming-ling-de-ben-zhi-zhen-shi-tong-su-yi-dong-a.html">【学习笔记】Git各命令的本质，真是通俗易懂啊</a></h2>
+                <div class="summary"><blockquote>
+<p>本文为学习笔记，并非原创。<a href="https://juejin.cn/post/6895246702614806542">原文链接</a></p>
+</blockquote>
+<p>本篇文章写得真的不错，建议全文阅读。这里只记我不熟悉的地方。</p>
+<h1>commit节点、HEAD和分支</h1>
+<p>每次commit都会生成一个节点，节点内容是本次及本次之前所有提交的内容。</p>
+<p>不管HEAD还是分支，都是对一个commit节点的引用。因为只是引用，所以它们非常轻量。引用+节点是git构成分布式的关键。</p>
+<p>HEAD是一个引用，它可以指向任意一个节点。其指向的节点始终为当前工作目录，换句话说就是当前工作目录（也就是你看到的代码）就是HEAD指向的节点</p>
+<p>分支也可以视为一个引用，分支指向一个节点时，该节点的内容就是分支的内容。</p>
+<p>分支可以存在多个，而HEAD只有一个。</p>
+<h1>合并</h1>
+<h2>merge</h2>
+<div class="highlight"><pre><span></span><code>git merge 分支名/节点哈希值   //将指定分支或节点的内容合并至HEAD
+</code></pre></div>
+
+
+<p>如果要合并的内容完全领先于当前分支，如下图中在<code>ft-2</code>上执行<code>git merge ft-1</code>，则会触发fast-foward（快速合并），此时两个分支指向统一节点。</p>
+<p><img alt="git merge fast-forward" src="/images/2021/git-merg-fastforward.png"></p>
+<p>但实际情况中，往往遇到的是下图中的情况。这种就不能直接合并了，在<code>ft-2</code>上执行 …</p>
+                    <a class="btn btn-default btn-xs" href="/xue-xi-bi-ji-gitge-ming-ling-de-ben-zhi-zhen-shi-tong-su-yi-dong-a.html">more ...</a>
+                </div>
+            </article>
+            <hr/>
+            <article>
+                <h2><a href="/iphoneping-mu-fen-bian-lu.html">iPhone屏幕分辨率</a></h2>
+                <div class="summary"><table>
+<thead>
+<tr>
+<th>iPhone型号</th>
+<th>分辨率（pixel）</th>
+<th>分辨率（pt）</th>
+<th>屏幕尺寸（inch）</th>
+<th>高宽比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2G,3G,3GS</td>
+<td>320 x 480</td>
+<td>320 x 480</td>
+<td>3.5</td>
+<td>1.5</td>
+</tr>
+<tr>
+<td>4,4S</td>
+<td>640 × 960</td>
+<td>320 x 480</td>
+<td>3.5</td>
+<td>1.5</td>
+</tr>
+<tr>
+<td>5,5S,5C,SE</td>
+<td>640 x 1136</td>
+<td>320 x 568</td>
+<td>4</td>
+<td>1.775</td>
+</tr>
+<tr>
+<td>6,6S,7,8,SE2 …</td></tr></tbody></table>
+                    <a class="btn btn-default btn-xs" href="/iphoneping-mu-fen-bian-lu.html">more ...</a>
+                </div>
+            </article>
+            <hr/>
 
         <ul class="pagination">
-                <li class="prev disabled"><a href="#">&laquo;</a></li>
-                    <li class="active"><a
-                            href="/tag/ios.html">1</a></li>
+                <li class="prev"><a href="/index.html">&laquo;</a>
+                </li>
                     <li class=""><a
-                            href="/tag/ios2.html">2</a></li>
-                <li class="next"><a
-                        href="/tag/ios2.html">&raquo;</a></li>
+                            href="/index.html">1</a></li>
+                    <li class="active"><a
+                            href="/index2.html">2</a></li>
+                <li class="next disabled"><a href="#">&raquo;</a></li>
         </ul>
         </div>
         <div class="col-sm-3" id="sidebar">
@@ -207,9 +214,9 @@
   <ul class="list-group" id="recentposts">
     <li class="list-group-item"><a href="/xue-xi-bi-ji-ios-ip-zhi-lian-yuan-li-pou-xi.html">【学习笔记】iOS IP 直连原理剖析</a></li>
     <li class="list-group-item"><a href="/xue-xi-bi-ji-ioswang-luo-huan-cun-sao-mang-pian-shi-yong-liang-xing-dai-ma-jiu-neng-wan-cheng-80de-huan-cun-xu-qiu.html">【学习笔记】iOS网络缓存扫盲篇--使用两行代码就能完成80%的缓存需求</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-quan-mian-li-jie-dnsji-httpdns.html">【学习笔记】全面理解DNS及HTTPDNS</a></li>
+    <li class="list-group-item"><a href="/xue-xi-bi-ji-tcpipsan-ci-wo-shou-si-ci-hui-shou.html">【学习笔记】TCP/IP三次握手四次挥手</a></li>
     <li class="list-group-item"><a href="/xue-xi-bi-ji-wkwebview-jia-zai-sheng-ming-zhou-qi-yu-dai-li-fang-fa-pou-xi.html">【学习笔记】WKWebView 加载生命周期与代理方法剖析</a></li>
-    <li class="list-group-item"><a href="/xue-xi-bi-ji-iosji-zhu-wen-zhang-lie-biao-cocoa.html">【学习笔记】iOS技术文章列表——Cocoa</a></li>
-    <li class="list-group-item"><a href="/xue-xi-bi-ji-iosji-zhu-wen-zhang-lie-biao-wang-luo.html">【学习笔记】iOS技术文章列表——网络</a></li>
   </ul>
 </li>
 <!-- End Sidebar/Recent Posts -->
